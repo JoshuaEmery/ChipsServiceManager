@@ -13,6 +13,6 @@ namespace CSMWebCore.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public string StudentId { get; set; }
-        public string ContactPref { get; set; }
+        public ContactPref ContactPref { get; set; }
     }
 }
