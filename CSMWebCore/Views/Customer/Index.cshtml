@@ -1,0 +1,16 @@
+﻿@model IEnumerable<CSMWebCore.ViewModels.CustomerViewModel>
+@{
+    ViewData["Title"] = "Customers List";
+}
+
+<h2>List of Customers</h2>
+<table class="table-bordered table-responsive table-striped">
+
+
+    @foreach (var customer in Model)
+    {
+        @await Html.PartialAsync("_Customer", customer)
+    }
+</table>
+
+
