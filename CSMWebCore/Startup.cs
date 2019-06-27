@@ -13,6 +13,7 @@ using CSMWebCore.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using CSMWebCore.Services;
 
 namespace CSMWebCore
 {
@@ -44,6 +45,7 @@ namespace CSMWebCore
             services.AddDbContext<ChipsDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<ICustomerData, SqlCustomerData>();
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ChipsDbContext>();
 
