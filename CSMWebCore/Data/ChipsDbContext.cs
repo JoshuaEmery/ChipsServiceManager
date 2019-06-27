@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using CSMWebCore.Controllers;
+using CSMWebCore.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace CSMWebCore.Data
+{
+    public class ChipsDbContext : IdentityDbContext
+    {
+        public DbSet<Customer> Customers { get; set; }
+
+        //public DbSet<Customer> MyProperty { get; set; }
+        public ChipsDbContext(DbContextOptions<ChipsDbContext> options)
+            : base(options)
+        {
+        }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
+    }
+}

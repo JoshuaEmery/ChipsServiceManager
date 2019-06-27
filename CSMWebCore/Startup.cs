@@ -12,17 +12,24 @@ using Microsoft.EntityFrameworkCore;
 using CSMWebCore.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace CSMWebCore
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public IConfiguration Configuration { get; set; }
 
-        public IConfiguration Configuration { get; }
+        public Startup(IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true);
+            if (env.IsDevelopment())
+                builder.AddUserSecrets<Startup>();
+            Configuration = builder.Build();
+
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -34,11 +41,11 @@ namespace CSMWebCore
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ChipsDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ChipsDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -50,6 +57,7 @@ namespace CSMWebCore
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+
             }
             else
             {
