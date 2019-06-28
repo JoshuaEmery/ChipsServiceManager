@@ -5,10 +5,18 @@
 
 <h2>List of Customers</h2>
 <table class="table-bordered table-responsive table-striped">
-
+    <tr class="panel">
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.FirstName)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.LastName)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.Phone)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.StudentId)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.Email)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.ContactPref)</th>
+    </tr>
 
     @foreach (var customer in Model)
     {
+
         @await Html.PartialAsync("_Customer", customer)
     }
 </table>
