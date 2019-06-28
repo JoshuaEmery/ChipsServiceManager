@@ -26,6 +26,8 @@ namespace CSMWebCore
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true);
+            //The connection string is stored in a json object called secrets.  This keeps it independent of version control
+            //the secrets json is only used if environment is development
             if (env.IsDevelopment())
                 builder.AddUserSecrets<Startup>();
             Configuration = builder.Build();
@@ -41,10 +43,13 @@ namespace CSMWebCore
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            //connects the database ChipsDbContext to the connection string stored in the with the value matching the
+            //DefaultConnect key in a JSON obejct
             services.AddDbContext<ChipsDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            //this adds the service to access Customer data through the SqlCustomerData object which implements the
+            //ICusomerData Interface.  Add scoped must be used in order for services to work with EF
             services.AddScoped<ICustomerData, SqlCustomerData>();
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ChipsDbContext>();
