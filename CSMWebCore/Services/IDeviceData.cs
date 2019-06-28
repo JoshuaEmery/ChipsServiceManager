@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    interface IDeviceData
+    public interface IDeviceData
     {
         List<Device> GetAll();
         Device Get(int id);

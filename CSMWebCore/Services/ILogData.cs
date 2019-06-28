@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    interface ILogData
+    public interface ILogData
     {
         List<Log> GetAll();
         Log Get(int id);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    interface ITicketData
+    public interface ITicketData
     {
         List<Ticket> GetAll();
         Ticket Get(int id);
