@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSMWebCore.Entities;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -77,13 +78,32 @@ namespace CSMWebCore.Controllers
 
             return RedirectToAction("Index");
         }
-        [HttpPost]
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-        [HttpGet] IActionResult Create(CustomerEditViewModel model)
+        [HttpPost] 
+        public IActionResult Create(CustomerEditViewModel model)
         {
+            Random rand = new Random();
+            model.StudentId = rand.Next(100000000, 999999999).ToString();
+            model.Phone = rand.Next(1000000000, 1999999999).ToString();
+            if (ModelState.IsValid)
+            {
+                Customer cust = new Customer
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    StudentId = model.StudentId,
+                    ContactPref = model.ContactPref
+                };
+                _customers.Add(cust);
+                _customers.Commit();
+                return RedirectToAction("Index");
+            }
             return View();
         }
     }

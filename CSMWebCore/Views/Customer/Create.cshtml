@@ -1,0 +1,29 @@
+﻿@model Customer
+@{ ViewBag.Title = "Create new customer";}
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All"></div>
+    <table>
+        <tr>
+            <td><label asp-for="FirstName"></label></td>
+            <td><input asp-for="FirstName" /></td>
+            <td><span asp-validation-for="FirstName"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="LastName"></label></td>
+            <td><input asp-for="LastName" /></td>
+            <td><span asp-validation-for="LastName"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Email"></label></td>
+            <td><input asp-for="Email" /></td>
+            <td><span asp-validation-for="Email"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="ContactPref"></label></td>
+            <td><select asp-for="ContactPref" asp-items="Html.GetEnumSelectList<ContactPref>()"></select></td>
+            <td><span asp-validation-for="ContactPref"></span></td>
+        </tr>
+    </table>
+    <input type="submit" value="Create" />
+</form>
