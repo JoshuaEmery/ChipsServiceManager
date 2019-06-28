@@ -11,6 +11,10 @@ namespace CSMWebCore.Data
     public class ChipsDbContext : IdentityDbContext
     {
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Log> Logs { get; set; }
+        public DbSet<Device> Devices { get; set; }
+
 
         //public DbSet<Customer> MyProperty { get; set; }
         public ChipsDbContext(DbContextOptions<ChipsDbContext> options)
