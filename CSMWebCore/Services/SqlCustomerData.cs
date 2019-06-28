@@ -6,7 +6,9 @@ using CSMWebCore.Data;
 using CSMWebCore.Entities;
 
 namespace CSMWebCore.Services
-{
+{/// <summary>
+/// Class which interacts with the database for Customer data
+/// </summary>
     public class SqlCustomerData : ICustomerData
     {
         private ChipsDbContext _db;
