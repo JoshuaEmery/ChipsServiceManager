@@ -77,5 +77,14 @@ namespace CSMWebCore.Controllers
 
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpGet] IActionResult Create(CustomerEditViewModel model)
+        {
+            return View();
+        }
     }
 }

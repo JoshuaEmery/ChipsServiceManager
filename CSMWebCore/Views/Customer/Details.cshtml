@@ -1,0 +1,11 @@
+﻿@model CustomerViewModel
+
+@{ ViewBag.Title = $"Details - {Model.FirstName} {Model.LastName}";}
+
+<div class="panel-primary table-bordered">
+    <div class="panel-heading">@Model.FirstName @Model.LastName</div>
+    <div class="panel-body"><label asp-for="Phone"></label><span class="pull-right">@Model.Phone</span></div>
+    <div class="panel-body"><label asp-for="StudentId"></label><span class="pull-right">@Model.StudentId</span></div>
+    <div class="panel-body"><label asp-for="Email"></label><span class="pull-right">@Model.Email</span></div>
+    <div class="panel-body"><label asp-for="ContactPref"></label><span class="pull-right">@Model.ContactPref</span></div>
+</div>
