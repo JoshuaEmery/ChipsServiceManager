@@ -51,6 +51,9 @@ namespace CSMWebCore
             //this adds the service to access Customer data through the SqlCustomerData object which implements the
             //ICusomerData Interface.  Add scoped must be used in order for services to work with EF
             services.AddScoped<ICustomerData, SqlCustomerData>();
+            services.AddScoped<IDeviceData, SqlDeviceData>();
+            services.AddScoped<ILogData, SqlLogData>();
+            services.AddScoped<ITicketData, SqlTicketData>();
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ChipsDbContext>();
 

@@ -1,0 +1,17 @@
+﻿@model IEnumerable<CSMWebCore.ViewModels.DeviceViewModel>
+@{ ViewBag.Title = "Device List";}
+<h2>@ViewBag.Title</h2>
+<table class="table table-bordered table-responsive table-striped">
+    <tr class="panel">
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.Owner)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.Make)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.Model)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.OperatingSystem)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.Password)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.Serviced)</th>
+    </tr>
+    @foreach (var device in Model)
+    {
+        @await Html.PartialAsync("_Device", device);
+    }
+</table>

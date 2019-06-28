@@ -8,7 +8,7 @@ namespace CSMWebCore.Services
 {
     public interface ILogData
     {
-        List<Log> GetAll();
+        IEnumerable<Log> GetAll();
         Log Get(int id);
         void Add(Log log);
         int Commit();

@@ -23,7 +23,7 @@ namespace CSMWebCore.Services
             throw new NotImplementedException();
         }
 
-        public List<Log> GetAll()
+        public IEnumerable<Log> GetAll()
         {
             throw new NotImplementedException();
         }

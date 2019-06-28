@@ -8,7 +8,7 @@ namespace CSMWebCore.Services
 {
     public interface ITicketData
     {
-        List<Ticket> GetAll();
+        IEnumerable<Ticket> GetAll();
         Ticket Get(int id);
         void Add(Ticket ticket);
         int Commit();

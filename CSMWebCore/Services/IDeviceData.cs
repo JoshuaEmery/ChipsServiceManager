@@ -8,7 +8,7 @@ namespace CSMWebCore.Services
 {
     public interface IDeviceData
     {
-        List<Device> GetAll();
+        IEnumerable<Device> GetAll();
         Device Get(int id);
         void Add(Device device);
         int Commit();

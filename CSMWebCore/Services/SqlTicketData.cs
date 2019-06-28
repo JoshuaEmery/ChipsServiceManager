@@ -23,7 +23,7 @@ namespace CSMWebCore.Services
             throw new NotImplementedException();
         }
 
-        public List<Ticket> GetAll()
+        public IEnumerable<Ticket> GetAll()
         {
             throw new NotImplementedException();
         }

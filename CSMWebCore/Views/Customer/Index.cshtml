@@ -1,10 +1,9 @@
 ﻿@model IEnumerable<CSMWebCore.ViewModels.CustomerViewModel>
 @{
-    ViewData["Title"] = "Customers List";
+    ViewBag.Title = "Customers List";
 }
-
-<h2>List of Customers</h2>
-<table class="table-bordered table-responsive table-striped">
+<h2>@ViewBag.Title</h2>
+<table class="table table-bordered table-responsive table-striped">
     <tr class="panel">
         <th class="panel-heading">@Html.DisplayNameFor(model => model.FirstName)</th>
         <th class="panel-heading">@Html.DisplayNameFor(model => model.LastName)</th>
