@@ -10,6 +10,7 @@ namespace CSMWebCore.ViewModels
     public class DeviceCreateViewModel
     {
         public List<SelectListItem> Customer { get; set; }
+        public string CustomerId { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
         public string OperatingSystem { get; set; }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSMWebCore.Entities;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -34,17 +35,16 @@ namespace CSMWebCore.Controllers
         }
         [HttpGet]
         public IActionResult Create()
-        {
-            var model = new DeviceCreateViewModel();
-            model.Customer = new List<SelectListItem>();
+        {            
+            ViewBag.Customer = new List<SelectListItem>();
             foreach (var customer in _customers.GetAll())
             {
-                model.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName,customer.Id.ToString()));
+                ViewBag.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName,customer.Id.ToString()));
             }           
-            return View(model);
+            return View();
         }
         [HttpPost]
-        public IActionResult Create(DeviceViewModel model)
+        public IActionResult Create(Device model)
         {
             return View();
         }
