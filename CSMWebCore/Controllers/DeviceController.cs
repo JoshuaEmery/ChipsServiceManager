@@ -26,7 +26,7 @@ namespace CSMWebCore.Controllers
                 Id = device.Id,
                 Owner = _customers.Get(device.CustomerId),
                 Make = device.Make,
-                Model = device.Model,
+                ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
                 Password = device.Password,
                 Serviced = device.Serviced
@@ -35,17 +35,20 @@ namespace CSMWebCore.Controllers
         }
         [HttpGet]
         public IActionResult Create()
-        {            
-            ViewBag.Customer = new List<SelectListItem>();
+        {
+            DeviceCreateViewModel model = new DeviceCreateViewModel();
+            model.Customer = new List<SelectListItem>();
             foreach (var customer in _customers.GetAll())
             {
-                ViewBag.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName,customer.Id.ToString()));
-            }           
-            return View();
+                model.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName, customer.Id.ToString()));
+            }
+            return View(model);
         }
         [HttpPost]
-        public IActionResult Create(Device model)
+        public IActionResult Create(DeviceCreateViewModel model)
         {
+            if(ModelState.IsValid)
+            string text = model.Make;
             return View();
         }
 
