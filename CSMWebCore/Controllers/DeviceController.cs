@@ -41,24 +41,30 @@ namespace CSMWebCore.Controllers
             {
                 return View();
             }
-            DeviceCreateViewModel model = new DeviceCreateViewModel();
+            DeviceEditViewModel model = new DeviceEditViewModel
+            {
+                Make = device.Make,
+                ModelNumber = device.ModelNumber,
+                OperatingSystem = device.OperatingSystem,
+                Password = device.Password,
+                Serviced = device.Serviced
+            };
             model.Customer = new List<SelectListItem>();
             foreach (var customer in _customers.GetAll())
             {
                 model.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName, customer.Id.ToString(), customer.Id == device.CustomerId ? true : false));
             }
             return View(model);
-
         }
         [HttpPost]
-        public IActionResult Edit(DeviceCreateViewModel model)
+        public IActionResult Edit(DeviceEditViewModel model)
         {
             var device = _devices.Get(model.Id);
             if (device == null || !ModelState.IsValid )
             {
                 return View();
             }
-            device.CustomerId = model.CustomerId;
+            device.CustomerId = int.Parse(model.CustomerId);
             device.Make = model.Make;
             device.ModelNumber = model.ModelNumber;
             device.OperatingSystem = model.OperatingSystem;
@@ -70,8 +76,8 @@ namespace CSMWebCore.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            DeviceCreateViewModel model = new DeviceCreateViewModel();
-            model.Customer = new List<SelectListItem>();
+            DeviceEditViewModel model = new DeviceEditViewModel();
+            model.Customer = new List<SelectListItem>();            
             foreach (var customer in _customers.GetAll())
             {
                 model.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName, customer.Id.ToString()));
@@ -79,7 +85,7 @@ namespace CSMWebCore.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult Create(DeviceCreateViewModel model)
+        public IActionResult Create(DeviceEditViewModel model)
         {
             if (ModelState.IsValid)
             {

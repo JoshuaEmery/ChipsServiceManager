@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.ViewModels
 {
-    public class DeviceCreateViewModel
+    public class DeviceEditViewModel
     {
+        public int Id { get; set; }
         public List<SelectListItem> Customer { get; set; }
         public string CustomerId { get; set; }
         public string Make { get; set; }

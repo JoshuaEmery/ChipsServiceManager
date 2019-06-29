@@ -1,11 +1,39 @@
-﻿@model Device
+﻿@model DeviceEditViewModel
 @{ ViewBag.Title = "Edit Device";}
 <h2>@ViewBag.Title</h2>
 <form asp-action="Edit" method="post">
     <div asp-validation-summary="All"></div>
     <table>
         <tr>
-            <td><label asp-for=""></label></td>
+            <td><label asp-for="CustomerId"></label></td>
+            <td><select asp-for="CustomerId" asp-items=Model.Customer></select></td>
+            <td><span asp-validation-for="CustomerId"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Make"></label></td>
+            <td><input asp-for="Make"/></td>
+            <td><span asp-validation-for="Make"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="ModelNumber"></label></td>
+            <td><input asp-for="ModelNumber"/></td>
+            <td><span asp-validation-for="ModelNumber"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="OperatingSystem"></label></td>
+            <td><input asp-for="OperatingSystem"/></td>
+            <td><span asp-validation-for="OperatingSystem"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Password"></label></td>
+            <td><input asp-for="Password"/></td>
+            <td><span asp-validation-for="Password"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Serviced"></label></td>
+            <td><input asp-for="Serviced"/></td>
+            <td><span asp-validation-for="Serviced"></span></td>
         </tr>
     </table>
+    <input type="submit" value="Edit" />
 </form>
