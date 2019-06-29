@@ -1,0 +1,9 @@
+﻿@model DeviceViewModel
+@{ ViewBag.Title = $"Details for {Model.Owner.FirstName} {Model.Owner.LastName}'s {Model.Make}";}
+<h2>@ViewBag.Title</h2>
+<div class="panel-primary table-bordered">
+    <div class="panel-heading">@Model.Make @Model.ModelNumber</div>
+    <div class="panel-body"><label asp-for="OperatingSystem"></label><span class="pull-right">@Model.OperatingSystem</span></div>
+    <div class="panel-body"><label asp-for="Password"></label><span class="pull-right">@Model.Password</span></div>
+    <div class="panel-body"><label asp-for="Serviced"></label><span class="pull-right">@Model.Serviced</span></div>
+</div>

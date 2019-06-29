@@ -104,6 +104,25 @@ namespace CSMWebCore.Controllers
             }
             return View();
         }
+        public IActionResult Details(int id)
+        {
+            var device = _devices.Get(id);
+            if(device == null)
+            {
+                return View();
+            }
+            var model = new DeviceViewModel
+            {
+                Id = device.Id,
+                Owner = _customers.Get(device.CustomerId),
+                Make = device.Make,
+                ModelNumber = device.ModelNumber,
+                OperatingSystem = device.OperatingSystem,
+                Password = device.Password,
+                Serviced = device.Serviced
+            };
+            return View(model);
+        }
 
     }
 }
