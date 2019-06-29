@@ -36,16 +36,22 @@ namespace CSMWebCore.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var model = _devices.Get(id);
-            if (model == null)
+            var device = _devices.Get(id);
+            if (device == null)
             {
                 return View();
+            }
+            DeviceCreateViewModel model = new DeviceCreateViewModel();
+            model.Customer = new List<SelectListItem>();
+            foreach (var customer in _customers.GetAll())
+            {
+                model.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName, customer.Id.ToString(), customer.Id == device.CustomerId ? true : false));
             }
             return View(model);
 
         }
         [HttpPost]
-        public IActionResult Edit(Device model)
+        public IActionResult Edit(DeviceCreateViewModel model)
         {
             var device = _devices.Get(model.Id);
             if (device == null || !ModelState.IsValid )
@@ -90,7 +96,6 @@ namespace CSMWebCore.Controllers
                 _devices.Commit();
                 return RedirectToAction("Index");
             }
-
             return View();
         }
 
