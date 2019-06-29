@@ -34,6 +34,34 @@ namespace CSMWebCore.Controllers
             return View(model);
         }
         [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var model = _devices.Get(id);
+            if (model == null)
+            {
+                return View();
+            }
+            return View(model);
+
+        }
+        [HttpPost]
+        public IActionResult Edit(Device model)
+        {
+            var device = _devices.Get(model.Id);
+            if (device == null || !ModelState.IsValid )
+            {
+                return View();
+            }
+            device.CustomerId = model.CustomerId;
+            device.Make = model.Make;
+            device.ModelNumber = model.ModelNumber;
+            device.OperatingSystem = model.OperatingSystem;
+            device.Password = model.Password;
+            device.Serviced = model.Serviced;
+            _devices.Commit();
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
         public IActionResult Create()
         {
             DeviceCreateViewModel model = new DeviceCreateViewModel();
@@ -47,8 +75,22 @@ namespace CSMWebCore.Controllers
         [HttpPost]
         public IActionResult Create(DeviceCreateViewModel model)
         {
-            if(ModelState.IsValid)
-            string text = model.Make;
+            if (ModelState.IsValid)
+            {
+                Device device = new Device
+                {
+                    CustomerId = int.Parse(model.CustomerId),
+                    Make = model.Make,
+                    ModelNumber = model.ModelNumber,
+                    OperatingSystem = model.OperatingSystem,
+                    Password = model.Password,
+                    Serviced = model.Serviced
+                };
+                _devices.Add(device);
+                _devices.Commit();
+                return RedirectToAction("Index");
+            }
+
             return View();
         }
 
