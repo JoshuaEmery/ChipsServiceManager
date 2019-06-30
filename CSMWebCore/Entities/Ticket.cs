@@ -18,6 +18,5 @@ namespace CSMWebCore.Entities
         public string CheckInUserId { get; set; }
         public string CheckOutUserId { get; set; }
 
-
     }
 }

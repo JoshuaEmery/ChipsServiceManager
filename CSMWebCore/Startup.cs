@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using CSMWebCore.Services;
+using CSMWebCore.Entities;
 
 namespace CSMWebCore
 {
@@ -54,8 +55,8 @@ namespace CSMWebCore
             services.AddScoped<IDeviceData, SqlDeviceData>();
             services.AddScoped<ILogData, SqlLogData>();
             services.AddScoped<ITicketData, SqlTicketData>();
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ChipsDbContext>();
+            //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
+            services.AddIdentity<User,IdentityUser>().AddEntityFrameworkStores<ChipsDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
