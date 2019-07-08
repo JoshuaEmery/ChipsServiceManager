@@ -9,7 +9,7 @@ namespace CSMWebCore.ViewModels
     public class LogEditViewModel
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int TicketId { get; set; }
         public DateTime Logged { get; set; }
         public string Notes { get; set; }
