@@ -2,30 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSMWebCore.Data;
 using CSMWebCore.Entities;
 
 namespace CSMWebCore.Services
 {
     public class SqlLogData : ILogData
     {
+        private ChipsDbContext _db;
+        public SqlLogData(ChipsDbContext db)
+        {
+            _db = db;
+        }
         public void Add(Log log)
         {
-            throw new NotImplementedException();
+            _db.Add(log);
         }
 
         public int Commit()
         {
-            throw new NotImplementedException();
+            return _db.SaveChanges();
         }
 
         public Log Get(int id)
         {
-            throw new NotImplementedException();
+            return _db.Find<Log>(id);
         }
 
         public IEnumerable<Log> GetAll()
         {
-            throw new NotImplementedException();
+            return _db.Logs;
         }
     }
 }
