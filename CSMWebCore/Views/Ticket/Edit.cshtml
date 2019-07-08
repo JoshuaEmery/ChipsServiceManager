@@ -1,0 +1,49 @@
+﻿@model Ticket
+@{ ViewBag.Title = $"Edit Ticket #{Model.Id.ToString()}";}
+<h2>@ViewBag.Title</h2>
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="All"></div>
+    <table>
+        <tr>
+            <td><label asp-for="DeviceId"></label></td>
+            <td><input asp-for="DeviceId" /></td>
+            <td><span asp-validation-for="DeviceId"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="CheckedIn"></label></td>
+            <td><input asp-for="CheckedIn" /></td>
+            <td><span asp-validation-for="CheckedIn"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="CheckedOut"></label></td>
+            <td><input asp-for="CheckedOut" /></td>
+            <td><span asp-validation-for="CheckedOut"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Finished"></label></td>
+            <td><input asp-for="Finished" /></td>
+            <td><span asp-validation-for="Finished"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="CheckInUserId"></label></td>
+            <td><input asp-for="CheckInUserId" /></td>
+            <td><span asp-validation-for="CheckInUserId"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="CheckOutUserId"></label></td>
+            <td><input asp-for="CheckOutUserId" /></td>
+            <td><span asp-validation-for="CheckOutUserId"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="NeedsBackup"></label></td>
+            <td><input asp-for="NeedsBackup" /></td>
+            <td><span asp-validation-for="NeedsBackup"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="TicketStatus"></label></td>
+            <td><select asp-for="TicketStatus" asp-items="Html.GetEnumSelectList<TicketStatus>()"></select></td>
+            <td><span asp-validation-for="TicketStatus"></span></td>
+        </tr>
+
+    </table>
+</form>

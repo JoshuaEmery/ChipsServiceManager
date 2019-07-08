@@ -77,6 +77,36 @@ namespace CSMWebCore.Controllers
             _tickets.Commit();
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var model = _tickets.Get(id);
+            if(model == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Edit(TicketEditViewModel model)
+        {
+            var ticket = _tickets.Get(model.Id);
+            if (ticket == null || !ModelState.IsValid)
+            {
+                return View(model);
+            }
+            ticket.DeviceId = model.DeviceId;
+            ticket.CheckedIn = model.CheckedIn;
+            ticket.CheckedOut = model.CheckedOut;
+            ticket.Finished = model.Finished;
+            ticket.CheckInUserId = model.CheckInUserId;
+            ticket.CheckOutUserId = model.CheckOutUserId;
+            ticket.NeedsBackup = model.NeedsBackup;
+            ticket.TicketStatus = model.TicketStatus;
+            _tickets.Commit();
+            return RedirectToAction("Index");
+
+        }
 
     }
 }
