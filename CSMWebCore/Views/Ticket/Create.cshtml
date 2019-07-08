@@ -1,0 +1,19 @@
+﻿@model TicketEditViewModel
+@{ ViewBag.Title = $"Create new Ticket for {Model.Customer.LastName} {Model.Device.ModelNumber}";}
+<h2>@ViewBag.Title</h2>
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All"></div>
+    <table>
+        <tr>
+            <td><label asp-for="DeviceId"></label></td>
+            <td><input asp-for="DeviceId" /></td>
+            <td><span asp-validation-for="DeviceId"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="NeedsBackup"></label></td>
+            <td><input asp-for="NeedsBackup" /></td>
+            <td><span asp-validation-for="NeedsBackup"></span></td>
+        </tr>
+    </table>
+    <input type="submit" value="Create" />
+</form>
