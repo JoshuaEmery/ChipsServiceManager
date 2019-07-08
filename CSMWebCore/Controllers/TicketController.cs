@@ -30,8 +30,19 @@ namespace CSMWebCore.Controllers
 
         public IActionResult Index()
         {
-            
-            return View();
+            var model = _tickets.GetAll().Select(cust => new TicketViewModel
+            {
+                Id = cust.Id,
+                DeviceId = cust.DeviceId,
+                CheckedIn = cust.CheckedIn.ToShortDateString(),
+                CheckedOut = cust.CheckedOut.ToShortDateString(),
+                Finished = cust.Finished.ToShortDateString(),
+                CheckInUserId = cust.CheckInUserId,
+                CheckOutUserId = cust.CheckOutUserId,
+                NeedsBackup = cust.NeedsBackup,
+                TicketStatus = cust.TicketStatus.ToString()
+            });
+            return View(model);
         }
         [HttpGet]
         public IActionResult Create(int deviceId)

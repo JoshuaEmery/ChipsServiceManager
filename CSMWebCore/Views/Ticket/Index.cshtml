@@ -1,0 +1,22 @@
+﻿@model IEnumerable<TicketViewModel>
+@{ ViewBag.Title = "List of Tickets";}
+<h2>@ViewBag.Title</h2>
+<table class="table table-bordered table-responsive table-striped">
+    <tr class="panel">
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.Id)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.DeviceId)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.CheckedIn)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.CheckedOut)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.Finished)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.CheckInUserId)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.CheckOutUserId)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.NeedsBackup)</th>
+        <th class="panel-heading">@Html.DisplayNameFor(model => model.TicketStatus)</th>
+    </tr>
+
+    @foreach (var ticket in Model)
+    {
+
+        @await Html.PartialAsync("_Ticket", ticket)
+    }
+</table>
