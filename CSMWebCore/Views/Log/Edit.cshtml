@@ -1,0 +1,42 @@
+﻿@model CSMWebCore.Entities.Log
+@{ ViewBag.Title = "Edit a Log";}
+
+<h2>@ViewBag.Title</h2>
+<form asp-action="edit" method="post">
+    <div asp-validation-summary="All"></div>
+    <table>
+        <tr>
+            <td><label asp-for="UserId"></label></td>
+            <td><input asp-for="UserId" /></td>
+            <td><span asp-validation-for="UserId"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="TicketId"></label></td>
+            <td><input asp-for="TicketId" /></td>
+            <td><span asp-validation-for="TicketId"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Logged"></label></td>
+            <td><input asp-for="Logged" /></td>
+            <td><span asp-validation-for="Logged"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Notes"></label></td>
+            <td><textarea asp-for="Notes"></textarea></td>
+            <td><span asp-validation-for="Notes"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="LogType"></label></td>
+            <td><select asp-for="LogType" asp-items="Html.GetEnumSelectList<LogType>()"></select></td>
+            <td><span asp-validation-for="LogType"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="ContactMethod"></label></td>
+            <td><select asp-for="ContactMethod" asp-items="Html.GetEnumSelectList<ContactMethod>()"></select></td>
+            <td><span asp-validation-for="ContactMethod"></span></td>
+        </tr>
+    </table>
+    <input type="submit" value="Edit" />
+    <a asp-action="Index">Back to Log List</a>
+
+</form>
