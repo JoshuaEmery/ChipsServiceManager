@@ -14,6 +14,6 @@ namespace CSMWebCore.ViewModels
         public DateTime Logged { get; set; }
         public string Notes { get; set; }
         public LogType LogType { get; set; }
-        public ContactMethod GetContactMethod { get; set; }
+        public ContactMethod ContactMethod { get; set; }
     }
 }

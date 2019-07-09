@@ -7,6 +7,7 @@ namespace CSMWebCore.Models
 {
     public enum ContactMethod
     {
+        NoContact,
         InPerson,
         Phone,
         Email,

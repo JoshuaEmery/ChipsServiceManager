@@ -28,7 +28,18 @@ namespace CSMWebCore.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var model = _logs.GetAll().Select(log => new LogViewModel
+            {
+                Id = log.Id,
+                UserId = log.UserId,
+                TicketId = log.TicketId,
+                Logged = log.Logged.ToShortDateString(),
+                Notes = log.Notes,
+                LogType = log.LogType.ToString(),
+                ContactMethod = log.ContactMethod.ToString()
+
+            });
+            return View(model);
         }
         [HttpGet]
         public IActionResult Create()
@@ -47,7 +58,7 @@ namespace CSMWebCore.Controllers
                     Logged = DateTime.Now,
                     Notes = model.Notes,
                     LogType = model.LogType,
-                    GetContactMethod = model.GetContactMethod,
+                    ContactMethod = model.ContactMethod
                 };
                 _logs.Add(log);
                 _logs.Commit();
@@ -79,7 +90,7 @@ namespace CSMWebCore.Controllers
             log.Logged = model.Logged;
             log.Notes = model.Notes;
             log.LogType = model.LogType;
-            log.GetContactMethod = model.GetContactMethod;
+            log.ContactMethod = model.ContactMethod;
             _logs.Commit();
             return RedirectToAction("Index");
         }
