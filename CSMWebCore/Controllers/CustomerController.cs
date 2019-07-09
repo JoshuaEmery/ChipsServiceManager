@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using CSMWebCore.Entities;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSMWebCore.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private ICustomerData _customers;

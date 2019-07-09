@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using CSMWebCore.Entities;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CSMWebCore.Controllers
 {
+    [Authorize]
     public class DeviceController : Controller
     {
         private IDeviceData _devices;
