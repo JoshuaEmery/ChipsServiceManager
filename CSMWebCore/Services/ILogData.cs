@@ -12,5 +12,6 @@ namespace CSMWebCore.Services
         Log Get(int id);
         void Add(Log log);
         int Commit();
+        Log GetLastByTicketId(int ticketId);
     }
 }

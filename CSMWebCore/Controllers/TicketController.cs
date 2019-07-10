@@ -27,7 +27,7 @@ namespace CSMWebCore.Controllers
             _tickets = tickets;
             _logs = logs;
         }
-
+        //Begin Test Actions
         public IActionResult Index()
         {
             var model = _tickets.GetAll().Select(cust => new TicketViewModel
@@ -106,6 +106,18 @@ namespace CSMWebCore.Controllers
             _tickets.Commit();
             return RedirectToAction("Index");
 
+        }
+        //End Test Actions
+        //Begin Launch Actions
+        public IActionResult Home()
+        {
+            var model = _tickets.GetAll().Select(ticket => new TicketHomeViewModel
+            {
+                Ticket = ticket,
+                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                Log = _logs.GetLastByTicketId(ticket.Id)
+            });
+            return View(model);
         }
 
     }
