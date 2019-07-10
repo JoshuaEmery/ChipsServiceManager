@@ -1,0 +1,19 @@
+﻿@model IEnumerable<TicketHomeViewModel>
+@{ ViewBag.Title = "Ticket Home";}
+<h2>@ViewBag.Title</h2>
+<table class="table table-bordered table-responsive table-striped">
+    <tr class="panel">
+        <th class="panel-heading">Ticket</th>
+        <th class="panel-heading">Status</th>
+        <th class="panel-heading">Customer</th>
+        <th class="panel-heading">Check-In Date</th>
+        <th class="panel-heading">Last Serviced</th>
+        <th class="panel-heading">Notes</th>
+    </tr>
+
+    @foreach (var ticketView in Model)
+    {
+
+        @await Html.PartialAsync("_Home", ticketView)
+    }
+</table>
