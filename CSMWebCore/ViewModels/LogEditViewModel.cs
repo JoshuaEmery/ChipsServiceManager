@@ -1,4 +1,5 @@
-﻿using CSMWebCore.Models;
+﻿using CSMWebCore.Entities;
+using CSMWebCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace CSMWebCore.ViewModels
         public int Id { get; set; }
         public string UserId { get; set; }
         public int TicketId { get; set; }
+        public Ticket Ticket { get; set; }
         public DateTime Logged { get; set; }
         public string Notes { get; set; }
         public LogType LogType { get; set; }

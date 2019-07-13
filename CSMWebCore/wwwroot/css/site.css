@@ -35,3 +35,14 @@ body {
         display: none;
     }
 }
+
+.topFormPanel {
+    background-color: lightgrey;
+    height: 60px;
+    padding: 20px
+}
+.bottomFormPanel {
+    background-color: lightseagreen;
+    height: 200px;
+    padding: 20px
+}

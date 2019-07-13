@@ -26,6 +26,7 @@ namespace CSMWebCore.Controllers
             _tickets = tickets;
             _logs = logs;
         }
+        //Test Actions
         public IActionResult Index()
         {
             var model = _logs.GetAll().Select(log => new LogViewModel
@@ -93,6 +94,38 @@ namespace CSMWebCore.Controllers
             log.ContactMethod = model.ContactMethod;
             _logs.Commit();
             return RedirectToAction("Index");
+        }
+        //End Test Actions
+        //Deployment Actions
+        [HttpGet]
+        public IActionResult Service(int ticketId)
+        {
+            var ticket = _tickets.Get(ticketId);
+            var model = new LogEditViewModel
+            {
+                Ticket = ticket                
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Service(LogEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Log log = new Log
+                {
+                    UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                    TicketId = model.Ticket.Id,
+                    Logged = DateTime.Now,
+                    Notes = model.Notes,
+                    LogType = model.LogType,
+                    ContactMethod = model.ContactMethod
+                };
+                _logs.Add(log);
+                _logs.Commit();
+                return RedirectToAction("Home","Ticket");
+            }
+            return View(model);
         }
     }
 }

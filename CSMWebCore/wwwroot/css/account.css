@@ -34,3 +34,8 @@ a, label{
     left: 50%;
     transform: translate(-50%,-50%);
 }
+.topFormPanel{
+    background-color:aqua;
+    height:10%;
+    width:70%
+}
