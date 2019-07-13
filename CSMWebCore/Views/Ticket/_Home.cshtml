@@ -3,8 +3,16 @@
     <div class="panel panel-default">
         <div class="panel-heading">
         <a data-toggle="collapse" href=@string.Format($"#collapse{ Model.Ticket.Id}")>
-            <table>
-                <tr>
+            <table class="table-responsive table-striped">
+                <tr class="panel">
+                    <th class="panel-heading">Ticket</th>
+                    <th class="panel-heading">Status</th>
+                    <th class="panel-heading">Customer</th>
+                    <th class="panel-heading">Check-In Date</th>
+                    <th class="panel-heading">Last Serviced</th>
+                    <th class="panel-heading">Notes</th>
+                </tr>
+                <tr class="panel-default">
                     <td class="panel-body">@Model.Ticket.Id</td>
                     <td class="panel-body">@Model.Ticket.TicketStatus.ToString()</td>
                     <td class="panel-body">@Model.Customer.LastName</td>
@@ -18,18 +26,27 @@
         <div id='@string.Format($"collapse{ Model.Ticket.Id}")' class="panel-collapse collapse">
             @foreach (var log in Model.Logs)
             {
-                <table>
-                    <tr>
-                        <td class="panel-body">@log.ContactMethod.ToString()</td>
-                        <td class="panel-body">@log.Logged</td>
-                        <td class="panel-body">@log.TicketId</td>
-                        <td class="panel-body">@log.UserId</td>
-                    </tr>
-                    <tr>
-                        <td class="panel-body">@log.Notes</td>
-                    </tr>
-                </table>
+            <table class="table-responsive">
+                <tr class="panel">
+                    <th class="panel-heading">Technician</th>
+                    <th class="panel-heading">Time Service Performed</th>
+                    <th class="panel-heading">Type of Contact</th>
+                </tr>
+                <tr>
+                    <td class="panel-body">@log.UserId</td>
+                    <td class="panel-body">@log.Logged</td>
+                    <td class="panel-body">@log.ContactMethod.ToString()</td>
+                </tr>
+            </table>
+
+                        <div class="panel-body">@log.Notes</div>
+
+
+
             }
+            
+                <a class="btn btn-primary" asp-controller="Log" asp-action="CreateLog" asp-route-ticketId="@Model.Ticket.Id">Create Log for this Ticket</a>
+            
 
         </div>
     </div>
