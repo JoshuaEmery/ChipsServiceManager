@@ -11,5 +11,6 @@ namespace CSMWebCore.ViewModels
         public Ticket Ticket { get; set; }
         public Customer Customer { get; set; }
         public Log Log { get; set; }
+        public IEnumerable<Log> Logs { get; set; }
     }
 }

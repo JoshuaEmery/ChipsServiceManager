@@ -37,5 +37,9 @@ namespace CSMWebCore.Services
         {
             return _db.Find<Log>(_db.Logs.Where(x => x.TicketId == ticketId).Max(y => y.Id));
         }
+        public IEnumerable<Log> GetLogsByTicketId(int ticketId)
+        {
+            return _db.Logs.Where(x => x.TicketId == ticketId);
+        }
     }
 }

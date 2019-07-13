@@ -10,10 +10,10 @@
         <th class="panel-heading">Last Serviced</th>
         <th class="panel-heading">Notes</th>
     </tr>
+    </table>
 
     @foreach (var ticketView in Model)
     {
 
         @await Html.PartialAsync("_Home", ticketView)
     }
-</table>

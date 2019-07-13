@@ -115,7 +115,8 @@ namespace CSMWebCore.Controllers
             {
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
-                Log = _logs.GetLastByTicketId(ticket.Id)
+                Log = _logs.GetLastByTicketId(ticket.Id),
+                Logs = _logs.GetLogsByTicketId(ticket.Id)
             });
             return View(model);
         }
