@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CSMWebCore.Entities;
+using CSMWebCore.Models;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -66,7 +67,7 @@ namespace CSMWebCore.Controllers
                 return RedirectToAction("Index");
             }
             return View();
-            
+
         }
         [HttpGet]
         public IActionResult Edit(int id)
@@ -103,7 +104,8 @@ namespace CSMWebCore.Controllers
             var ticket = _tickets.Get(ticketId);
             var model = new LogEditViewModel
             {
-                Ticket = ticket                
+                TicketId = ticket.Id,
+                TicketNumber = ticket.TicketNumber
             };
             return View(model);
         }
@@ -115,7 +117,7 @@ namespace CSMWebCore.Controllers
                 Log log = new Log
                 {
                     UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                    TicketId = model.Ticket.Id,
+                    TicketId = model.TicketId,
                     Logged = DateTime.Now,
                     Notes = model.Notes,
                     LogType = model.LogType,
@@ -123,9 +125,60 @@ namespace CSMWebCore.Controllers
                 };
                 _logs.Add(log);
                 _logs.Commit();
-                return RedirectToAction("Home","Ticket");
+                return RedirectToAction("Home", "Ticket");
             }
             return View(model);
         }
+        [HttpGet]
+        public IActionResult Contact(int ticketId)
+        {
+            var ticket = _tickets.Get(ticketId);
+            var customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId);
+            var model = new LogEditViewModel
+            {
+                TicketId = ticket.Id,
+                TicketNumber = ticket.TicketNumber,
+                Customer = customer,
+                TicketStatus = ticket.TicketStatus,
+                ContactMethod = ContactMethod.InPerson
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Contact(LogEditViewModel model)
+        {
+            Ticket ticket = _tickets.Get(model.TicketId);
+            if (ModelState.IsValid && ticket != null)
+            {
+                Log log = new Log
+                {
+                    UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                    TicketId = model.TicketId,
+                    Logged = DateTime.Now,
+                    Notes = model.Notes,
+                    LogType = model.LogType,
+                    ContactMethod = model.ContactMethod
+
+                };
+                _logs.Add(log);
+                _logs.Commit();
+                ticket.TicketStatus = model.TicketStatus;
+                if (model.TicketStatus == TicketStatus.PendingPickup)
+                {
+                    ticket.Finished = DateTime.Now;                    
+                }
+                else if (model.TicketStatus == TicketStatus.Done)
+                {
+                    ticket.CheckedOut = DateTime.Now;
+                    ticket.CheckOutUserId = User.FindFirst(ClaimTypes.Name).Value.ToString();
+                }
+                _tickets.Commit();
+                return RedirectToAction("Home", "Ticket");
+            }
+
+            return View(model);
+        }
+
+
     }
 }

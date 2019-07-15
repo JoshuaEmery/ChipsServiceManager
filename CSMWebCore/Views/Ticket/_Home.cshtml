@@ -39,16 +39,16 @@
                     </tr>
                 </table>
 
-                <div class="panel-body">@log.Notes</div>
+                <div class="panel-body table-bordered">@log.Notes</div>
 
 
             }
-
-            <a class="btn btn-primary" asp-controller="Log" asp-action="Service" asp-route-ticketId="@Model.Ticket.Id">Log Service</a>
-            <a class="btn btn-success" asp-controller="Log" asp-action="Contact" asp-route-ticketId="@Model.Ticket.Id">Log Contact</a>
-            <a class="btn btn-info" asp-controller="Customer" asp-action="Details" asp-route-ticketId="@Model.Ticket.Id">Customer Details</a>
-            <a class="btn btn-warning" asp-controller="Device" asp-action="Details" asp-route-ticketId="@Model.Ticket.Id">Device Details</a>
-
+                <div class="btn-group">
+                    <a class="btn btn-primary" asp-controller="Log" asp-action="Service" asp-route-ticketId="@Model.Ticket.Id">Log Service</a>
+                    <a class="btn btn-success" asp-controller="Log" asp-action="Contact" asp-route-ticketId="@Model.Ticket.Id">Log Contact</a>
+                    <a class="btn btn-info" asp-controller="Customer" asp-action="Details" asp-route-id="@Model.Customer.Id">Customer Details</a>
+                    <a class="btn btn-warning" asp-controller="Device" asp-action="Details" asp-route-id="@Model.Ticket.DeviceId">Device Details</a>
+                </div>
 
         </div>
     </div>

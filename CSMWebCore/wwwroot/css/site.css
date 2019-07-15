@@ -38,11 +38,17 @@ body {
 
 .topFormPanel {
     background-color: lightgrey;
-    height: 60px;
+    display: flex;
+    flex-direction: column;
+    min-height: 10vh;
     padding: 20px
 }
 .bottomFormPanel {
     background-color: lightseagreen;
-    height: 200px;
+    flex-direction: column;
+    min-height: 10vh;
     padding: 20px
+}
+.btn-group{
+    padding:10px;
 }

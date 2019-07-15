@@ -104,7 +104,7 @@ namespace CSMWebCore.Controllers
             ticket.NeedsBackup = model.NeedsBackup;
             ticket.TicketStatus = model.TicketStatus;
             _tickets.Commit();
-            return RedirectToAction("Index");
+            return RedirectToAction("Home");
 
         }
         //End Test Actions
@@ -120,6 +120,7 @@ namespace CSMWebCore.Controllers
             });
             return View(model);
         }
+        
 
 
     }
