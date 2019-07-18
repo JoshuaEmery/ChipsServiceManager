@@ -10,6 +10,7 @@
                     <th class="panel-heading">Customer</th>
                     <th class="panel-heading">Check-In Date</th>
                     <th class="panel-heading">Last Serviced</th>
+                    <th class="panel-heading">Needs Backup</th>
                     <th class="panel-heading">Notes</th>
                 </tr>
                 <tr class="panel-default">
@@ -18,6 +19,7 @@
                     <td class="panel-body">@Model.Customer.LastName</td>
                     <td class="panel-body">@Model.Ticket.CheckedIn.ToShortDateString()</td>
                     <td class="panel-body">@Model.Log.Logged.ToShortDateString()</td>
+                    <td class="panel-body">@Model.Ticket.NeedsBackup.ToString()</td>
                     <td class="panel-body">@Model.Log.Notes.ToString()</td>
                 </tr>
             </table>

@@ -1,4 +1,6 @@
 ﻿using CSMWebCore.Entities;
+using CSMWebCore.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +14,6 @@ namespace CSMWebCore.ViewModels
         public Customer Customer { get; set; }
         public Log Log { get; set; }
         public IEnumerable<Log> Logs { get; set; }
+        public TicketStatus TicketStatus { get; set; }
     }
 }

@@ -109,6 +109,7 @@ namespace CSMWebCore.Controllers
         }
         //End Test Actions
         //Begin Launch Actions
+        [HttpGet]
         public IActionResult Home()
         {
             var model = _tickets.GetAll().Select(ticket => new TicketHomeViewModel
@@ -116,11 +117,27 @@ namespace CSMWebCore.Controllers
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
+                Logs = _logs.GetLogsByTicketId(ticket.Id)     
+                
+            });
+            
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Home(TicketHomeViewModel result)
+        {
+            var model = _tickets.GetByStatus(result.TicketStatus).Select(ticket => new TicketHomeViewModel
+            {                
+                Ticket = ticket,
+                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                Log = _logs.GetLastByTicketId(ticket.Id),
                 Logs = _logs.GetLogsByTicketId(ticket.Id)
+
             });
             return View(model);
         }
-        
+
+
 
 
     }

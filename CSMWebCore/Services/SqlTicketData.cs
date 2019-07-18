@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CSMWebCore.Data;
 using CSMWebCore.Entities;
+using CSMWebCore.Models;
 
 namespace CSMWebCore.Services
 {
@@ -32,6 +33,10 @@ namespace CSMWebCore.Services
         public IEnumerable<Ticket> GetAll()
         {
             return _db.Tickets;
+        }
+        public IEnumerable<Ticket> GetByStatus(TicketStatus status)
+        {
+            return _db.Tickets.Where(x => x.TicketStatus == status);
         }
     }
 }
