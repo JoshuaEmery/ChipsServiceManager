@@ -6,9 +6,10 @@
 
 
 <div class="col-md-12 bottomFormPanel">
-    <form asp-action="Home" method="post">
-        <select onchange="this.form.submit()" name="TicketStatus" asp-items="Html.GetEnumSelectList<TicketStatus>()">
+    <form asp-action="FilterByStatus" method="post">
+        <select onchange="this.form.submit()" name="Status" asp-items="Html.GetEnumSelectList<TicketStatus>()">
             <option disabled selected>Filter By Status</option>
+            <option value="All">All</option>
         </select>
     </form>
     
