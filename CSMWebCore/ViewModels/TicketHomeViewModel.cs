@@ -15,7 +15,9 @@ namespace CSMWebCore.ViewModels
         public Log Log { get; set; }
         public IEnumerable<Log> Logs { get; set; }
         public TicketStatus TicketStatus { get; set; }
+        public DateFilter DateFilter { get; set; }
         public string Status { get; set; }
         public bool All { get; set; }
+        public TimeSpan DaysIdle { get; set; }
     }
 }

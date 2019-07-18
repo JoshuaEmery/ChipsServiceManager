@@ -48,8 +48,8 @@ namespace CSMWebCore.Controllers
         public IActionResult Create(int deviceId)
         {
             var device = _devices.Get(deviceId);
-            var cust = _customers.Get(device.CustomerId);            
-            if(cust == null || device == null)
+            var cust = _customers.Get(device.CustomerId);
+            if (cust == null || device == null)
             {
                 return NotFound();
             }
@@ -63,16 +63,18 @@ namespace CSMWebCore.Controllers
         [HttpPost]
         public IActionResult Create(TicketEditViewModel model)
         {
-            if(model == null || !ModelState.IsValid)
+            if (model == null || !ModelState.IsValid)
             {
                 return View();
             }
             _tickets.Add(
-                new Ticket { DeviceId = model.DeviceId,
+                new Ticket
+                {
+                    DeviceId = model.DeviceId,
                     CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
                     CheckedIn = DateTime.Now,
                     NeedsBackup = model.NeedsBackup,
-                    TicketStatus = TicketStatus.New                               
+                    TicketStatus = TicketStatus.New
                 });
             _tickets.Commit();
             return RedirectToAction("Index");
@@ -81,7 +83,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(int id)
         {
             var model = _tickets.Get(id);
-            if(model == null)
+            if (model == null)
             {
                 return RedirectToAction("Index");
             }
@@ -109,7 +111,7 @@ namespace CSMWebCore.Controllers
         }
         //End Test Actions
         //Begin Launch Actions
-        
+
         public IActionResult Home()
         {
             var model = _tickets.GetAll().Select(ticket => new TicketHomeViewModel
@@ -117,29 +119,79 @@ namespace CSMWebCore.Controllers
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
-                Logs = _logs.GetLogsByTicketId(ticket.Id)     
-                
+                Logs = _logs.GetLogsByTicketId(ticket.Id)
+
             });
-            
+
             return View(model);
         }
         [HttpPost]
         public IActionResult FilterByStatus(TicketHomeViewModel result)
         {
-            if(result.Status == "All")
+            if (result.Status == "All")
             {
                 return RedirectToAction("Home");
             }
             var model = _tickets.GetByStatus(result.TicketStatus).Select(ticket => new TicketHomeViewModel
-            {                
+            {
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
                 Logs = _logs.GetLogsByTicketId(ticket.Id)
 
             });
-            
-            return View("Home",model);
+
+            return View("Home", model);
+        }
+        [HttpPost]
+        public IActionResult FilterByDate(TicketHomeViewModel result)
+        {
+            if (result.Status == "All")
+            {
+                return RedirectToAction("Home");
+            }
+            else if (result.DateFilter == DateFilter.Oldest)
+            {
+                var model = _tickets.GetAll().OrderBy(x => x.CheckedIn).Select(ticket => new TicketHomeViewModel
+                {
+                    Ticket = ticket,
+                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                    Log = _logs.GetLastByTicketId(ticket.Id),
+                    Logs = _logs.GetLogsByTicketId(ticket.Id)
+
+                });
+
+                return View("Home", model);
+            }
+            else if (result.DateFilter == DateFilter.Newest)
+            {
+                var model = _tickets.GetAll().OrderByDescending(x => x.CheckedIn).Select(ticket => new TicketHomeViewModel
+                {
+                    Ticket = ticket,
+                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                    Log = _logs.GetLastByTicketId(ticket.Id),
+                    Logs = _logs.GetLogsByTicketId(ticket.Id)
+
+                });
+
+                return View("Home", model);
+            }
+            else if (result.DateFilter == DateFilter.Idle)
+            {
+                var model = _tickets.GetAll().OrderBy(x => x.CheckedIn).Select(ticket => new TicketHomeViewModel
+                {
+                    Ticket = ticket,
+                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                    Log = _logs.GetLastByTicketId(ticket.Id),
+                    Logs = _logs.GetLogsByTicketId(ticket.Id),
+                    DaysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).Logged
+                });
+                var sorted = model.OrderByDescending(x => x.DaysIdle).ToList();
+
+                return View("Home", sorted);
+            }
+
+            return View("Home");
         }
 
 

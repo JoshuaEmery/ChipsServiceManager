@@ -6,16 +6,22 @@
 
 
 <div class="col-md-12 bottomFormPanel">
-    <form asp-action="FilterByStatus" method="post">
+    <form asp-action="FilterByStatus" method="post" class="btn-group">
         <select onchange="this.form.submit()" name="Status" asp-items="Html.GetEnumSelectList<TicketStatus>()">
             <option disabled selected>Filter By Status</option>
             <option value="All">All</option>
         </select>
     </form>
-    
+    <form asp-action="FilterByDate" method="post" class="btn-group">
+        <select onchange="this.form.submit()" name="DateFilter" asp-items="Html.GetEnumSelectList<DateFilter>()">
+            <option disabled selected>Filter By Date</option>
+            <option value="All">All</option>
+        </select>
+    </form>
+
     @foreach (var ticketView in Model)
     {
-        
+
         @await Html.PartialAsync("_Home", ticketView)
     }
- </div>
+</div>
