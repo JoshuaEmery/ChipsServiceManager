@@ -104,7 +104,8 @@ namespace CSMWebCore.Controllers
                 };
                 _customers.Add(cust);
                 _customers.Commit();
-                return RedirectToAction("Index");
+                int newId = cust.Id;
+                return RedirectToAction("Details", new { id = newId });
             }
             return View();
         }

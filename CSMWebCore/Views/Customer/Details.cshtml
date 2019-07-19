@@ -1,11 +1,50 @@
 ﻿@model CustomerViewModel
+@{ ViewBag.Title = Model.FirstName + " " + Model.LastName;}
+<div class="col-md-12 topFormPanel">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="col-md-12 bottomFormPanel">
+    <form asp-action="CreateByCustId" method="get">
+        <div asp-validation-summary="All"></div>
+        <table class="col-md-3 table table-hover">
+            <tr>
+                <td><label asp-for="FirstName"></label></td>
+                <td><input disabled asp-for="FirstName" /></td>
+                <td><span asp-validation-for="FirstName"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="LastName"></label></td>
+                <td><input disabled asp-for="LastName" /></td>
+                <td><span asp-validation-for="LastName"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="StudentId"></label></td>
+                <td><input disabled id="sid" size="11" asp-for="StudentId" placeholder="999-999-999" pattern="\d{3}-?\d{3}-?\d{3}" onkeyup="mask(this, stuid);" onblur="mask(this, stuid)" /></td>
+                <td><span asp-validation-for="StudentId"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="Phone"></label></td>
+                <td><input disabled id="sid" size="11" asp-for="Phone" placeholder="999-999-9999" pattern="\d{3}-?\d{3}-?\d{4}" onkeyup="mask(this, phone);" onblur="mask(this, phone)" /></td>
+                <td><span asp-validation-for="Phone"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="Email"></label></td>
+                <td><input disabled asp-for="Email" /></td>
+                <td><span asp-validation-for="Email"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="ContactPref"></label></td>
+                <td><select disabled asp-for="ContactPref" asp-items="Html.GetEnumSelectList<ContactPref>()"></select></td>
+                <td><span asp-validation-for="ContactPref"></span></td>
+            </tr>
+        </table>
+        <input asp-for="Id" type="hidden"/>
+        <div class="btn-group">
+            <a class="btn btn-primary" asp-controller="Device" asp-action="CreateByCustId" asp-route-customerId="@Model.Id">Create New Device for this Customer</a>
+            <a class="btn btn-success" asp-controller="Device" asp-action="Service" asp-route-customerId="@Model.Id">Show all Devices owned by this Customer</a>
+            <input class="btn btn-warning" type="submit" value="Edit this customer" />
+        </div>
 
-@{ ViewBag.Title = $"Details - {Model.FirstName} {Model.LastName}";}
-<h2>@ViewBag.Title</h2>
-<div class="panel-primary table-bordered">
-    <div class="panel-heading">@Model.FirstName @Model.LastName</div>
-    <div class="panel-body"><label asp-for="Phone"></label><span class="pull-right">@Model.Phone</span></div>
-    <div class="panel-body"><label asp-for="StudentId"></label><span class="pull-right">@Model.StudentId</span></div>
-    <div class="panel-body"><label asp-for="Email"></label><span class="pull-right">@Model.Email</span></div>
-    <div class="panel-body"><label asp-for="ContactPref"></label><span class="pull-right">@Model.ContactPref</span></div>
+        
+    </form>
 </div>

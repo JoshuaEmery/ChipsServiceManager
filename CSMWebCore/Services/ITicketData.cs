@@ -14,6 +14,7 @@ namespace CSMWebCore.Services
         void Add(Ticket ticket);
         int Commit();
         IEnumerable<Ticket> GetByStatus(TicketStatus status);
+        int CurrentTicketNumber();
     }
 
 }

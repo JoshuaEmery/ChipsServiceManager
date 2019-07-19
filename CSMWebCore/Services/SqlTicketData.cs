@@ -25,6 +25,11 @@ namespace CSMWebCore.Services
             return _db.SaveChanges();
         }
 
+        public int CurrentTicketNumber()
+        {
+            return _db.Tickets.Max(t => t.TicketNumber);
+        }
+
         public Ticket Get(int id)
         {
             return _db.Find<Ticket>(id);
@@ -38,6 +43,7 @@ namespace CSMWebCore.Services
         {
             return _db.Tickets.Where(x => x.TicketStatus == status);
         }
+        
 
     }
 }

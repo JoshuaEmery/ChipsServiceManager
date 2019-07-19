@@ -7,6 +7,7 @@ namespace CSMWebCore.Models
 {
     public enum LogType
     {
+        CheckIn,
         InitialInspection,
         ContactCustomer,
         GeneralTroubleshooting,
@@ -20,6 +21,7 @@ namespace CSMWebCore.Models
         OSUpdate,
         OfficeInstallation,
         MalwareScan,
-        MalwareRemoval
+        MalwareRemoval,
+        Checkout
     }
 }

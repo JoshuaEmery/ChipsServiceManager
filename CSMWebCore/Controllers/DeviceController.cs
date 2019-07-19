@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CSMWebCore.Entities;
+using CSMWebCore.Models;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -16,10 +18,14 @@ namespace CSMWebCore.Controllers
     {
         private IDeviceData _devices;
         private ICustomerData _customers;
-        public DeviceController(IDeviceData devices, ICustomerData customers)
+        private ITicketData _tickets;
+        private ILogData _logs;
+        public DeviceController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs)
         {
             _devices = devices;
             _customers = customers;
+            _tickets = tickets;
+            _logs = logs;
         }
         public IActionResult Index()
         {
@@ -124,6 +130,62 @@ namespace CSMWebCore.Controllers
                 Serviced = device.Serviced
             };
             return View(model);
+        }
+        [HttpGet]
+        public IActionResult CreateByCustId(string customerId)
+        {
+            DeviceEditViewModel model = new DeviceEditViewModel();
+            model.Ticket = new Ticket();
+            model.CustomerId = customerId;
+            model.Owner = _customers.Get(int.Parse(customerId));
+            model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult CreateByCustId(DeviceEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Device device = new Device
+                {
+                    CustomerId = int.Parse(model.CustomerId),
+                    Make = model.Make,
+                    ModelNumber = model.ModelNumber,
+                    OperatingSystem = model.OperatingSystem,
+                    Password = model.Password,
+                    Serviced = model.Serviced
+                };
+                _devices.Add(device);
+                _devices.Commit();
+                Ticket ticket = new Ticket 
+                {
+                    DeviceId = device.Id,
+                    CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                    CheckedIn = DateTime.Now,
+                    NeedsBackup = model.Ticket.NeedsBackup,
+                    TicketStatus = TicketStatus.New,
+                    TicketNumber = model.Ticket.TicketNumber
+                };
+                _tickets.Add(ticket);
+                _tickets.Commit();
+                Log log = new Log
+                {
+                    UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                    TicketId = ticket.Id,
+                    Logged = DateTime.Now,
+                    Notes = model.Log.Notes,
+                    LogType = LogType.CheckIn,
+                    ContactMethod = ContactMethod.InPerson
+                };
+                _logs.Add(log);
+                _logs.Commit();
+                return RedirectToAction("Home", "Ticket",null);
+
+            }
+            return View();
+            
+
+
         }
 
     }

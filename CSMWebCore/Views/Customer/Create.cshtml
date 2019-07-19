@@ -19,7 +19,7 @@
             </tr>
             <tr>
                 <td><label asp-for="StudentId"></label></td>
-                <td><input id="sid" size="11" asp-for="StudentId" placeholder="999-999-999" pattern="\d{3}-?\d{3}-?\d{3}" onkeyup="mask(this, sid);" onblur="mask(this, sid)" /></td>
+                <td><input id="sid" size="11" asp-for="StudentId" placeholder="999-999-999" pattern="\d{3}-?\d{3}-?\d{3}" onkeyup="mask(this, stuid);" onblur="mask(this, stuid)" /></td>
                 <td><span asp-validation-for="StudentId"></span></td>
             </tr>
             <tr>
@@ -38,7 +38,7 @@
                 <td><span asp-validation-for="ContactPref"></span></td>
             </tr>
         </table>
-        <input type="submit" value="Create" asp-controller="" />
+        <input type="submit" value="Create"/>
     </form>
 </div>
 <script>
@@ -51,7 +51,7 @@
         }, 1);
     }
 
-    function sid(v) {
+    function stuid(v) {
         var r = v.replace(/\D/g, "");
         if (r.length > 9) {
             r = r.replace(/^(\d\d\d)(\d{3})(\d{0,3}).*/, "$1-$2-$3");

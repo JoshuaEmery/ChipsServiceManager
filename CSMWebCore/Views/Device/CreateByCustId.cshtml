@@ -1,0 +1,53 @@
+﻿@model DeviceEditViewModel
+@{ ViewBag.Title = $"Create new device for {Model.Owner.FirstName} {Model.Owner.LastName}";}
+<div class="col-md-12 topFormPanel">
+    <h2>@ViewBag.Title</h2>         <div class="pull-right">
+        <label asp-for="Ticket.TicketNumber"></label>
+        <input asp-for="Ticket.TicketNumber" readonly="readonly" />
+    </div>
+</div>
+<div class="col-md-12 bottomFormPanel">
+    <form asp-action="CreateByCustId" method="post">
+        <div asp-validation-summary="All"></div>
+        <table class="col-md-3 table table-hover">
+            <tr>
+                <td><label asp-for="Make"></label></td>
+                <td><input asp-for="Make" /></td>
+                <td><span asp-validation-for="Make"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="ModelNumber"></label></td>
+                <td><input asp-for="ModelNumber" /></td>
+                <td><span asp-validation-for="ModelNumber"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="OperatingSystem"></label></td>
+                <td><input asp-for="OperatingSystem" /></td>
+                <td><span asp-validation-for="OperatingSystem"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="Password"></label></td>
+                <td><input asp-for="Password" /></td>
+                <td><span asp-validation-for="Password"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="Serviced"></label></td>
+                <td><input asp-for="Serviced" /></td>
+                <td><span asp-validation-for="Serviced"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="Ticket.NeedsBackup"></label></td>
+                <td><input asp-for="Ticket.NeedsBackup" /></td>
+                <td><span asp-validation-for="Ticket.NeedsBackup"></span></td>
+            </tr>
+        </table>
+        <div class="row">
+            <label asp-for="Log.Notes" class="col-md-1">Issues</label>
+            <textarea asp-for="Log.Notes" rows="5" class="col-md-5"></textarea>
+            <span asp-validation-for="Log.Notes"></span>
+        </div>
+        <input hidden asp-for="CustomerId" />
+        <input hidden asp-for="Ticket.TicketNumber" />
+        <input type="submit" value="Create" />
+    </form>
+</div>
