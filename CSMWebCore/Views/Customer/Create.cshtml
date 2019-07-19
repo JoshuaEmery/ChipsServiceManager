@@ -1,29 +1,88 @@
 ﻿@model Customer
 @{ ViewBag.Title = "Create new customer";}
-<h2>@ViewBag.Title</h2>
-<form asp-action="Create" method="post">
-    <div asp-validation-summary="All"></div>
-    <table>
-        <tr>
-            <td><label asp-for="FirstName"></label></td>
-            <td><input asp-for="FirstName" /></td>
-            <td><span asp-validation-for="FirstName"></span></td>
-        </tr>
-        <tr>
-            <td><label asp-for="LastName"></label></td>
-            <td><input asp-for="LastName" /></td>
-            <td><span asp-validation-for="LastName"></span></td>
-        </tr>
-        <tr>
-            <td><label asp-for="Email"></label></td>
-            <td><input asp-for="Email" /></td>
-            <td><span asp-validation-for="Email"></span></td>
-        </tr>
-        <tr>
-            <td><label asp-for="ContactPref"></label></td>
-            <td><select asp-for="ContactPref" asp-items="Html.GetEnumSelectList<ContactPref>()"></select></td>
-            <td><span asp-validation-for="ContactPref"></span></td>
-        </tr>
-    </table>
-    <input type="submit" value="Create" />
-</form>
+<div class="col-md-12 topFormPanel">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="col-md-12 bottomFormPanel">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="All"></div>
+        <table class="col-md-3 table table-hover">
+            <tr>
+                <td><label asp-for="FirstName"></label></td>
+                <td><input asp-for="FirstName" /></td>
+                <td><span asp-validation-for="FirstName"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="LastName"></label></td>
+                <td><input asp-for="LastName" /></td>
+                <td><span asp-validation-for="LastName"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="StudentId"></label></td>
+                <td><input id="sid" size="11" asp-for="StudentId" placeholder="999-999-999" pattern="\d{3}-?\d{3}-?\d{3}" onkeyup="mask(this, sid);" onblur="mask(this, sid)" /></td>
+                <td><span asp-validation-for="StudentId"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="Phone"></label></td>
+                <td><input id="sid" size="11" asp-for="Phone" placeholder="999-999-9999" pattern="\d{3}-?\d{3}-?\d{4}" onkeyup="mask(this, phone);" onblur="mask(this, phone)" /></td>
+                <td><span asp-validation-for="Phone"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="Email"></label></td>
+                <td><input asp-for="Email" /></td>
+                <td><span asp-validation-for="Email"></span></td>
+            </tr>
+            <tr>
+                <td><label asp-for="ContactPref"></label></td>
+                <td><select asp-for="ContactPref" asp-items="Html.GetEnumSelectList<ContactPref>()"></select></td>
+                <td><span asp-validation-for="ContactPref"></span></td>
+            </tr>
+        </table>
+        <input type="submit" value="Create" asp-controller="" />
+    </form>
+</div>
+<script>
+    function mask(o, f) {
+        setTimeout(function () {
+            var v = f(o.value);
+            if (v != o.value) {
+                o.value = v;
+            }
+        }, 1);
+    }
+
+    function sid(v) {
+        var r = v.replace(/\D/g, "");
+        if (r.length > 9) {
+            r = r.replace(/^(\d\d\d)(\d{3})(\d{0,3}).*/, "$1-$2-$3");
+            return r;
+        }
+        else if (r.length > 5) {
+            r = r.replace(/^(\d\d\d)(\d{3})(\d{0,3}).*/, "$1-$2-$3");
+        }
+        else if (r.length > 2) {
+            r = r.replace(/^(\d\d\d)(\d{0,3})/, "$1-$2");
+        }
+        else {
+            r = r.replace(/^(\d*)/, "$1");
+        }
+        return r;
+    }
+    function phone(v) {
+        var r = v.replace(/\D/g, "");
+        if (r.length > 9) {
+            r = r.replace(/^(\d\d\d)(\d{3})(\d{0,4}).*/, "$1-$2-$3");
+            return r;
+        }
+        else if (r.length > 5) {
+            r = r.replace(/^(\d\d\d)(\d{3})(\d{0,4}).*/, "$1-$2-$3");
+        }
+        else if (r.length > 2) {
+            r = r.replace(/^(\d\d\d)(\d{0,3})/, "$1-$2");
+        }
+        else {
+            r = r.replace(/^(\d*)/, "$1");
+        }
+        return r;
+    }
+</script>
