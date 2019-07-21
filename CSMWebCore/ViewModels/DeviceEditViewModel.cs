@@ -14,7 +14,7 @@ namespace CSMWebCore.ViewModels
         public Customer Owner { get; set; }
         public Log Log { get; set; }
         public Ticket Ticket { get; set; }
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public string Make { get; set; }
         public string ModelNumber { get; set; }
         public string OperatingSystem { get; set; }

@@ -72,7 +72,7 @@ namespace CSMWebCore.Controllers
             {
                 return View();
             }
-            device.CustomerId = int.Parse(model.CustomerId);
+            device.CustomerId = model.CustomerId;
             device.Make = model.Make;
             device.ModelNumber = model.ModelNumber;
             device.OperatingSystem = model.OperatingSystem;
@@ -99,7 +99,7 @@ namespace CSMWebCore.Controllers
             {
                 Device device = new Device
                 {
-                    CustomerId = int.Parse(model.CustomerId),
+                    CustomerId = model.CustomerId,
                     Make = model.Make,
                     ModelNumber = model.ModelNumber,
                     OperatingSystem = model.OperatingSystem,
@@ -132,12 +132,12 @@ namespace CSMWebCore.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult CreateByCustId(string customerId)
+        public IActionResult CreateByCustId(int customerId)
         {
             DeviceEditViewModel model = new DeviceEditViewModel();
             model.Ticket = new Ticket();
             model.CustomerId = customerId;
-            model.Owner = _customers.Get(int.Parse(customerId));
+            model.Owner = _customers.Get(customerId);
             model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
             return View(model);
         }
@@ -148,7 +148,7 @@ namespace CSMWebCore.Controllers
             {
                 Device device = new Device
                 {
-                    CustomerId = int.Parse(model.CustomerId),
+                    CustomerId = model.CustomerId,
                     Make = model.Make,
                     ModelNumber = model.ModelNumber,
                     OperatingSystem = model.OperatingSystem,
