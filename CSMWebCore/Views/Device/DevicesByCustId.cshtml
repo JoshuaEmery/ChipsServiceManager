@@ -1,0 +1,11 @@
+﻿@model IEnumerable<DeviceViewModel>
+@{ ViewBag.Title = "Ticket Home";}
+<div class="col-md-12 topFormPanel">
+    <h2>@ViewBag.Customer.FirstName @ViewBag.Customer.LastName - Device List</h2>
+</div>
+<div class="col-md-12 bottomFormPanel">
+    @foreach (var device in Model)
+    {
+        @await Html.PartialAsync("_DevicesByCustId", device)
+    }
+</div>

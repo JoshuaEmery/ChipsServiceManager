@@ -33,5 +33,10 @@ namespace CSMWebCore.Services
         {
             return _db.Devices;
         }
+
+        public IEnumerable<Device> GetAllByCustId(int customerId)
+        {
+            return _db.Devices.Where(x => x.CustomerId == customerId);
+        }
     }
 }

@@ -45,39 +45,61 @@ namespace CSMWebCore.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Create(int deviceId)
+        public IActionResult CreateByDeviceId(int deviceId)
         {
             var device = _devices.Get(deviceId);
-            var cust = _customers.Get(device.CustomerId);
-            if (cust == null || device == null)
-            {
-                return NotFound();
-            }
-            TicketEditViewModel model = new TicketEditViewModel
-            {
-                Customer = cust,
-                Device = device
-            };
-            return View(model);
-        }
-        [HttpPost]
-        public IActionResult Create(TicketEditViewModel model)
-        {
-            if (model == null || !ModelState.IsValid)
+            if (device == null)
             {
                 return View();
             }
-            _tickets.Add(
-                new Ticket
-                {
-                    DeviceId = model.DeviceId,
-                    CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                    CheckedIn = DateTime.Now,
-                    NeedsBackup = model.NeedsBackup,
-                    TicketStatus = TicketStatus.New
-                });
+            DeviceEditViewModel model = new DeviceEditViewModel
+            {
+                Id = device.Id,
+                Make = device.Make,
+                ModelNumber = device.ModelNumber,
+                OperatingSystem = device.OperatingSystem,
+                Password = device.Password,
+                Serviced = device.Serviced,
+                Ticket = new Ticket(),
+                Owner = _customers.Get(device.CustomerId)
+                
+            };
+            model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult CreateByDeviceId(DeviceEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Owner = _customers.Get(model.CustomerId);
+                return View(model);
+
+            }
+            var device = _devices.Get(model.Id);
+            Ticket ticket = new Ticket
+            {
+                DeviceId = device.Id,
+                CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                CheckedIn = DateTime.Now,
+                NeedsBackup = model.Ticket.NeedsBackup,
+                TicketStatus = TicketStatus.New,
+                TicketNumber = model.Ticket.TicketNumber
+            };
+            _tickets.Add(ticket);
             _tickets.Commit();
-            return RedirectToAction("Index");
+            Log log = new Log
+            {
+                UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                TicketId = ticket.Id,
+                Logged = DateTime.Now,
+                Notes = model.Log.Notes,
+                LogType = LogType.CheckIn,
+                ContactMethod = ContactMethod.InPerson
+            };
+            _logs.Add(log);
+            _logs.Commit();
+            return RedirectToAction("Home", "Ticket", null);
         }
         [HttpGet]
         public IActionResult Edit(int id)

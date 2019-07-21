@@ -1,0 +1,31 @@
+﻿@model DeviceViewModel
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a data-toggle="collapse" href=@string.Format($"#collapse{ Model.Id}")>
+                <table class="table-responsive table-striped">
+                    <tr class="panel">
+                        <th class="panel-heading">Make</th>
+                        <th class="panel-heading">Model</th>
+                        <th class="panel-heading">Operating System</th>
+
+                    </tr>
+                    <tr class="panel-default">
+                        <td class="panel-body">@Model.Make</td>
+                        <td class="panel-body">@Model.ModelNumber</td>
+                        <td class="panel-body">@Model.OperatingSystem</td>
+                    </tr>
+                </table>
+            </a>
+        </div>
+        <div id='@string.Format($"collapse{ Model.Id}")' class="panel-collapse collapse">
+
+            <div class="btn-group">
+                <a class="btn btn-primary" asp-controller="Ticket" asp-action="CreateByDeviceId" asp-route-deviceId="@Model.Id" asp-route-customerId="@Model.CustomerId">Create a new ticket for this device</a>
+                <a class="btn btn-success" asp-controller="Log" asp-action="Contact" asp-route-ticketId="@Model.Id">View all tickets for this device</a>
+                <a class="btn btn-info" asp-controller="Customer" asp-action="Details" asp-route-id="@Model.Id">Edit this device</a>
+            </div>
+
+        </div>
+    </div>
+</div>

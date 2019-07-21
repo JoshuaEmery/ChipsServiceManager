@@ -12,5 +12,6 @@ namespace CSMWebCore.Services
         Device Get(int id);
         void Add(Device device);
         int Commit();
+        IEnumerable<Device> GetAllByCustId(int customerId);
     }
 }

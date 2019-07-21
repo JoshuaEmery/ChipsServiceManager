@@ -68,7 +68,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(DeviceEditViewModel model)
         {
             var device = _devices.Get(model.Id);
-            if (device == null || !ModelState.IsValid )
+            if (device == null || !ModelState.IsValid)
             {
                 return View();
             }
@@ -85,7 +85,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Create()
         {
             DeviceEditViewModel model = new DeviceEditViewModel();
-            model.Customer = new List<SelectListItem>();            
+            model.Customer = new List<SelectListItem>();
             foreach (var customer in _customers.GetAll())
             {
                 model.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName, customer.Id.ToString()));
@@ -115,7 +115,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Details(int id)
         {
             var device = _devices.Get(id);
-            if(device == null)
+            if (device == null)
             {
                 return View();
             }
@@ -184,7 +184,27 @@ namespace CSMWebCore.Controllers
             _logs.Add(log);
             _logs.Commit();
             return RedirectToAction("Home", "Ticket", null);
-
+        }
+        [HttpGet] public IActionResult DevicesByCustId(int customerId)
+        {
+            var cust = _customers.Get(customerId);
+            if(cust == null)
+            {
+                return View();
+            }
+            ViewBag.Customer = cust;
+            var model = _devices.GetAllByCustId(customerId).Select(device => new DeviceViewModel
+            {
+                Id = device.Id,
+                CustomerId = device.CustomerId,
+                Make = device.Make,
+                ModelNumber = device.ModelNumber,
+                OperatingSystem = device.OperatingSystem,
+                Password = device.Password,
+                Serviced = device.Serviced
+                
+            });
+            return View(model);
 
 
         }

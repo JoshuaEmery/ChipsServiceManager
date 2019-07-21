@@ -41,7 +41,7 @@
         <input asp-for="Id" type="hidden"/>
         <div class="btn-group">
             <a class="btn btn-primary" asp-controller="Device" asp-action="CreateByCustId" asp-route-customerId="@Model.Id">Create New Device for this Customer</a>
-            <a class="btn btn-success" asp-controller="Device" asp-action="Service" asp-route-customerId="@Model.Id">Show all Tickets for by this Customer</a>
+            <a class="btn btn-success" asp-controller="Device" asp-action="DevicesByCustId" asp-route-customerId="@Model.Id">Show all Devices owned by this Customer</a>
             <input class="btn btn-warning" asp-controller="Customer" asp-action="Edit" asp-route-customerId="@Model.Id" type="submit" value="Edit this customer" />
         </div>
 

@@ -1,5 +1,5 @@
 ﻿@model DeviceEditViewModel
-@{ ViewBag.Title = $"Create new device for {Model.Owner.FirstName} {Model.Owner.LastName}";}
+@{ ViewBag.Title = $"Create new Ticket for {Model.Owner.FirstName} {Model.Owner.LastName}";}
 <div class="col-md-12 topFormPanel">
     <h2>@ViewBag.Title</h2>         <div class="pull-right">
         <label asp-for="Ticket.TicketNumber"></label>
@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="col-md-12 bottomFormPanel">
-    <form asp-action="CreateByCustId" method="post">
+    <form asp-action="CreateByDeviceId" method="post">
         <div asp-validation-summary="All"></div>
         <table class="col-md-3 table table-hover">
             <tr>
@@ -48,7 +48,7 @@
         </div>
         <input hidden asp-for="CustomerId" />
         <input hidden asp-for="Ticket.TicketNumber" />
-        <input hidden asp-for="Owner" />
+        <input hidden asp-for="Id" />
         <input type="submit" value="Create" />
     </form>
 </div>
