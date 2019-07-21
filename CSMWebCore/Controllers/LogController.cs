@@ -85,7 +85,7 @@ namespace CSMWebCore.Controllers
             var log = _logs.Get(model.Id);
             if (log == null || !ModelState.IsValid)
             {
-                return View();
+                return View(model);
             }
             log.UserId = model.UserId;
             log.TicketId = model.TicketId;
@@ -112,22 +112,23 @@ namespace CSMWebCore.Controllers
         [HttpPost]
         public IActionResult Service(LogEditViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                Log log = new Log
-                {
-                    UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                    TicketId = model.TicketId,
-                    Logged = DateTime.Now,
-                    Notes = model.Notes,
-                    LogType = model.LogType,
-                    ContactMethod = model.ContactMethod
-                };
-                _logs.Add(log);
-                _logs.Commit();
-                return RedirectToAction("Home", "Ticket");
+                return View(model);
             }
-            return View(model);
+            Log log = new Log
+            {
+                UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                TicketId = model.TicketId,
+                Logged = DateTime.Now,
+                Notes = model.Notes,
+                LogType = model.LogType,
+                ContactMethod = model.ContactMethod
+            };
+            _logs.Add(log);
+            _logs.Commit();
+            return RedirectToAction("Home", "Ticket");
+            
         }
         [HttpGet]
         public IActionResult Contact(int ticketId)
@@ -148,35 +149,35 @@ namespace CSMWebCore.Controllers
         public IActionResult Contact(LogEditViewModel model)
         {
             Ticket ticket = _tickets.Get(model.TicketId);
-            if (ModelState.IsValid && ticket != null)
+            if (!ModelState.IsValid || ticket == null)
             {
-                Log log = new Log
-                {
-                    UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                    TicketId = model.TicketId,
-                    Logged = DateTime.Now,
-                    Notes = model.Notes,
-                    LogType = model.LogType,
-                    ContactMethod = model.ContactMethod
-
-                };
-                _logs.Add(log);
-                _logs.Commit();
-                ticket.TicketStatus = model.TicketStatus;
-                if (model.TicketStatus == TicketStatus.PendingPickup)
-                {
-                    ticket.Finished = DateTime.Now;                    
-                }
-                else if (model.TicketStatus == TicketStatus.Done)
-                {
-                    ticket.CheckedOut = DateTime.Now;
-                    ticket.CheckOutUserId = User.FindFirst(ClaimTypes.Name).Value.ToString();
-                }
-                _tickets.Commit();
-                return RedirectToAction("Home", "Ticket");
+                return View(model);
             }
+            Log log = new Log
+            {
+                UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                TicketId = model.TicketId,
+                Logged = DateTime.Now,
+                Notes = model.Notes,
+                LogType = model.LogType,
+                ContactMethod = model.ContactMethod
 
-            return View(model);
+            };
+            _logs.Add(log);
+            _logs.Commit();
+            ticket.TicketStatus = model.TicketStatus;
+            if (model.TicketStatus == TicketStatus.PendingPickup)
+            {
+                ticket.Finished = DateTime.Now;
+            }
+            else if (model.TicketStatus == TicketStatus.Done)
+            {
+                ticket.CheckedOut = DateTime.Now;
+                ticket.CheckOutUserId = User.FindFirst(ClaimTypes.Name).Value.ToString();
+            }
+            _tickets.Commit();
+            return RedirectToAction("Home", "Ticket");
+            
         }
 
 

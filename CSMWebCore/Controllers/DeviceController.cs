@@ -144,46 +144,47 @@ namespace CSMWebCore.Controllers
         [HttpPost]
         public IActionResult CreateByCustId(DeviceEditViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                Device device = new Device
-                {
-                    CustomerId = model.CustomerId,
-                    Make = model.Make,
-                    ModelNumber = model.ModelNumber,
-                    OperatingSystem = model.OperatingSystem,
-                    Password = model.Password,
-                    Serviced = model.Serviced
-                };
-                _devices.Add(device);
-                _devices.Commit();
-                Ticket ticket = new Ticket 
-                {
-                    DeviceId = device.Id,
-                    CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                    CheckedIn = DateTime.Now,
-                    NeedsBackup = model.Ticket.NeedsBackup,
-                    TicketStatus = TicketStatus.New,
-                    TicketNumber = model.Ticket.TicketNumber
-                };
-                _tickets.Add(ticket);
-                _tickets.Commit();
-                Log log = new Log
-                {
-                    UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                    TicketId = ticket.Id,
-                    Logged = DateTime.Now,
-                    Notes = model.Log.Notes,
-                    LogType = LogType.CheckIn,
-                    ContactMethod = ContactMethod.InPerson
-                };
-                _logs.Add(log);
-                _logs.Commit();
-                return RedirectToAction("Home", "Ticket",null);
+                model.Owner = _customers.Get(model.CustomerId);
+                return View(model);
 
             }
-            return View();
-            
+            Device device = new Device
+            {
+                CustomerId = model.CustomerId,
+                Make = model.Make,
+                ModelNumber = model.ModelNumber,
+                OperatingSystem = model.OperatingSystem,
+                Password = model.Password,
+                Serviced = model.Serviced
+            };
+            _devices.Add(device);
+            _devices.Commit();
+            Ticket ticket = new Ticket
+            {
+                DeviceId = device.Id,
+                CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                CheckedIn = DateTime.Now,
+                NeedsBackup = model.Ticket.NeedsBackup,
+                TicketStatus = TicketStatus.New,
+                TicketNumber = model.Ticket.TicketNumber
+            };
+            _tickets.Add(ticket);
+            _tickets.Commit();
+            Log log = new Log
+            {
+                UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                TicketId = ticket.Id,
+                Logged = DateTime.Now,
+                Notes = model.Log.Notes,
+                LogType = LogType.CheckIn,
+                ContactMethod = ContactMethod.InPerson
+            };
+            _logs.Add(log);
+            _logs.Commit();
+            return RedirectToAction("Home", "Ticket", null);
+
 
 
         }
