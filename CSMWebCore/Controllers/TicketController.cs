@@ -62,7 +62,7 @@ namespace CSMWebCore.Controllers
                 Serviced = device.Serviced,
                 Ticket = new Ticket(),
                 Owner = _customers.Get(device.CustomerId)
-                
+
             };
             model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
             return View(model);
@@ -214,6 +214,25 @@ namespace CSMWebCore.Controllers
             }
 
             return View("Home");
+        }
+        public IActionResult TicketsByDeviceId(int deviceId)
+        {
+            var model = _tickets.GetAllByDevice(deviceId).Select(ticket => new TicketHomeViewModel
+            {
+                Ticket = ticket,
+                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                Log = _logs.GetLastByTicketId(ticket.Id),
+                Logs = _logs.GetLogsByTicketId(ticket.Id)
+
+            });
+            if (model != null)
+            {
+                return View("Home",model);
+            }
+            return View();
+
+
+
         }
 
 

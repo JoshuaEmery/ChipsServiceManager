@@ -15,6 +15,7 @@ namespace CSMWebCore.Services
         int Commit();
         IEnumerable<Ticket> GetByStatus(TicketStatus status);
         int CurrentTicketNumber();
+        IEnumerable<Ticket> GetAllByDevice(int deviceId);
     }
 
 }

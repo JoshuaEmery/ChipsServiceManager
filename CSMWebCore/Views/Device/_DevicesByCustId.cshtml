@@ -22,7 +22,7 @@
 
             <div class="btn-group">
                 <a class="btn btn-primary" asp-controller="Ticket" asp-action="CreateByDeviceId" asp-route-deviceId="@Model.Id" asp-route-customerId="@Model.CustomerId">Create a new ticket for this device</a>
-                <a class="btn btn-success" asp-controller="Log" asp-action="Contact" asp-route-ticketId="@Model.Id">View all tickets for this device</a>
+                <a class="btn btn-success" asp-controller="Ticket" asp-action="TicketsByDeviceId" asp-route-deviceId="@Model.Id">View all tickets for this device</a>
                 <a class="btn btn-info" asp-controller="Customer" asp-action="Details" asp-route-id="@Model.Id">Edit this device</a>
             </div>
 
