@@ -116,6 +116,10 @@ namespace CSMWebCore.Controllers
             {
                 return View(model);
             }
+            if(model.TicketStatus == TicketStatus.New)
+            {
+                model.TicketStatus = TicketStatus.InProgress;
+            }
             Log log = new Log
             {
                 UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
@@ -127,6 +131,9 @@ namespace CSMWebCore.Controllers
             };
             _logs.Add(log);
             _logs.Commit();
+            var ticket = _tickets.Get(model.TicketId);
+            ticket.TicketStatus = model.TicketStatus;
+            _tickets.Commit();
             return RedirectToAction("Home", "Ticket");
             
         }

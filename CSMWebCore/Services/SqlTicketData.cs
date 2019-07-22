@@ -40,6 +40,11 @@ namespace CSMWebCore.Services
             return _db.Tickets;
         }
 
+        public IEnumerable<Ticket> GetAllActiveTickets()
+        {
+            return _db.Tickets.Where(x => x.TicketStatus != TicketStatus.Done);
+        }
+
         public IEnumerable<Ticket> GetAllByDevice(int deviceId)
         {
             return _db.Tickets.Where(x => x.DeviceId == deviceId);

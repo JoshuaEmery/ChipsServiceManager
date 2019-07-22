@@ -136,7 +136,7 @@ namespace CSMWebCore.Controllers
 
         public IActionResult Home()
         {
-            var model = _tickets.GetAll().Select(ticket => new TicketHomeViewModel
+            var model = _tickets.GetAllActiveTickets().Select(ticket => new TicketHomeViewModel
             {
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),

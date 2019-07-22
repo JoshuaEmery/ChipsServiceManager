@@ -42,26 +42,23 @@ namespace CSMWebCore.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int deviceId)
         {
-            var device = _devices.Get(id);
+            var device = _devices.Get(deviceId);
             if (device == null)
             {
                 return View();
             }
             DeviceEditViewModel model = new DeviceEditViewModel
             {
+                Id = device.Id,
+                CustomerId = device.CustomerId,
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
                 Password = device.Password,
                 Serviced = device.Serviced
             };
-            model.Customer = new List<SelectListItem>();
-            foreach (var customer in _customers.GetAll())
-            {
-                model.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName, customer.Id.ToString(), customer.Id == device.CustomerId ? true : false));
-            }
             return View(model);
         }
         [HttpPost]
@@ -112,14 +109,14 @@ namespace CSMWebCore.Controllers
             }
             return View();
         }
-        public IActionResult Details(int id)
+        public IActionResult Details(int deviceId)
         {
-            var device = _devices.Get(id);
+            var device = _devices.Get(deviceId);
             if (device == null)
             {
                 return View();
             }
-            var model = new DeviceViewModel
+            var model = new DeviceEditViewModel
             {
                 Id = device.Id,
                 Owner = _customers.Get(device.CustomerId),
