@@ -35,5 +35,19 @@ namespace CSMWebCore.Services
         {
             return _db.Customers;
         }
+
+        public IEnumerable<Customer> Search(string searchValue)
+        {
+            var result = new List<Customer>();
+            if (!String.IsNullOrEmpty(searchValue))
+            {
+                result.AddRange(_db.Customers.Where(c => c.FirstName.Contains(searchValue)));
+                result.AddRange(_db.Customers.Where(c => c.LastName.Contains(searchValue)));
+                result.AddRange(_db.Customers.Where(c => c.Phone.Contains(searchValue)));
+                result.AddRange(_db.Customers.Where(c => c.StudentId.Contains(searchValue)));
+                result.AddRange(_db.Customers.Where(c => c.Email.Contains(searchValue)));
+            }
+            return result;
+        }
     }
 }

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<CSMWebCore.ViewModels.CustomerViewModel>
+@{
+    ViewBag.Title = "Customers List";
+}
+<div class="topFormPanel col-md-12">
+    <h2>Search results for - @ViewBag.SearchValue</h2>
+</div>
+
+<div class="bottomFormPanel col-md-12">
+    @foreach (var customer in Model)
+    {
+
+        @await Html.PartialAsync("_Search", customer)
+    }
+</div>

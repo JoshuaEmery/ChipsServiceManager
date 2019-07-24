@@ -1,23 +1,13 @@
-﻿@model IEnumerable<CSMWebCore.ViewModels.CustomerViewModel>
-@{
-    ViewBag.Title = "Customers List";
-}
-<h2>@ViewBag.Title</h2>
-<table class="table table-bordered table-responsive table-striped">
-    <tr class="panel">
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.FirstName)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.LastName)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.Phone)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.StudentId)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.Email)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.ContactPref)</th>
-    </tr>
+﻿@model IEnumerable<DeviceViewModel>
 
+<div class="col-md-12 topFormPanel">
+    <h2>Customer Search Results - @ViewBag.SearchValue</h2>
+</div>
+<div class="col-md-12 bottomFormPanel">
     @foreach (var customer in Model)
     {
-
-        @await Html.PartialAsync("_Customer", customer)
+        @await Html.PartialAsync("_Search", customer)
     }
-</table>
+</div>
 
 

@@ -16,6 +16,7 @@ namespace CSMWebCore.Services
         Customer Get(int id);
         void Add(Customer customer);
         int Commit();
+        IEnumerable<Customer> Search(string searchValue);
     }
 
 }

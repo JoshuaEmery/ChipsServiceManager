@@ -110,5 +110,20 @@ namespace CSMWebCore.Controllers
             }
             return View();
         }
+        
+        public IActionResult Search(string searchValue)
+        {
+            var model = _customers.Search(searchValue).Select(cust => new CustomerViewModel {
+                Id = cust.Id,
+                FirstName = cust.FirstName,
+                LastName = cust.LastName,
+                Email = cust.Email,
+                StudentId = cust.StudentId,
+                Phone = cust.Phone,
+                ContactPref = cust.ContactPref.ToString()
+            });
+            ViewBag.SearchValue = searchValue;
+            return View(model);
+        }
     }
 }

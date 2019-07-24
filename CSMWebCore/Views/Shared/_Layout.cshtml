@@ -26,22 +26,38 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CSMWebCore</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Create New Ticket</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a asp-area="" asp-controller="Ticket" asp-action="Home">View Tickets</a></li>
+                    <li><a asp-area="" asp-controller="Customer" asp-action="Index">Search</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
+                <div class="col-sm-3 col-md-3 pull-right">
+                    <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" asp-controller="Customer" asp-action="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <partial name="_LoginPartial" />
             </div>
         </div>
     </nav>
 
     <partial name="_CookieConsentPartial" />
-    
-    <div class="container body-content">        
+
+    <div class="container body-content">
+        @*<div class="sidenav">
+            <a href="#">New customer and new ticket</a>
+            <a href="#">Lookup existing customer</a>
+            <a href="#">Clients</a>
+            <a href="#">Contact</a>
+        </div>*@
         @RenderBody()
         <hr />
         <footer>
