@@ -56,8 +56,8 @@ namespace CSMWebCore
             services.AddScoped<ILogData, SqlLogData>();
             services.AddScoped<ITicketData, SqlTicketData>();
             //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ChipsDbContext>();
+            services.AddDefaultIdentity<ChipsUser>()
+                    .AddEntityFrameworkStores<ChipsDbContext>();
             //This line of code routes my default to the login page
             services.AddMvc().AddRazorPagesOptions(options => {
                 options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");

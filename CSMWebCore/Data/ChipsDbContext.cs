@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSMWebCore.Data
 {
-    public class ChipsDbContext : IdentityDbContext
+    public class ChipsDbContext : IdentityDbContext<ChipsUser>
     {
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
