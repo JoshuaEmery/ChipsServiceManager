@@ -1,25 +1,24 @@
 @using Microsoft.AspNetCore.Identity
 
+
 @inject SignInManager<ChipsUser> SignInManager
 @inject UserManager<ChipsUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+            <li>@User.Identity.Name</li>
+            <li class="dropdown pull-right">
+                <a href="#" id="user-dropdown" class="dropdown-toggle user-dropdown" data-toggle="dropdown" role="button" aria-expanded="false">
+                    <img src="~/images/avatar.png" class="img-circle avatar" alt="" height="40">
+                    <span class="caret text-light hidden-xs"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Settings</a></li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                </ul>
             </li>
         </ul>
     </form>
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
-    </ul>
 }

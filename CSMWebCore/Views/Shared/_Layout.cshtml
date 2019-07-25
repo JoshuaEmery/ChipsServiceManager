@@ -17,7 +17,39 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    @*<nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a asp-area="" asp-controller="Customer" asp-action="Create" class="navbar-brand">Create New Ticket</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Ticket" asp-action="Home">View Tickets</a></li>
+                        <li><a asp-area="" asp-controller="Customer" asp-action="Index">View Customers</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    </ul>
+                    <div class="col-sm-3 col-md-3 pull-right">
+                        <form class="navbar-form" role="search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" asp-controller="Customer" asp-action="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>*@
+
+    <nav class="navbar navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -26,38 +58,65 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Customer" asp-action="Create" class="navbar-brand">Create New Ticket</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/membership-logo.png" alt="Brand" /></a>
             </div>
+            <ul class="nav navbar-nav nav-button">
+                <li class="dropdown pull-left">
+                    <a href="#" id="user-dropdown" class="dropdown-toggle user-dropdown btn btn-info" data-toggle="dropdown" role="button" aria-expanded="false">
+                        Create New Ticket
+                        <span class="caret text-light hidden-xs"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a asp-controller="Customer" asp-action="Create" title="New Customer">New Customer</a></li>
+                        <li>
+                            <a title="Existing Customer">Existing Customer</a><form class="navbar-form" role="search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" asp-controller="Customer" asp-action="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav nav-button">
+                <li class="dropdown pull-left">
+                    <a href="#" id="user-dropdown" class="dropdown-toggle user-dropdown btn btn-info" data-toggle="dropdown" role="button" aria-expanded="false">
+                        Tickets
+                        <span class="caret text-light hidden-xs"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a asp-controller="Ticket" asp-action="Home" title="Current Tickets">Current Tickets</a></li>
+                        <li>
+                            <a title="Completed Tickets">Completed Tickets</a><form class="navbar-form" role="search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" asp-controller="Ticket" asp-action="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Ticket" asp-action="Home">View Tickets</a></li>
-                    <li><a asp-area="" asp-controller="Customer" asp-action="Index">View Customers</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-                <div class="col-sm-3 col-md-3 pull-right">
-                    <form class="navbar-form" role="search">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" asp-controller="Customer" asp-action="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <partial name="_LoginPartial" />
+
+                @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </nav>
-
     <partial name="_CookieConsentPartial" />
 
     <div class="container body-content">
         @*<div class="sidenav">
-            <a href="#">New customer and new ticket</a>
-            <a href="#">Lookup existing customer</a>
-            <a href="#">Clients</a>
-            <a href="#">Contact</a>
-        </div>*@
+                <a href="#">New customer and new ticket</a>
+                <a href="#">Lookup existing customer</a>
+                <a href="#">Clients</a>
+                <a href="#">Contact</a>
+            </div>*@
         @RenderBody()
         <hr />
         <footer>
