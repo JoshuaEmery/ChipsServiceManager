@@ -136,12 +136,14 @@ namespace CSMWebCore.Controllers
 
         public IActionResult Home()
         {
+            
             var model = _tickets.GetAllActiveTickets().Select(ticket => new TicketHomeViewModel
             {
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
-                Logs = _logs.GetLogsByTicketId(ticket.Id)
+                ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 
             });
 
@@ -159,7 +161,8 @@ namespace CSMWebCore.Controllers
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
-                Logs = _logs.GetLogsByTicketId(ticket.Id)
+                ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 
             });
 
@@ -179,7 +182,8 @@ namespace CSMWebCore.Controllers
                     Ticket = ticket,
                     Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
                     Log = _logs.GetLastByTicketId(ticket.Id),
-                    Logs = _logs.GetLogsByTicketId(ticket.Id)
+                    ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                    ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 
                 });
 
@@ -192,7 +196,8 @@ namespace CSMWebCore.Controllers
                     Ticket = ticket,
                     Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
                     Log = _logs.GetLastByTicketId(ticket.Id),
-                    Logs = _logs.GetLogsByTicketId(ticket.Id)
+                    ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                    ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 
                 });
 
@@ -205,7 +210,8 @@ namespace CSMWebCore.Controllers
                     Ticket = ticket,
                     Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
                     Log = _logs.GetLastByTicketId(ticket.Id),
-                    Logs = _logs.GetLogsByTicketId(ticket.Id),
+                    ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                    ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id),
                     DaysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).Logged
                 });
                 var sorted = model.OrderByDescending(x => x.DaysIdle).ToList();
@@ -222,7 +228,8 @@ namespace CSMWebCore.Controllers
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
-                Logs = _logs.GetLogsByTicketId(ticket.Id)
+                ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 
             });
             if (model != null)

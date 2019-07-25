@@ -14,5 +14,7 @@ namespace CSMWebCore.Services
         int Commit();
         Log GetLastByTicketId(int ticketId);
         IEnumerable<Log> GetLogsByTicketId(int ticketId);
+        IEnumerable<Log> GetContactLogsByTicketId(int ticketId);
+        IEnumerable<Log> GetServiceLogsByTicketId(int ticketId);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CSMWebCore.Data;
 using CSMWebCore.Entities;
+using CSMWebCore.Models;
 
 namespace CSMWebCore.Services
 {
@@ -41,5 +42,14 @@ namespace CSMWebCore.Services
         {
             return _db.Logs.Where(x => x.TicketId == ticketId);
         }
+        public IEnumerable<Log> GetServiceLogsByTicketId(int ticketId)
+        {
+            return _db.Logs.Where(log => log.TicketId == ticketId && log.ContactMethod == ContactMethod.NoContact);
+        }
+        public IEnumerable<Log> GetContactLogsByTicketId(int ticketId)
+        {
+            return _db.Logs.Where(log => log.TicketId == ticketId && log.ContactMethod != ContactMethod.NoContact);
+        }
+
     }
 }

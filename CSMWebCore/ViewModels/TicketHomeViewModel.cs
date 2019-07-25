@@ -13,7 +13,8 @@ namespace CSMWebCore.ViewModels
         public Ticket Ticket { get; set; }
         public Customer Customer { get; set; }
         public Log Log { get; set; }
-        public IEnumerable<Log> Logs { get; set; }
+        public IEnumerable<Log> ServiceLogs { get; set; }
+        public IEnumerable<Log> ContactLogs { get; set; }
         public TicketStatus TicketStatus { get; set; }
         public DateFilter DateFilter { get; set; }
         public string Status { get; set; }
