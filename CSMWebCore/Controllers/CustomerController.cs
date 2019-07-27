@@ -14,9 +14,13 @@ namespace CSMWebCore.Controllers
     public class CustomerController : Controller
     {
         private ICustomerData _customers;
-        public CustomerController(ICustomerData customers)
+        private ITicketData _tickets;
+        private IDeviceData _devices;
+        public CustomerController(ICustomerData customers, ITicketData tickets, IDeviceData devices)
         {
             _customers = customers;
+            _tickets = tickets;
+            _devices = devices;
         }
 
         public IActionResult Index()
@@ -124,6 +128,30 @@ namespace CSMWebCore.Controllers
             });
             ViewBag.SearchValue = searchValue;
             return View(model);
+        }
+        public IActionResult Active()
+        {
+            //List<Customer> activeCustomers = new List<Customer>();
+            //List<Device> activeDevices = new List<Device>();
+            //var activeTickets = _tickets.GetAllActiveTickets();           
+            //foreach (var ticket in activeTickets)
+            //{
+            //    activeDevices.Add(_devices.Get(ticket.DeviceId));
+            //}
+            //foreach (var device in activeDevices)
+            //{
+            //    activeCustomers.Add(_customers.Get(device.CustomerId));
+            //}
+            //return View("Search", activeCustomers);
+            var model = _tickets.GetAllActiveTickets().Select(ticket => new CustomerActiveViewModel
+            {
+                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId)
+                
+            });
+            return View(model);
+
+
+
         }
     }
 }

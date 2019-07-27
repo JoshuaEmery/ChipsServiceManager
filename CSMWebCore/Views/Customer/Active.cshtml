@@ -1,0 +1,11 @@
+﻿@model IEnumerable<CustomerActiveViewModel>
+
+<div class="col-md-12 topFormPanel">
+    <h2>Customers with Active Tickets</h2>
+</div>
+<div class="col-md-12 bottomFormPanel">
+    @foreach (var customer in Model)
+    {
+        @await Html.PartialAsync("_Active", customer)
+    }
+</div>

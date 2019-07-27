@@ -102,6 +102,49 @@
                     </ul>
                 </li>
             </ul>
+            <ul class="nav navbar-nav nav-button">
+                <li class="dropdown pull-left">
+                    <a href="#" id="user-dropdown" class="dropdown-toggle user-dropdown btn btn-info" data-toggle="dropdown" role="button" aria-expanded="false">
+                        Customers
+                        <span class="caret text-light hidden-xs"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a asp-controller="Customer" asp-action="Active" title="Current Customers">Customers with active tickets</a></li>
+                        <li><a asp-controller="Customer" asp-action="Index" title="All Customers">All Customers</a></li>
+                        <li>
+                            <a title="Existing Customer">Customer Search</a><form class="navbar-form" role="search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" asp-controller="Customer" asp-action="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav nav-button">
+                <li class="dropdown pull-left">
+                    <a href="#" id="user-dropdown" class="dropdown-toggle user-dropdown btn btn-info" data-toggle="dropdown" role="button" aria-expanded="false">
+                        Devices
+                        <span class="caret text-light hidden-xs"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a asp-controller="Ticket" asp-action="Home" title="Current Tickets">Current Tickets</a></li>
+                        <li>
+                            <a title="Completed Tickets">Completed Tickets</a><form class="navbar-form" role="search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" asp-controller="Ticket" asp-action="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
             <div class="navbar-collapse collapse">
 
                 @await Html.PartialAsync("_LoginPartial")
