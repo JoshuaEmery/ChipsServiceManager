@@ -20,12 +20,14 @@ namespace CSMWebCore.Controllers
         private ICustomerData _customers;
         private ITicketData _tickets;
         private ILogData _logs;
-        public DeviceController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs)
+        private IUpdateData _updates;
+        public DeviceController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates)
         {
             _devices = devices;
             _customers = customers;
             _tickets = tickets;
             _logs = logs;
+            _updates = updates;
         }
         public IActionResult Index()
         {
@@ -180,6 +182,13 @@ namespace CSMWebCore.Controllers
             };
             _logs.Add(log);
             _logs.Commit();
+            Update update = new Update
+            {
+                Id = new Guid(),
+                TicketId = ticket.Id
+            };
+            _updates.Add(update);
+            _updates.Commit();
             return RedirectToAction("Home", "Ticket", null);
         }
         [HttpGet] public IActionResult DevicesByCustId(int customerId)
