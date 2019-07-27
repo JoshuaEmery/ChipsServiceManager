@@ -240,6 +240,20 @@ namespace CSMWebCore.Controllers
 
 
 
+        }       
+        public IActionResult Search(string searchValue)
+        {
+
+            var model = _tickets.Search(searchValue).Select(ticket => new TicketHomeViewModel
+            {
+                Ticket = ticket,
+                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                Log = _logs.GetLastByTicketId(ticket.Id),
+                ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
+
+            });
+            return View("Home", model);
         }
 
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CSMWebCore.Data;
 using CSMWebCore.Entities;
 using CSMWebCore.Models;
+using CSMWebCore.Services;
 
 namespace CSMWebCore.Services
 {
@@ -54,7 +55,21 @@ namespace CSMWebCore.Services
         {
             return _db.Tickets.Where(x => x.TicketStatus == status);
         }
-        
 
+        public IEnumerable<Ticket> Search(string searchValue)
+        {
+            var result = new List<Ticket>();
+            if (!String.IsNullOrEmpty(searchValue))
+            {
+                result.AddRange(_db.Tickets.Where(c => c.CheckedIn.ToShortDateString().Contains(searchValue)));
+                result.AddRange(_db.Tickets.Where(c => c.CheckedOut.ToShortDateString().Contains(searchValue)));
+                result.AddRange(_db.Tickets.Where(c => c.CheckInUserId.Contains(searchValue)));
+                result.AddRange(_db.Tickets.Where(c => c.CheckOutUserId.Contains(searchValue)));
+                result.AddRange(_db.Tickets.Where(c => c.TicketNumber.ToString().Contains(searchValue)));
+
+            }
+            return result;
+
+        }
     }
 }
