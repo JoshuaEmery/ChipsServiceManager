@@ -1,0 +1,17 @@
+﻿@model UpdateViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Confirmation</title>
+</head>
+<body>
+    <img src="@Url.Action("GetQRByGuid", new { code = Model.Update.Id.ToString() })" />
+    @Model.Customer.FirstName @Model.Device.Make @Model.Ticket.TicketNumber
+</body>
+</html>

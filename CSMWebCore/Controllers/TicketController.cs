@@ -105,7 +105,7 @@ namespace CSMWebCore.Controllers
             Update update = new Update
             {
                 Id = new Guid(),
-                TicketId = ticket.TicketNumber
+                TicketId = ticket.Id
             };
             _updates.Add(update);
             _updates.Commit();

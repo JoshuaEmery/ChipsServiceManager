@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -10,6 +12,7 @@ using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using QRCoder;
 
 namespace CSMWebCore.Controllers
 {
@@ -187,14 +190,25 @@ namespace CSMWebCore.Controllers
                 Id = new Guid(),
                 TicketId = ticket.Id
             };
+
+
             _updates.Add(update);
             _updates.Commit();
-            return RedirectToAction("Home", "Ticket", null);
+            var updateViewModel = new UpdateViewModel
+            {
+                Ticket = ticket,
+                Device = device,
+                Customer = _customers.Get(model.CustomerId),
+                Update = update
+            };
+
+            return View("Confirmation", updateViewModel);
         }
-        [HttpGet] public IActionResult DevicesByCustId(int customerId)
+        [HttpGet]
+        public IActionResult DevicesByCustId(int customerId)
         {
             var cust = _customers.Get(customerId);
-            if(cust == null)
+            if (cust == null)
             {
                 return View();
             }
@@ -208,12 +222,35 @@ namespace CSMWebCore.Controllers
                 OperatingSystem = device.OperatingSystem,
                 Password = device.Password,
                 Serviced = device.Serviced
-                
+
             });
             return View(model);
 
 
         }
+        [Authorize]
+        public ActionResult GetQRByGuid(Guid code)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"http://localhost:52394/update/index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+            var image = BitmapToBytes(qrCodeImage);
+            return File(image, "image/jpeg");
+            // I'm not sure if the using here will work or not. It might work
+            // to just remove the using block if you have issues.
+
+        }
+
+        private static byte[] BitmapToBytes(Bitmap img)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                return stream.ToArray();
+            }
+        }
+
 
     }
 }

@@ -1,4 +1,45 @@
-﻿@model Ticket
-@{ ViewBag.Title = Model.TicketNumber;}
+﻿@model UpdateViewModel
+@{
+    Layout = null;
+}
 
-<h2>@ViewBag.Title</h2>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    <div class="panel panel-primary">
+        <div class="panel-heading">Status update for @Model.Device.Make @Model.Device.ModelNumber<span class="pull-right">Ticket #@Model.Ticket.TicketNumber</span></div>
+        
+            <table>
+                <tr class="panel-body">
+                    <td>Ticket Status: </td>
+                    <td>@Model.Ticket.TicketStatus.ToString()</td>
+                </tr>
+                <tr class="panel-body">
+                    <td>Check in date: </td>
+                    <td>@Model.Ticket.CheckedIn.ToString()</td>
+                </tr>
+                <tr class="panel-body">
+                    <td>Most recent service:  </td>
+                    <td>@Model.Log.LogType.ToString() performed at @Model.Log.Logged.ToString()</td>
+                </tr>
+            </table>
+            <div class="panel-footer">Feel free to contact us with any questions at 425-123-1123</div>
+        
+    </div>
+</body>
+</html>

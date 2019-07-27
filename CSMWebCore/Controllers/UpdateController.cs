@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CSMWebCore.Services;
+using CSMWebCore.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QRCoder;
 
 namespace CSMWebCore.Controllers
 {
@@ -27,7 +32,14 @@ namespace CSMWebCore.Controllers
         {
             var guid = new Guid(id);
             var ticket = _tickets.Get(_updates.GetTicketId(guid));
-            return View(ticket);
+            var model = new UpdateViewModel
+            {
+                Ticket = ticket,
+                Device = _devices.Get(ticket.DeviceId),
+                Log = _logs.GetLastByTicketId(ticket.Id),
+            };
+            return View(model);            
         }
+
     }
 }
