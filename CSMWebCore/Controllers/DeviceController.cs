@@ -237,8 +237,7 @@ namespace CSMWebCore.Controllers
             Bitmap qrCodeImage = qrCode.GetGraphic(20);
             var image = BitmapToBytes(qrCodeImage);
             return File(image, "image/jpeg");
-            // I'm not sure if the using here will work or not. It might work
-            // to just remove the using block if you have issues.
+
 
         }
 
