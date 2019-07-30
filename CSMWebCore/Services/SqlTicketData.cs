@@ -26,6 +26,11 @@ namespace CSMWebCore.Services
             return _db.SaveChanges();
         }
 
+        public int CountByStatus(TicketStatus status)
+        {
+            return _db.Tickets.Where(x => x.TicketStatus == status).Count();
+        }
+
         public int CurrentTicketNumber()
         {
             return _db.Tickets.Max(t => t.TicketNumber);
@@ -54,6 +59,11 @@ namespace CSMWebCore.Services
         public IEnumerable<Ticket> GetByStatus(TicketStatus status)
         {
             return _db.Tickets.Where(x => x.TicketStatus == status);
+        }
+
+        public IEnumerable<Ticket> GetTicketsCompletedWithinTimeSpan(TimeSpan span)
+        {
+            return _db.Tickets.Where(x => x.Finished > DateTime.Now - span);
         }
 
         public IEnumerable<Ticket> Search(string searchValue)

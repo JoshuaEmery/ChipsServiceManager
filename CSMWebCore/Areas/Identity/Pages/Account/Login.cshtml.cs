@@ -77,7 +77,7 @@ namespace CSMWebCore.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToAction("Index","Device");
+                    return RedirectToAction("Index","Home");
                 }
                 if (result.RequiresTwoFactor)
                 {

@@ -277,6 +277,23 @@ namespace CSMWebCore.Controllers
             });
             return View("Home", model);
         }
+        public IActionResult Details(int ticketId)
+        {
+            var ticket = _tickets.Get(ticketId);
+            if(ticket != null)
+            {
+                var model = new TicketHomeViewModel
+                {
+                    Ticket = ticket,
+                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                    Log = _logs.GetLastByTicketId(ticket.Id),
+                    ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                    ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
+                };
+                return View("_Home", model);
+            }
+            return RedirectToAction("Index", "Home");
+        }
         [Authorize]
         public ActionResult GetQRByGuid(Guid code)
         {

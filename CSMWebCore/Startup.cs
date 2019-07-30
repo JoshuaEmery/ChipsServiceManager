@@ -61,9 +61,9 @@ namespace CSMWebCore
             services.AddDefaultIdentity<ChipsUser>()
                     .AddEntityFrameworkStores<ChipsDbContext>();
             //This line of code routes my default to the login page
-            services.AddMvc().AddRazorPagesOptions(options => {
-                options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            //services.AddMvc().AddRazorPagesOptions(options => {
+            //    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
+            //}).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

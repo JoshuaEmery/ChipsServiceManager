@@ -131,13 +131,13 @@
                         <span class="caret text-light hidden-xs"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a asp-controller="Ticket" asp-action="Home" title="Current Tickets">Current Tickets</a></li>
+                        <li><a asp-controller="Device" asp-action="Index" title="Current Devices">Current Device Inventory</a></li>
                         <li>
-                            <a title="Completed Tickets">Completed Tickets</a><form class="navbar-form" role="search">
+                            <a title="Search Current Devices">Search Current Devices</a><form class="navbar-form" role="search">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-default" asp-controller="Ticket" asp-action="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                        <button class="btn btn-default" asp-controller="Device" asp-action="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                                     </div>
                                 </div>
                             </form>
