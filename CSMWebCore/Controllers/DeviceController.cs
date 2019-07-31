@@ -97,6 +97,7 @@ namespace CSMWebCore.Controllers
         [HttpPost]
         public IActionResult Create(DeviceEditViewModel model)
         {
+
             if (ModelState.IsValid)
             {
                 Device device = new Device
@@ -146,6 +147,10 @@ namespace CSMWebCore.Controllers
         [HttpPost]
         public IActionResult CreateByCustId(DeviceEditViewModel model)
         {
+            if (model.Ticket.TicketNumber == _tickets.CurrentTicketNumber())
+            {
+                return View("Confirmation");
+            }
             if (!ModelState.IsValid)
             {
                 model.Owner = _customers.Get(model.CustomerId);
@@ -161,8 +166,10 @@ namespace CSMWebCore.Controllers
                 Password = model.Password,
                 Serviced = model.Serviced
             };
+            
             _devices.Add(device);
             _devices.Commit();
+
             Ticket ticket = new Ticket
             {
                 DeviceId = device.Id,

@@ -76,6 +76,10 @@ namespace CSMWebCore.Controllers
         [HttpPost]
         public IActionResult CreateByDeviceId(DeviceEditViewModel model)
         {
+            if (model.Ticket.TicketNumber == _tickets.CurrentTicketNumber())
+            {
+                return View("Confirmation");
+            }
             if (!ModelState.IsValid)
             {
                 model.Owner = _customers.Get(model.CustomerId);
