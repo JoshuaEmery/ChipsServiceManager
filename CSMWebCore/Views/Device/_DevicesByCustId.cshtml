@@ -21,7 +21,7 @@
         <div id='@string.Format($"collapse{ Model.Id}")' class="panel-collapse collapse">
 
             <div class="btn-group">
-                <a class="btn btn-primary" asp-controller="Ticket" asp-action="CreateByDeviceId" asp-route-deviceId="@Model.Id">Create a new ticket for this device</a>
+                <a class="btn btn-primary" asp-controller="Ticket" asp-action="CreateByExistingDeviceId" asp-route-deviceId="@Model.Id">Create a new ticket for this device</a>
                 <a class="btn btn-success" asp-controller="Ticket" asp-action="TicketsByDeviceId" asp-route-deviceId="@Model.Id">View all tickets for this device</a>
                 <a class="btn btn-info" asp-controller="Device" asp-action="Edit" asp-route-deviceId="@Model.Id">Edit this device</a>
             </div>

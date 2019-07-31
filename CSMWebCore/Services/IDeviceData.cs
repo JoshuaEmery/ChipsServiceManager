@@ -13,5 +13,6 @@ namespace CSMWebCore.Services
         void Add(Device device);
         int Commit();
         IEnumerable<Device> GetAllByCustId(int customerId);
+        IEnumerable<Device> Search(string searchValue);
     }
 }

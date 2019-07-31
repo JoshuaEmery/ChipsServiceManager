@@ -8,6 +8,7 @@ using CSMWebCore.Models;
 using Microsoft.AspNetCore.Authorization;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
+using CSMWebCore.Entities;
 
 namespace CSMWebCore.Controllers
 {
@@ -26,6 +27,8 @@ namespace CSMWebCore.Controllers
             _tickets = tickets;
             _logs = logs;
             
+
+
         }
         public IActionResult Index()
         {
@@ -67,7 +70,66 @@ namespace CSMWebCore.Controllers
                 }
                 TimeSpan daysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).Logged;
                 sumIdle += daysIdle;
-                if(daysIdle > maxIdle)
+                if (daysIdle > maxIdle)
+                {
+                    maxIdle = daysIdle;
+                    maxIdleTicketId = ticket.Id;
+                }
+            }
+            TimeSpan avgAge = sumAge / activeTickets.Count();
+            TimeSpan avgIdle = sumIdle / activeTickets.Count();
+            model.avgAge = avgAge;
+            model.avgIdle = avgIdle;
+            model.maxAge = maxAge;
+            model.maxAgeTicketId = maxAgeTicketId;
+            model.maxIdle = maxIdle;
+            model.maxIdleTicketId = maxIdleTicketId;
+
+
+
+            return View(model);
+        }
+        public IActionResult Charts()
+        {
+            var activeTickets = _tickets.GetAllActiveTickets();
+            var model = new HomeIndexViewModel();
+            model.newCount = 0;
+            model.inProgressCount = 0;
+            model.pendingResponseCount = 0;
+            model.pendingPickupCount = 0;
+            TimeSpan maxAge = TimeSpan.Zero;
+            TimeSpan sumAge = TimeSpan.Zero;
+            int maxAgeTicketId = 0;
+            TimeSpan maxIdle = TimeSpan.Zero;
+            TimeSpan sumIdle = TimeSpan.Zero;
+            int maxIdleTicketId = 0;
+            foreach (var ticket in activeTickets)
+            {
+                switch (ticket.TicketStatus)
+                {
+                    case TicketStatus.New:
+                        model.newCount++;
+                        break;
+                    case TicketStatus.InProgress:
+                        model.inProgressCount++;
+                        break;
+                    case TicketStatus.PendingResponse:
+                        model.pendingResponseCount++;
+                        break;
+                    case TicketStatus.PendingPickup:
+                        model.pendingPickupCount++;
+                        break;
+                }
+                TimeSpan daysOld = DateTime.Now - ticket.CheckedIn;
+                sumAge += daysOld;
+                if (daysOld > maxAge)
+                {
+                    maxAge = daysOld;
+                    maxAgeTicketId = ticket.Id;
+                }
+                TimeSpan daysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).Logged;
+                sumIdle += daysIdle;
+                if (daysIdle > maxIdle)
                 {
                     maxIdle = daysIdle;
                     maxIdleTicketId = ticket.Id;
@@ -111,6 +173,8 @@ namespace CSMWebCore.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        
+
 
     }
 }

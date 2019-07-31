@@ -169,7 +169,6 @@ namespace CSMWebCore.Controllers
             
             _devices.Add(device);
             _devices.Commit();
-
             Ticket ticket = new Ticket
             {
                 DeviceId = device.Id,

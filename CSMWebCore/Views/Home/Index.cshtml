@@ -6,24 +6,90 @@
 
 
 <div class="row">
-    <div class="col-md-6">
-        <h2>Computers on hand</h2>
-        <ul>
-            <li>New - @Model.newCount</li>
-            <li>In Progress - @Model.inProgressCount</li>
-            <li>Pending Respose - @Model.pendingResponseCount</li>
-            <li>Pending Pickup - @Model.pendingPickupCount</li>
-        </ul>
+    <div class="col-md-7">
+        <h2 style="margin-left:150px">Devices on hand</h2>
+        <div id="chart1">        </div>
+
     </div>
-    <div class="col-md-6">
+
+    
+
+
+    @*<div class="col-md-5">
         <h2>Current Inventory Handle Time</h2>
-        <ul>
+        <ul style="margin-top:60px">
             <li>Average Ticket Age - @Model.avgAge.Days Days</li>
             <li>Oldest Ticket - @Model.maxAge.Days Days <a class="btn btn-danger" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxAgeTicketId">Open Ticket</a></li>
             <li>Average Ticket Idle - @Model.avgIdle.Days Days</li>
-            <li>Longest Idle Ticket - @Model.maxIdle.Days Days <a class="btn btn-danger" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxAgeTicketId">Open Ticket</a></li>
-            
+            <li>Longest Idle Ticket - @Model.maxIdle.Days Days <a class="btn btn-danger" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxIdleTicketId">Open Ticket</a></li>
+
         </ul>
-    </div>
-    
+    </div>*@
 </div>
+
+<div class="row">
+    <div class="col-md-10">
+        <div id="chart_div"></div></div>
+        <div class="col-md-1">
+            <a class="btn btn-group btn-warning" style="margin-top:50px; width:200px" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxAgeTicketId">Open Oldest Ticket</a>
+            <a class="btn btn-group btn-warning" style="margin-top:50px; width:200px" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxIdleTicketId">Open Max Idle Ticket</a>
+        </div>
+    </div>
+
+
+    @section scripts{
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.load('current', { 'packages': ['gauge'] });
+        google.charts.setOnLoadCallback(drawPieChart);
+        google.charts.setOnLoadCallback(drawGuageChart);
+
+        function drawPieChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Ticket Status');
+            data.addColumn('number', 'Percentage');
+            data.addRows([
+                ['New', @Model.newCount],
+                ['In Progress', @Model.inProgressCount],
+                ['Pending Response', @Model.pendingResponseCount],
+                ['Pending Pickup', @Model.pendingResponseCount]
+            ]);
+
+            // Simple Pie Chart:
+            var option = {
+                title: 'Ticket Status',
+                width: 700,
+                height: 500
+            };
+            option.is3D = true;
+            var chart = new google.visualization.PieChart(document.getElementById('chart1'));
+            chart.draw(data, option);
+
+        }
+        function drawGuageChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Average Age', @int.Parse(Model.avgAge.Days.ToString())],
+                ['Max Age', @int.Parse(Model.maxAge.Days.ToString())],
+                ['Avg Idle', @int.Parse(Model.avgIdle.Days.ToString())],
+                ['Max Idle', @int.Parse(Model.maxIdle.Days.ToString())]
+
+            ]);
+
+            var options = {
+                width: 950, height: 300,
+                redFrom: 10, redTo: 14,
+                yellowFrom: 7, yellowTo: 10,
+                minorTicks: 1,
+                max: 14
+            };
+
+            var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+
+        }
+        </script>
+    }

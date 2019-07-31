@@ -50,7 +50,7 @@ namespace CSMWebCore.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult CreateByDeviceId(int deviceId)
+        public IActionResult CreateByExistingDeviceId(int deviceId)
         {
             var device = _devices.Get(deviceId);
             if (device == null)
@@ -74,7 +74,7 @@ namespace CSMWebCore.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult CreateByDeviceId(DeviceEditViewModel model)
+        public IActionResult CreateByExistingDeviceId(DeviceEditViewModel model)
         {
             if (model.Ticket.TicketNumber == _tickets.CurrentTicketNumber())
             {
@@ -157,6 +157,7 @@ namespace CSMWebCore.Controllers
             return RedirectToAction("Home");
 
         }
+
         //End Test Actions
         //Begin Launch Actions
 
