@@ -16,6 +16,10 @@ namespace CSMWebCore.ViewModels
         public int maxAgeTicketId { get; set; }
         public TimeSpan avgIdle { get; set; }
         public TimeSpan maxIdle { get; set; }
+        public TimeSpan weekAvgHandle { get; set; }
+        public TimeSpan monthAvgHandle { get; set; }
+        public TimeSpan ninetyDayAvgHandle { get; set; }
+        public TimeSpan yearAvgHangle { get; set; }
         public int maxIdleTicketId { get; set; }
         
 

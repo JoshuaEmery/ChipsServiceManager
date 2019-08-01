@@ -33,6 +33,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Index()
         {
             var activeTickets = _tickets.GetAllActiveTickets();
+            var completedTickets = _tickets.GetAllCompletedTickets();
             var model = new HomeIndexViewModel();
             model.newCount = 0;
             model.inProgressCount = 0;
@@ -43,6 +44,18 @@ namespace CSMWebCore.Controllers
             int maxAgeTicketId = 0;
             TimeSpan maxIdle = TimeSpan.Zero;
             TimeSpan sumIdle = TimeSpan.Zero;
+            TimeSpan weekTotal = TimeSpan.Zero;
+            int weekCount = 0;
+            TimeSpan weekAvgHandle = TimeSpan.Zero;
+            TimeSpan monthTotal = TimeSpan.Zero;
+            int monthCount = 0;
+            TimeSpan monthAvgHandle = TimeSpan.Zero;
+            TimeSpan ninetyTotal = TimeSpan.Zero;
+            int ninetyCount = 0;
+            TimeSpan ninetyAvgHandle = TimeSpan.Zero;
+            TimeSpan yearTotal = TimeSpan.Zero;
+            int yearCount = 0;
+            TimeSpan yearAvgHandle = TimeSpan.Zero;            
             int maxIdleTicketId = 0;
             foreach (var ticket in activeTickets)
             {
@@ -76,6 +89,42 @@ namespace CSMWebCore.Controllers
                     maxIdleTicketId = ticket.Id;
                 }
             }
+            foreach (var ticket in completedTickets)
+            {
+                if((DateTime.Now - ticket.Finished).TotalDays < 8)
+                {
+                    weekCount++;
+                    weekTotal += ticket.Finished - ticket.CheckedIn;
+                    monthCount++;
+                    monthTotal += ticket.Finished - ticket.CheckedIn;
+                    ninetyCount++;
+                    ninetyTotal += ticket.Finished - ticket.CheckedIn;
+                    yearCount++;
+                    yearTotal += ticket.Finished - ticket.CheckedIn;
+                }
+                else if ((DateTime.Now - ticket.Finished).TotalDays < 31)
+                {
+                    monthCount++;
+                    monthTotal += ticket.Finished - ticket.CheckedIn;
+                    ninetyCount++;
+                    ninetyTotal += ticket.Finished - ticket.CheckedIn;
+                    yearCount++;
+                    yearTotal += ticket.Finished - ticket.CheckedIn;
+                }
+                else if ((DateTime.Now - ticket.Finished).TotalDays < 91)
+                {
+                    ninetyCount++;
+                    ninetyTotal += ticket.Finished - ticket.CheckedIn;
+                    yearCount++;
+                    yearTotal += ticket.Finished - ticket.CheckedIn;
+                }
+                else if ((DateTime.Now - ticket.Finished).TotalDays < 366)
+                {
+                    yearCount++;
+                    yearTotal += ticket.Finished - ticket.CheckedIn;
+                }
+
+            }
             TimeSpan avgAge = sumAge / activeTickets.Count();
             TimeSpan avgIdle = sumIdle / activeTickets.Count();
             model.avgAge = avgAge;
@@ -84,6 +133,10 @@ namespace CSMWebCore.Controllers
             model.maxAgeTicketId = maxAgeTicketId;
             model.maxIdle = maxIdle;
             model.maxIdleTicketId = maxIdleTicketId;
+            model.weekAvgHandle = weekCount == 0 ? TimeSpan.Zero : weekTotal / weekCount;
+            model.monthAvgHandle = monthCount == 0 ? TimeSpan.Zero : monthTotal / monthCount;
+            model.ninetyDayAvgHandle = ninetyCount == 0 ? TimeSpan.Zero : ninetyTotal / ninetyCount;
+            model.yearAvgHangle = yearCount == 0 ? TimeSpan.Zero : yearTotal / yearCount;
 
 
 

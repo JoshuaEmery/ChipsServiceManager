@@ -20,6 +20,7 @@ namespace CSMWebCore.Services
         IEnumerable<Ticket> Search(string searchValue);
         int CountByStatus(TicketStatus status);
         IEnumerable<Ticket> GetTicketsCompletedWithinTimeSpan(TimeSpan span);
+        IEnumerable<Ticket> GetAllCompletedTickets();
 
 
     }

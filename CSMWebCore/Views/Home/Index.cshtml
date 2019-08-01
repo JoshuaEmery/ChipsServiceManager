@@ -11,40 +11,46 @@
         <div id="chart1">        </div>
 
     </div>
+    <div class="col-md-5">
+        <h2 style="margin-left:150px">Average Handle Time</h2>
+        <div style="margin-top:30px" id="barchart_values"></div>
+    </div>
 
-    
+
 
 
     @*<div class="col-md-5">
-        <h2>Current Inventory Handle Time</h2>
-        <ul style="margin-top:60px">
-            <li>Average Ticket Age - @Model.avgAge.Days Days</li>
-            <li>Oldest Ticket - @Model.maxAge.Days Days <a class="btn btn-danger" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxAgeTicketId">Open Ticket</a></li>
-            <li>Average Ticket Idle - @Model.avgIdle.Days Days</li>
-            <li>Longest Idle Ticket - @Model.maxIdle.Days Days <a class="btn btn-danger" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxIdleTicketId">Open Ticket</a></li>
+            <h2>Current Inventory Handle Time</h2>
+            <ul style="margin-top:60px">
+                <li>Average Ticket Age - @Model.avgAge.Days Days</li>
+                <li>Oldest Ticket - @Model.maxAge.Days Days <a class="btn btn-danger" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxAgeTicketId">Open Ticket</a></li>
+                <li>Average Ticket Idle - @Model.avgIdle.Days Days</li>
+                <li>Longest Idle Ticket - @Model.maxIdle.Days Days <a class="btn btn-danger" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxIdleTicketId">Open Ticket</a></li>
 
-        </ul>
-    </div>*@
+            </ul>
+        </div>*@
 </div>
 
 <div class="row">
     <div class="col-md-10">
-        <div id="chart_div"></div></div>
-        <div class="col-md-1">
-            <a class="btn btn-group btn-warning" style="margin-top:50px; width:200px" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxAgeTicketId">Open Oldest Ticket</a>
-            <a class="btn btn-group btn-warning" style="margin-top:50px; width:200px" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxIdleTicketId">Open Max Idle Ticket</a>
-        </div>
+        <div id="chart3"></div>
     </div>
+    <div class="col-md-1">
+        <a class="btn btn-group btn-warning" style="margin-top:50px; width:200px" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxAgeTicketId">Open Oldest Ticket</a>
+        <a class="btn btn-group btn-warning" style="margin-top:50px; width:200px" asp-controller="Ticket" asp-action="Details" asp-route-ticketId="@Model.maxIdleTicketId">Open Max Idle Ticket</a>
+    </div>
+</div>
 
 
-    @section scripts{
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script>
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
         google.charts.load('current', { 'packages': ['corechart'] });
         google.charts.load('current', { 'packages': ['gauge'] });
         google.charts.setOnLoadCallback(drawPieChart);
         google.charts.setOnLoadCallback(drawGuageChart);
-
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
         function drawPieChart() {
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Ticket Status');
@@ -86,10 +92,40 @@
                 max: 14
             };
 
-            var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+            var chart = new google.visualization.Gauge(document.getElementById('chart3'));
 
             chart.draw(data, options);
 
         }
-        </script>
-    }
+
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                    ["Element", "Density", { role: "style" }],
+                    ["Last Week", @double.Parse(Model.weekAvgHandle.TotalDays.ToString()), "blue"],
+                    ["Last 30 Days", @double.Parse(Model.monthAvgHandle.TotalDays.ToString()), "silver"],
+                    ["Last 90 Days", @double.Parse(Model.ninetyDayAvgHandle.TotalDays.ToString()), "red"],
+                    ["Last Year", @double.Parse(Model.yearAvgHangle.TotalDays.ToString()), "green"]
+                ]);
+
+                var view = new google.visualization.DataView(data);
+                view.setColumns([0, 1,
+                    {
+                        calc: "stringify",
+                        sourceColumn: 1,
+                        type: "string",
+                        role: "annotation"
+                    },
+                    2]);
+
+                var options = {
+                    title: "Average numbers days from check-in to finished",
+                    width: 600,
+                    height: 400,
+                    bar: { groupWidth: "95%" },
+                    legend: { position: "none" },
+                };
+                var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+                chart.draw(view, options);
+            }
+    </script>
+}
