@@ -6,7 +6,10 @@
 <div class="col-md-12 bottomFormPanel">
     @foreach (var user in Model)
     {
-        @await Html.PartialAsync("_Index", user)
+        @if (user.Active)
+        {
+            @await Html.PartialAsync("_Index", user)
+        }
     }
 </div>
 

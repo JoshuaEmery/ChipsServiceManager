@@ -58,8 +58,11 @@ namespace CSMWebCore
             services.AddScoped<IUpdateData, SqlUpdateData>();
 
             //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
-            services.AddDefaultIdentity<ChipsUser>()
+            services.AddDefaultIdentity<ChipsUser>().AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ChipsDbContext>();
+            //This line allows to check the User object inside of a view 
+            services.AddScoped<IUserClaimsPrincipalFactory<ChipsUser>, UserClaimsPrincipalFactory<ChipsUser, IdentityRole>>();
+
             //This line of code routes my default to the login page
             //services.AddMvc().AddRazorPagesOptions(options => {
             //    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");

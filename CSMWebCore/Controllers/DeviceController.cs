@@ -255,7 +255,22 @@ namespace CSMWebCore.Controllers
                 return stream.ToArray();
             }
         }
+        public IActionResult Search(string searchValue)
+        {
 
+            var model = _devices.Search(searchValue).Select(device => new DeviceViewModel
+            {
+                Id = device.Id,
+                Owner = _customers.Get(device.CustomerId),
+                Make = device.Make,
+                ModelNumber = device.ModelNumber,
+                OperatingSystem = device.OperatingSystem,
+                Password = device.Password,
+                Serviced = device.Serviced
+
+            });
+            return View("Index", model);
+        }
 
     }
 }

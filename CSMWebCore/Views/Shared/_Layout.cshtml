@@ -145,6 +145,18 @@
                     </ul>
                 </li>
             </ul>
+            <ul class="nav navbar-nav nav-button">
+                <li class="dropdown pull-left">
+                    <a href="#" id="user-dropdown" class="dropdown-toggle user-dropdown btn btn-info" data-toggle="dropdown" role="button" aria-expanded="false">
+                        User Accounts
+                        <span class="caret text-light hidden-xs"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a asp-controller="User" asp-action="Index" title="All Acounts">View All Accounts</a></li>
+                        <li><a asp-area="Identity" asp-page="/Account/Register">Create New User Account</a></li>
+                    </ul>
+                </li>
+            </ul>
             <div class="navbar-collapse collapse">
 
                 @await Html.PartialAsync("_LoginPartial")
