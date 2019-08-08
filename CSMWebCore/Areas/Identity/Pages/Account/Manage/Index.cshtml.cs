@@ -53,8 +53,7 @@ namespace CSMWebCore.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-            [Display(Name = "User Photo")]
-            public byte[] Avatar { get; set; }
+            
 
             
         }
@@ -78,7 +77,7 @@ namespace CSMWebCore.Areas.Identity.Pages.Account.Manage
             {
                 Email = email,
                 PhoneNumber = phoneNumber,
-                Avatar = user.Avatar
+                
                 
             };
 
@@ -121,10 +120,7 @@ namespace CSMWebCore.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
                 }
             }
-            if (Input.Avatar != user.Avatar)
-            {
-                user.Avatar = Input.Avatar;                
-            }
+
             await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

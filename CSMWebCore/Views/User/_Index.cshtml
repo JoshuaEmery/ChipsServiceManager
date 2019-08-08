@@ -1,0 +1,26 @@
+﻿@model ChipsUser
+
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a asp-controller="User" asp-action="Details" asp-route-userId="@Model.Id">
+                <table class="table-responsive table-striped">
+                    <tr class="panel">
+                        <th class="panel-heading">First Name</th>
+                        <th class="panel-heading">Last Name</th>
+                        <th class="panel-heading">Phone</th>
+                        <th class="panel-heading">E-mail</th>
+
+                    </tr>
+                    <tr class="panel-default">
+                        <td class="panel-body">@Model.FirstName</td>
+                        <td class="panel-body">@Model.LastName</td>
+                        <td class="panel-body">@Model.Phone</td>
+                        <td class="panel-body">@Model.Email</td>
+
+                    </tr>
+                </table>
+            </a>
+        </div>
+    </div>
+</div>

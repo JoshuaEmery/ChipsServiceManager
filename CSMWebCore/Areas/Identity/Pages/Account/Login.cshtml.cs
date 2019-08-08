@@ -17,12 +17,14 @@ namespace CSMWebCore.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ChipsUser> _signInManager;
+        private readonly UserManager<ChipsUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ChipsUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ChipsUser> signInManager, UserManager<ChipsUser> userManager ,ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -73,6 +75,13 @@ namespace CSMWebCore.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                
+                ChipsUser user = await _userManager.FindByNameAsync(Input.UserName);
+                if (!user.Active)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
+                }
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {

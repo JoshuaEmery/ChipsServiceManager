@@ -84,7 +84,7 @@ namespace CSMWebCore.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = new ChipsUser { UserName = Input.UserName, Email = Input.Email, FirstName = Input.FirstName,
-                LastName = Input.LastName, Phone = Input.Phone};
+                LastName = Input.LastName, Phone = Input.Phone, Active = true};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
