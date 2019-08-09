@@ -109,7 +109,7 @@
                         <span class="caret text-light hidden-xs"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a asp-controller="Customer" asp-action="Active" title="Current Customers">Customers with active tickets</a></li>
+                        <li><a asp-controller="Customer" asp-action="Active" title="Current Customers">Customers With Active Tickets</a></li>
                         <li><a asp-controller="Customer" asp-action="Index" title="All Customers">All Customers</a></li>
                         <li>
                             <a title="Existing Customer">Customer Search</a><form class="navbar-form" role="search">
@@ -132,7 +132,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a asp-controller="Device" asp-action="Index" title="Current Devices">Current Device Inventory</a></li>
-                        <li>
+                        @*<li>
                             <a title="Search Current Devices">Search All Devices</a><form class="navbar-form" role="search">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
@@ -141,7 +141,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </li>
+                        </li>*@
                     </ul>
                 </li>
             </ul>
