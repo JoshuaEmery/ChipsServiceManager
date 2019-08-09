@@ -125,10 +125,13 @@ namespace CSMWebCore.Controllers
                 }
 
             }
-            TimeSpan avgAge = sumAge / activeTickets.Count();
-            TimeSpan avgIdle = sumIdle / activeTickets.Count();
-            model.avgAge = avgAge;
-            model.avgIdle = avgIdle;
+            if(activeTickets.Count() > 0)
+            {
+                TimeSpan avgAge = sumAge / activeTickets.Count();
+                TimeSpan avgIdle = sumIdle / activeTickets.Count();
+                model.avgAge = avgAge;
+                model.avgIdle = avgIdle;
+            }
             model.maxAge = maxAge;
             model.maxAgeTicketId = maxAgeTicketId;
             model.maxIdle = maxIdle;
@@ -188,10 +191,14 @@ namespace CSMWebCore.Controllers
                     maxIdleTicketId = ticket.Id;
                 }
             }
-            TimeSpan avgAge = sumAge / activeTickets.Count();
-            TimeSpan avgIdle = sumIdle / activeTickets.Count();
-            model.avgAge = avgAge;
-            model.avgIdle = avgIdle;
+            if(activeTickets.Count() > 0)
+            {
+                TimeSpan avgAge = sumAge / activeTickets.Count();
+                TimeSpan avgIdle = sumIdle / activeTickets.Count();
+                model.avgAge = avgAge;
+                model.avgIdle = avgIdle;
+            }
+
             model.maxAge = maxAge;
             model.maxAgeTicketId = maxAgeTicketId;
             model.maxIdle = maxIdle;

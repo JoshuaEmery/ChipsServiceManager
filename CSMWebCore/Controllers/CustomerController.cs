@@ -94,8 +94,6 @@ namespace CSMWebCore.Controllers
         public IActionResult Create(CustomerEditViewModel model)
         {
             Random rand = new Random();
-            model.StudentId = rand.Next(100000000, 999999999).ToString();
-            model.Phone = rand.Next(1000000000, 1999999999).ToString();
             if (ModelState.IsValid)
             {
                 Customer cust = new Customer
