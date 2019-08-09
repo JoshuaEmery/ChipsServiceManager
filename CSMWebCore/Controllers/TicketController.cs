@@ -303,7 +303,7 @@ namespace CSMWebCore.Controllers
         public ActionResult GetQRByGuid(Guid code)
         {
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"http://localhost:52394/update/index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"https://csmwebcore.conveyor.cloud/update/index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(20);
             var image = BitmapToBytes(qrCodeImage);
