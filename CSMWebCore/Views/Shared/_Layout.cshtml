@@ -133,7 +133,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a asp-controller="Device" asp-action="Index" title="Current Devices">Current Device Inventory</a></li>
                         <li>
-                            <a title="Search Current Devices">Search Current Devices</a><form class="navbar-form" role="search">
+                            <a title="Search Current Devices">Search All Devices</a><form class="navbar-form" role="search">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Search" name="searchValue" id="searchValue">
                                     <div class="input-group-btn">
@@ -152,7 +152,8 @@
                         <span class="caret text-light hidden-xs"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a asp-controller="User" asp-action="Index" title="All Acounts">View All Accounts</a></li>
+                        <li><a asp-controller="User" asp-action="Index" title="All Acounts">View All Users</a></li>
+                        <li><a asp-controller="User" asp-action="ActiveUsers" title="All Active Acounts">View All Active Users</a></li>
                         <li><a asp-area="Identity" asp-page="/Account/Register">Create New User Account</a></li>
                     </ul>
                 </li>

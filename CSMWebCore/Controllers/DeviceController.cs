@@ -34,16 +34,24 @@ namespace CSMWebCore.Controllers
         }
         public IActionResult Index()
         {
-            var model = _devices.GetAll().Select(device => new DeviceViewModel
+            List<DeviceViewModel> model = new List<DeviceViewModel>();
+            var activetickets = _tickets.GetAllActiveTickets();
+            foreach (var ticket in activetickets)
             {
-                Id = device.Id,
-                Owner = _customers.Get(device.CustomerId),
-                Make = device.Make,
-                ModelNumber = device.ModelNumber,
-                OperatingSystem = device.OperatingSystem,
-                Password = device.Password,
-                Serviced = device.Serviced
-            });
+                var device = _devices.Get(ticket.DeviceId);
+                model.Add(new DeviceViewModel
+                {
+                    Id = device.Id,
+                    Owner = _customers.Get(device.CustomerId),
+                    Make = device.Make,
+                    ModelNumber = device.ModelNumber,
+                    OperatingSystem = device.OperatingSystem,
+                    Password = device.Password,
+                    Serviced = device.Serviced,
+                    Ticket = ticket
+                });
+            }
+
             return View(model);
         }
         [HttpGet]
@@ -266,7 +274,8 @@ namespace CSMWebCore.Controllers
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
                 Password = device.Password,
-                Serviced = device.Serviced
+                Serviced = device.Serviced,
+                Ticket = _tickets.GetRecentByDevice(device.Id)                
 
             });
             return View("Index", model);

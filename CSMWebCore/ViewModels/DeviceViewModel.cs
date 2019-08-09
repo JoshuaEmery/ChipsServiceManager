@@ -17,5 +17,6 @@ namespace CSMWebCore.ViewModels
         public string OperatingSystem { get; set; }
         public string Password { get; set; }
         public bool Serviced { get; set; }
+        
     }
 }

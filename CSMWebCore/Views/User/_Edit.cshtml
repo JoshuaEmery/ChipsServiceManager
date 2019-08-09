@@ -14,11 +14,11 @@
 
                     </tr>
                     <tr class="panel-default">
-                        <td class="panel-body">@Model.User.FirstName</td>
-                        <td class="panel-body">@Model.User.LastName</td>
-                        <td class="panel-body">@Model.User.Phone</td>
-                        <td class="panel-body">@Model.User.Email</td>
-                        <td class="panel-body">@foreach (var role in Model.Roles)
+                        <td class="panel-body">@Model.FirstName</td>
+                        <td class="panel-body">@Model.LastName</td>
+                        <td class="panel-body">@Model.Phone</td>
+                        <td class="panel-body">@Model.Email</td>
+                        <td class="panel-body">@foreach (var role in Model.CurrentRoles)
                         {
                             @role;
                         }</td>

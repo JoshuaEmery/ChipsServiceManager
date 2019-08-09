@@ -7,4 +7,6 @@
     <td class="panel-body">@Model.OperatingSystem</td>
     <td class="panel-body">@Model.Password</td>
     <td class="panel-body">@Model.Serviced</td>
+    <td class="panel-body">@if (Model.Ticket != null) { @Model.Ticket.TicketStatus; }</td>
+    <td class="panel-body">@if (Model.Ticket != null) { @Model.Ticket.TicketNumber; }</td>
 </tr>

@@ -1,15 +1,12 @@
 ﻿@model List<ChipsUser>
-@{ ViewBag.Title = "Technician List";}
+@{ ViewBag.Title = "User Account List";}
 <div class="col-md-12 topFormPanel">
     <h2>@ViewBag.Title</h2>
 </div>
 <div class="col-md-12 bottomFormPanel">
     @foreach (var user in Model)
     {
-        @if (user.Active)
-        {
             @await Html.PartialAsync("_Index", user)
-        }
     }
 </div>
 

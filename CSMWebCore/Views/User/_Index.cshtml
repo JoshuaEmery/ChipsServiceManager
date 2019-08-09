@@ -6,27 +6,29 @@
             
                 <table class="table-responsive table-striped">
                     <tr class="panel">
+                        <th class="panel-heading">User Name</th>
                         <th class="panel-heading">First Name</th>
                         <th class="panel-heading">Last Name</th>
                         <th class="panel-heading">Phone</th>
                         <th class="panel-heading">E-mail</th>
                         <th class="panel-heading">Active</th>
-                        
+
 
                     </tr>
                     <tr class="panel-default">
+                        <td class="panel-body">@Model.UserName</td>
                         <td class="panel-body">@Model.FirstName</td>
                         <td class="panel-body">@Model.LastName</td>
                         <td class="panel-body">@Model.Phone</td>
                         <td class="panel-body">@Model.Email</td>
                         <td class="panel-body">@Model.Active.ToString()</td>
-                        
+
 
                     </tr>
                 </table>
             @if(User.IsInRole("Administrator") || User.IsInRole("Supervisor"))
             {
-                <a asp-controller="User" asp-action="Edit" asp-route-user="@Model">Edit</a>
+                <a class="btn btn-warning" asp-controller="User" asp-action="Edit" asp-route-userId="@Model.Id">Edit this account</a>
             }
 
         </div>

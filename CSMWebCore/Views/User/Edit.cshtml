@@ -1,6 +1,6 @@
 ﻿@model UserEditViewModel
-@{ ViewBag.Title = "Edit User Account";}
-<div class="topFormPanel col-md-12">@ViewBag.Title</div>
+@{ ViewBag.Title = $"Edit user privilieges for {Model.FirstName} {Model.LastName}";}
+
 <div class="col-md-12 topFormPanel">
     <h2>@ViewBag.Title</h2>
 </div>
@@ -9,30 +9,41 @@
         <div asp-validation-summary="All"></div>
         <table class="col-md-3 table table-hover">
             <tr>
-                <td><label asp-for="User.FirstName"></label></td>
-                <td><input asp-for="User.FirstName" /></td>
-                <td><span asp-validation-for="User.FirstName"></span></td>
+                <td><label asp-for="Email"></label></td>
+                <td><input asp-for="Email" /></td>
+                <td><span asp-validation-for="Email"></span></td>
             </tr>
             <tr>
-                <td><label asp-for="User.LastName"></label></td>
-                <td><input asp-for="User.LastName" /></td>
-                <td><span asp-validation-for="User.LastName"></span></td>
+                <td>
+                @if (Model.Active) {<label>This account is active, uncheck to disable access</label> }
+                else {<label>This account is unactive, check to enable access</label>}
+                </td>
+                <td><input asp-for="Active" /></td>
+                <td><span asp-validation-for="Active"></span></td>
             </tr>
             <tr>
-                <td><label asp-for="User.Phone"></label></td>
-                <td><input id="sid" size="11" asp-for="User.Phone" placeholder="999-999-999" pattern="\d{3}-?\d{3}-?\d{4}" onkeyup="mask(this, stuid);" onblur="mask(this, phone)" /></td>
-                <td><span asp-validation-for="User.Phone"></span></td>
-            </tr>
+                <td>
+                    <label>This user currently has the following permissions</label>
+                    </td>
+                    <td>
+                        <ul>
+                    @foreach (var role in Model.CurrentRoles)
+                    {
+                            <li>@role</li>
+                    }
+                            </ul>
+                </td>
+                </tr>
             <tr>
-                <td><label asp-for="User.Email"></label></td>
-                <td><input asp-for="User.Email" /></td>
-                <td><span asp-validation-for="User.Email"></span></td>
+                <td>Select permission to add to this user: <select asp-for="NewRole" asp-items="Html.GetEnumSelectList<UserRoles>()"><option disabled selected>No Change</option></select></td>
+                <td>Select permission to remove from this user: <select asp-for="RemoveRole" asp-items="Html.GetEnumSelectList<UserRoles>()"><option disabled selected>No Change</option></select></td>
             </tr>
 
         </table>
-        <input asp-for="User.Id" type="hidden" />
+        <input asp-for="Id" type="hidden" />
         <div class="btn-group">
-            <input class="btn btn-warning" type="submit" value="Edit this customer" />
+            <input class="btn btn-success" type="submit" value="Save Changes" />
         </div>
     </form>
 </div>
+

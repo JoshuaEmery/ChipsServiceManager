@@ -55,6 +55,10 @@ namespace CSMWebCore.Services
         {
             return _db.Tickets.Where(x => x.DeviceId == deviceId);
         }
+        public Ticket GetRecentByDevice(int deviceId)
+        {
+            return _db.Find<Ticket>(_db.Tickets.Where(x => x.DeviceId == deviceId).LastOrDefault().Id);
+        }
 
         public IEnumerable<Ticket> GetAllCompletedTickets()
         {

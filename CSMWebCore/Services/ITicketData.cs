@@ -21,6 +21,7 @@ namespace CSMWebCore.Services
         int CountByStatus(TicketStatus status);
         IEnumerable<Ticket> GetTicketsCompletedWithinTimeSpan(TimeSpan span);
         IEnumerable<Ticket> GetAllCompletedTickets();
+        Ticket GetRecentByDevice(int deviceId);
 
 
     }
