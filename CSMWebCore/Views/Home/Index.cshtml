@@ -100,7 +100,7 @@
 
             function drawChart() {
                 var data = google.visualization.arrayToDataTable([
-                    ["Element", "Density", { role: "style" }],
+                    ["Days", "Handle Time", { role: "style" }],
                     ["Last Week", @double.Parse(Model.weekAvgHandle.TotalDays.ToString()), "blue"],
                     ["Last 30 Days", @double.Parse(Model.monthAvgHandle.TotalDays.ToString()), "silver"],
                     ["Last 90 Days", @double.Parse(Model.ninetyDayAvgHandle.TotalDays.ToString()), "red"],

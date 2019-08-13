@@ -19,18 +19,16 @@ namespace CSMWebCore.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ChipsUser> _userManager;
         private readonly SignInManager<ChipsUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private IImageConverter _imageConverter;
+        
 
         public IndexModel(
             UserManager<ChipsUser> userManager,
             SignInManager<ChipsUser> signInManager,
-            IEmailSender emailSender,
-            IImageConverter imageConverter)
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
-            _imageConverter = imageConverter;
+            _emailSender = emailSender;            
         }
 
         public string Username { get; set; }

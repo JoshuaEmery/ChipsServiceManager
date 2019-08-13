@@ -33,7 +33,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Index()
         {
             var activeTickets = _tickets.GetAllActiveTickets();
-            var completedTickets = _tickets.GetAllCompletedTickets();
+            var allTickets = _tickets.GetAll();
             var model = new HomeIndexViewModel();
             model.newCount = 0;
             model.inProgressCount = 0;
@@ -89,7 +89,7 @@ namespace CSMWebCore.Controllers
                     maxIdleTicketId = ticket.Id;
                 }
             }
-            foreach (var ticket in completedTickets)
+            foreach (var ticket in allTickets)
             {
                 if((DateTime.Now - ticket.Finished).TotalDays < 8)
                 {
