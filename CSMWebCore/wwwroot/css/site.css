@@ -97,3 +97,12 @@ body {
     margin:10px;
 }
 /*NavBar*/
+
+.update-logo {
+    position: absolute;
+    right: 25%;
+    top: 0px;
+    width: 30%;
+    height: 25%;
+
+}

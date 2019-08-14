@@ -64,11 +64,10 @@ namespace CSMWebCore.Controllers
             {
                 return RedirectToAction("Index");
             }
-            CustomerEditViewModel model = new CustomerEditViewModel
-            {
-                Id = cust.Id,
-
-            };
+            //CustomerEditViewModel model = new CustomerEditViewModel
+            //{
+            //    Id = cust.Id,
+            //};
             return View(cust);
         }
         [HttpPost]

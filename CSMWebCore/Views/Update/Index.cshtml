@@ -26,25 +26,28 @@
     </script>
 </head>
 <body>
+
     <div class="panel panel-primary">
         <div class="panel-heading">Status update for @Model.Device.Make @Model.Device.ModelNumber<span class="pull-right">Ticket #@Model.Ticket.TicketNumber</span></div>
-        
-            <table>
-                <tr class="panel-body">
-                    <td>Ticket Status: </td>
-                    <td>@Model.Ticket.TicketStatus.ToString()</td>
-                </tr>
-                <tr class="panel-body">
-                    <td>Check in date: </td>
-                    <td>@Model.Ticket.CheckedIn.ToString()</td>
-                </tr>
-                <tr class="panel-body">
-                    <td>Most recent service:  </td>
-                    <td>@Model.Log.LogType.ToString() performed at @Model.Log.Logged.ToString()</td>
-                </tr>
-            </table>
-            <div class="panel-footer">Feel free to contact us with any questions at 425-123-1123</div>
-        
+
+        <table class="table table-hover">
+            <tr class="panel-body">
+                <td>Ticket Status: </td>
+                <td>@Model.Ticket.TicketStatus.ToString()</td>
+            </tr>
+            <tr class="panel-body">
+                <td>Check in date: </td>
+                <td>@Model.Ticket.CheckedIn.ToString()</td>
+            </tr>
+            <tr class="panel-body">
+                <td>Most recent service:  </td>
+                <td>@Model.Log.LogType.ToString() performed at @Model.Log.Logged.ToString()</td>
+            </tr>
+        </table>
+        <div class="panel-footer">Feel free to contact us with any questions at 425-235-2531 Ext. 5722</div>
+        <div class="panel-footer">E-mail us at <A HREF="mailto:chips@student.rtc.edu">chips@student.rtc.edu</A></div>
+
+
     </div>
 </body>
 </html>
