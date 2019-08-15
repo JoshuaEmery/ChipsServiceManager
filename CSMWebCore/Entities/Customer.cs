@@ -19,6 +19,7 @@ namespace CSMWebCore.Entities
         public string Email { get; set; }
         public string Phone { get; set; }
         public string StudentId { get; set; }
+        [Display(Name = "Contact Preference")]
         public ContactPref ContactPref { get; set; }
     }
 }
