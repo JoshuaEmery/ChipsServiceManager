@@ -155,10 +155,7 @@ namespace CSMWebCore.Controllers
         [HttpPost]
         public IActionResult CreateByCustId(DeviceEditViewModel model)
         {
-            if (model.Ticket.TicketNumber == _tickets.CurrentTicketNumber())
-            {
-                return View("Confirmation");
-            }
+            
             if (!ModelState.IsValid)
             {
                 model.Owner = _customers.Get(model.CustomerId);
@@ -177,6 +174,7 @@ namespace CSMWebCore.Controllers
             
             _devices.Add(device);
             _devices.Commit();
+            model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
             Ticket ticket = new Ticket
             {
                 DeviceId = device.Id,
@@ -208,15 +206,12 @@ namespace CSMWebCore.Controllers
 
             _updates.Add(update);
             _updates.Commit();
-            var updateViewModel = new UpdateViewModel
-            {
-                Ticket = ticket,
-                Device = device,
-                Customer = _customers.Get(model.CustomerId),
-                Update = update
-            };
 
-            return View("Confirmation", updateViewModel);
+
+            return RedirectToAction("Confirmation", new { ticketId = ticket.Id,
+            deviceId = device.Id,
+            customerId = model.CustomerId,
+            updateId = update.Id});
         }
         [HttpGet]
         public IActionResult DevicesByCustId(int customerId)
@@ -279,6 +274,17 @@ namespace CSMWebCore.Controllers
 
             });
             return View("Index", model);
+        }
+        public IActionResult Confirmation(int ticketId, int deviceId, int customerId, Guid updateId)
+        {
+            var model = new UpdateViewModel
+            {
+                Ticket = _tickets.Get(ticketId),
+                Device = _devices.Get(deviceId),
+                Customer = _customers.Get(customerId),
+                Update = _updates.Get(updateId)
+            };
+            return View(model);
         }
 
     }

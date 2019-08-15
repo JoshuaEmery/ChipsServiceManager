@@ -76,10 +76,7 @@ namespace CSMWebCore.Controllers
         [HttpPost]
         public IActionResult CreateByExistingDeviceId(DeviceEditViewModel model)
         {
-            if (model.Ticket.TicketNumber == _tickets.CurrentTicketNumber())
-            {
-                return View("Confirmation");
-            }
+            model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
             if (!ModelState.IsValid)
             {
                 model.Owner = _customers.Get(model.CustomerId);
@@ -117,15 +114,13 @@ namespace CSMWebCore.Controllers
             };
             _updates.Add(update);
             _updates.Commit();
-            var updateViewModel = new UpdateViewModel
+            return RedirectToAction("Confirmation", new
             {
-                Ticket = ticket,
-                Device = device,
-                Customer = _customers.Get(model.CustomerId),
-                Update = update
-            };
-
-            return View("Confirmation", updateViewModel);
+                ticketId = ticket.Id,
+                deviceId = device.Id,
+                customerId = model.CustomerId,
+                updateId = update.Id
+            });
         }
         [HttpGet]
         public IActionResult Edit(int id)
@@ -319,6 +314,18 @@ namespace CSMWebCore.Controllers
                 img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                 return stream.ToArray();
             }
+        }
+
+        public IActionResult Confirmation(int ticketId, int deviceId, int customerId, Guid updateId)
+        {
+            var model = new UpdateViewModel
+            {
+                Ticket = _tickets.Get(ticketId),
+                Device = _devices.Get(deviceId),
+                Customer = _customers.Get(customerId),
+                Update = _updates.Get(updateId)
+            };
+            return View(model);
         }
 
 

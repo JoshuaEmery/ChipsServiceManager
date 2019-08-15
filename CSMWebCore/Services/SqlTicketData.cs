@@ -32,16 +32,15 @@ namespace CSMWebCore.Services
         }
 
         public int CurrentTicketNumber()
-        {
+        {            
             try
             {
                 return _db.Tickets.Max(t => t.TicketNumber);
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 return 0;
             }
-
         }
 
         public Ticket Get(int id)
