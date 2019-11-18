@@ -241,6 +241,7 @@ namespace CSMWebCore.Controllers
         public ActionResult GetQRByGuid(Guid code)
         {
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //change to route to site url
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"https://csmwebcore.conveyor.cloud/update/index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(20);

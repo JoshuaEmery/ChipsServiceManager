@@ -29,8 +29,8 @@ namespace CSMWebCore
                 .AddJsonFile("appsettings.json", optional: true);
             //The connection string is stored in a json object called secrets.  This keeps it independent of version control
             //the secrets json is only used if environment is development
-            if (env.IsDevelopment())
-                builder.AddUserSecrets<Startup>();
+            //if (env.IsDevelopment())
+            //    builder.AddUserSecrets<Startup>();
             Configuration = builder.Build();
 
         }
