@@ -92,7 +92,6 @@ namespace CSMWebCore.Services
                 result.AddRange(_db.Tickets.Where(c => c.CheckInUserId.Contains(searchValue)));
                 result.AddRange(_db.Tickets.Where(c => c.CheckOutUserId.Contains(searchValue)));
                 result.AddRange(_db.Tickets.Where(c => c.TicketNumber.ToString().Contains(searchValue)));
-
             }
             return result;
 

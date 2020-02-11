@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CSMWebCore.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize]
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<ChipsUser> _userManager;

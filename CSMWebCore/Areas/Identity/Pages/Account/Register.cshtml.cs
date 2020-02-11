@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CSMWebCore.Areas.Identity.Pages.Account
 {
-    
+    [Authorize]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ChipsUser> _signInManager;

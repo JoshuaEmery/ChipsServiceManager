@@ -6,12 +6,14 @@ using CSMWebCore.Data;
 using CSMWebCore.Entities;
 using CSMWebCore.Models;
 using CSMWebCore.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CSMWebCore.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly UserManager<ChipsUser> _userManager;
