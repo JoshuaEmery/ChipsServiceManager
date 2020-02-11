@@ -266,7 +266,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Search(string searchValue)
         {
 
-            fvar model = _tickets.Search(searchValue).Select(ticket => new TicketHomeViewModel
+            var model = _tickets.Search(searchValue).Select(ticket => new TicketHomeViewModel
             {
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
