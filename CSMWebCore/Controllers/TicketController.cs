@@ -299,7 +299,7 @@ namespace CSMWebCore.Controllers
         {
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             //change to route to site url
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"http://joshuaemery-001-site1.gtempurl.com/Update/Index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"http://chipsmgr.com/Update/Index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(20);
             var image = BitmapToBytes(qrCodeImage);
