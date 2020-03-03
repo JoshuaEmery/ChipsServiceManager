@@ -68,8 +68,8 @@ namespace CSMWebCore.Controllers
                 LastName = user.LastName,
                 Phone = user.Phone,
                 Email = user.Email,
-                CurrentRoles = rolesList
-            };
+                CurrentRoles = rolesList               
+            };            
             return View(model);
         }
         [HttpPost]
