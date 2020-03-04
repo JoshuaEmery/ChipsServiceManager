@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using CSMWebCore.Services;
 using CSMWebCore.Entities;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using CSMWebCore.Services;
 
 namespace CSMWebCore
 {
@@ -68,6 +70,12 @@ namespace CSMWebCore
             //    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
             //}).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
