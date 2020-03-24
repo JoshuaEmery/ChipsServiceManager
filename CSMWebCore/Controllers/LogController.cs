@@ -12,7 +12,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CSMWebCore.Controllers
 {
+    //check login
     [Authorize]
+    //Logs table needs access to devices, customers, tickets, logs.  Also the Log table works primarily
+    //by TicketID as that is the foreign key in the log table.
     public class LogController : Controller
     {
         private IDeviceData _devices;
@@ -28,76 +31,77 @@ namespace CSMWebCore.Controllers
             _logs = logs;
         }
         //Test Actions
-        //public IActionResult Index()
-        //{
-        //    var model = _logs.GetAll().Select(log => new LogViewModel
-        //    {
-        //        Id = log.Id,
-        //        UserId = log.UserId,
-        //        TicketId = log.TicketId,
-        //        Logged = log.Logged.ToShortDateString(),
-        //        Notes = log.Notes,
-        //        LogType = log.LogType.ToString(),
-        //        ContactMethod = log.ContactMethod.ToString()
+        public IActionResult Index()
+        {
+            var model = _logs.GetAll().Select(log => new LogViewModel
+            {
+                Id = log.Id,
+                UserId = log.UserId,
+                TicketId = log.TicketId,
+                Logged = log.Logged.ToShortDateString(),
+                Notes = log.Notes,
+                LogType = log.LogType.ToString(),
+                ContactMethod = log.ContactMethod.ToString()
 
-        //    });
-        //    return View(model);
-        //}
-        //[HttpGet]
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public IActionResult Create(LogEditViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Log log = new Log
-        //        {
-        //            UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-        //            TicketId = model.TicketId,
-        //            Logged = DateTime.Now,
-        //            Notes = model.Notes,
-        //            LogType = model.LogType,
-        //            ContactMethod = model.ContactMethod
-        //        };
-        //        _logs.Add(log);
-        //        _logs.Commit();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View();
+            });
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(LogEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Log log = new Log
+                {
+                    UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                    TicketId = model.TicketId,
+                    Logged = DateTime.Now,
+                    Notes = model.Notes,
+                    LogType = model.LogType,
+                    ContactMethod = model.ContactMethod
+                };
+                _logs.Add(log);
+                _logs.Commit();
+                return RedirectToAction("Index");
+            }
+            return View();
 
-        //}
-        //[HttpGet]
-        //public IActionResult Edit(int id)
-        //{
-        //    var model = _logs.Get(id);
-        //    if (model == null)
-        //    {
-        //        return View();
-        //    }
-        //    return View(model);
-        //}
-        //[HttpPost]
-        //public IActionResult Edit(LogEditViewModel model)
-        //{
-        //    var log = _logs.Get(model.Id);
-        //    if (log == null || !ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-        //    log.UserId = model.UserId;
-        //    log.TicketId = model.TicketId;
-        //    log.Logged = model.Logged;
-        //    log.Notes = model.Notes;
-        //    log.LogType = model.LogType;
-        //    log.ContactMethod = model.ContactMethod;
-        //    _logs.Commit();
-        //    return RedirectToAction("Index");
-        //}
+        }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var model = _logs.Get(id);
+            if (model == null)
+            {
+                return View();
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Edit(LogEditViewModel model)
+        {
+            var log = _logs.Get(model.Id);
+            if (log == null || !ModelState.IsValid)
+            {
+                return View(model);
+            }
+            log.UserId = model.UserId;
+            log.TicketId = model.TicketId;
+            log.Logged = model.Logged;
+            log.Notes = model.Notes;
+            log.LogType = model.LogType;
+            log.ContactMethod = model.ContactMethod;
+            _logs.Commit();
+            return RedirectToAction("Index");
+        }
         //End Test Actions
-        //Deployment Actions
+
+        //Deployed Actions
 
         //Log/Service
         //Method that takes a ticketId and creates a service Log for that ticket
@@ -145,14 +149,16 @@ namespace CSMWebCore.Controllers
             ticket.TicketStatus = model.TicketStatus;
             _tickets.Commit();
             return RedirectToAction("Home", "Ticket");            
-        }
-        //Ticket/Contact
-        //Log/Service
+        }        
+        //Log/Contact
+        //Get Method to log contact with customer
         [HttpGet]
         public IActionResult Contact(int ticketId)
         {
+            //get th ticket and the customer associated with that ticket
             var ticket = _tickets.Get(ticketId);
             var customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId);
+            //create LogEditViewModel
             var model = new LogEditViewModel
             {
                 TicketId = ticket.Id,
@@ -161,6 +167,7 @@ namespace CSMWebCore.Controllers
                 TicketStatus = ticket.TicketStatus,
                 ContactMethod = ContactMethod.InPerson
             };
+            //return View
             return View(model);
         }
         [HttpPost]
