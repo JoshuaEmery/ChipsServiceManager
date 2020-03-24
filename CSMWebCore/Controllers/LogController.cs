@@ -31,74 +31,74 @@ namespace CSMWebCore.Controllers
             _logs = logs;
         }
         //Test Actions
-        public IActionResult Index()
-        {
-            var model = _logs.GetAll().Select(log => new LogViewModel
-            {
-                Id = log.Id,
-                UserId = log.UserId,
-                TicketId = log.TicketId,
-                Logged = log.Logged.ToShortDateString(),
-                Notes = log.Notes,
-                LogType = log.LogType.ToString(),
-                ContactMethod = log.ContactMethod.ToString()
+        //public IActionResult Index()
+        //{
+        //    var model = _logs.GetAll().Select(log => new LogViewModel
+        //    {
+        //        Id = log.Id,
+        //        UserId = log.UserId,
+        //        TicketId = log.TicketId,
+        //        Logged = log.Logged.ToShortDateString(),
+        //        Notes = log.Notes,
+        //        LogType = log.LogType.ToString(),
+        //        ContactMethod = log.ContactMethod.ToString()
 
-            });
-            return View(model);
-        }
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Create(LogEditViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                Log log = new Log
-                {
-                    UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                    TicketId = model.TicketId,
-                    Logged = DateTime.Now,
-                    Notes = model.Notes,
-                    LogType = model.LogType,
-                    ContactMethod = model.ContactMethod
-                };
-                _logs.Add(log);
-                _logs.Commit();
-                return RedirectToAction("Index");
-            }
-            return View();
+        //    });
+        //    return View(model);
+        //}
+        //[HttpGet]
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //public IActionResult Create(LogEditViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Log log = new Log
+        //        {
+        //            UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+        //            TicketId = model.TicketId,
+        //            Logged = DateTime.Now,
+        //            Notes = model.Notes,
+        //            LogType = model.LogType,
+        //            ContactMethod = model.ContactMethod
+        //        };
+        //        _logs.Add(log);
+        //        _logs.Commit();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View();
 
-        }
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var model = _logs.Get(id);
-            if (model == null)
-            {
-                return View();
-            }
-            return View(model);
-        }
-        [HttpPost]
-        public IActionResult Edit(LogEditViewModel model)
-        {
-            var log = _logs.Get(model.Id);
-            if (log == null || !ModelState.IsValid)
-            {
-                return View(model);
-            }
-            log.UserId = model.UserId;
-            log.TicketId = model.TicketId;
-            log.Logged = model.Logged;
-            log.Notes = model.Notes;
-            log.LogType = model.LogType;
-            log.ContactMethod = model.ContactMethod;
-            _logs.Commit();
-            return RedirectToAction("Index");
-        }
+        //}
+        //[HttpGet]
+        //public IActionResult Edit(int id)
+        //{
+        //    var model = _logs.Get(id);
+        //    if (model == null)
+        //    {
+        //        return View();
+        //    }
+        //    return View(model);
+        //}
+        //[HttpPost]
+        //public IActionResult Edit(LogEditViewModel model)
+        //{
+        //    var log = _logs.Get(model.Id);
+        //    if (log == null || !ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+        //    log.UserId = model.UserId;
+        //    log.TicketId = model.TicketId;
+        //    log.Logged = model.Logged;
+        //    log.Notes = model.Notes;
+        //    log.LogType = model.LogType;
+        //    log.ContactMethod = model.ContactMethod;
+        //    _logs.Commit();
+        //    return RedirectToAction("Index");
+        //}
         //End Test Actions
 
         //Deployed Actions
@@ -171,13 +171,16 @@ namespace CSMWebCore.Controllers
             return View(model);
         }
         [HttpPost]
+        //Post Method for log contact
         public IActionResult Contact(LogEditViewModel model)
         {
+            //get the ticket and check for valid
             Ticket ticket = _tickets.Get(model.TicketId);
             if (!ModelState.IsValid || ticket == null)
             {
                 return View(model);
             }
+            //create new log
             Log log = new Log
             {
                 UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
@@ -188,8 +191,10 @@ namespace CSMWebCore.Controllers
                 ContactMethod = model.ContactMethod
 
             };
+            //update database
             _logs.Add(log);
             _logs.Commit();
+            //record time finished if ticket has been completed
             ticket.TicketStatus = model.TicketStatus;
             if (model.TicketStatus == TicketStatus.PendingPickup)
             {
@@ -200,11 +205,9 @@ namespace CSMWebCore.Controllers
                 ticket.CheckedOut = DateTime.Now;
                 ticket.CheckOutUserId = User.FindFirst(ClaimTypes.Name).Value.ToString();
             }
+            //update tickets table
             _tickets.Commit();
-            return RedirectToAction("Home", "Ticket");
-            
+            return RedirectToAction("Home", "Ticket");            
         }
-
-
     }
 }
