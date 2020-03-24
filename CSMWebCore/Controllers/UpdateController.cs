@@ -12,6 +12,7 @@ using QRCoder;
 
 namespace CSMWebCore.Controllers
 {
+    //Conroller that generates data for updating the customer
     public class UpdateController : Controller
     {
         private IDeviceData _devices;
@@ -28,6 +29,9 @@ namespace CSMWebCore.Controllers
             _logs = logs;
             _updates = updates;
         }
+        //Update/Index
+        //Takes a string representation of a GUID and returns informaiton
+        //aboout the ticket associated with that Guid
         public IActionResult Index(string id)
         {
             var guid = new Guid(id);
