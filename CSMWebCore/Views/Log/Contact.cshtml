@@ -1,0 +1,58 @@
+﻿@model LogEditViewModel
+<form asp-action="Contact" method="post">
+    <div asp-validation-summary="All"></div>
+    <div class="topFormPanel">
+        <Table class="col-md-3 table table-bordered table-hover">
+            <tr>
+                <td>
+                    <label asp-for="Customer.FirstName"></label>
+                </td>
+                     <td><input asp-for="Customer.FirstName" readonly="readonly" /></td>
+                
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="Customer.LastName"></label></td>
+                    <td><input asp-for="Customer.LastName" readonly="readonly" />
+                </td>
+            </tr>            
+            <tr>
+                <td>
+                    <label asp-for="Customer.Email"></label></td>
+                    <td><input asp-for="Customer.Email" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="Customer.Phone"></label></td>
+                   <td> <input asp-for="Customer.Phone" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="TicketNumber"></label></td>
+                    <td><input asp-for="TicketNumber" readonly="readonly" />
+                </td>
+            </tr>
+        </Table>        
+    </div>
+    <div class="col-md-12 bottomFormPanel">
+        <div class="row">
+            <label asp-for="ContactMethod" class="col-md-2"></label>
+            <select class="col-md-2" asp-for="ContactMethod" asp-items="Html.GetEnumSelectList<ContactMethod>()"></select>
+            <span asp-validation-for="ContactMethod"></span>
+        </div>
+        <div class="row">
+            <label asp-for="TicketStatus" class="col-md-2"></label>
+            <select class="col-md-2" asp-for="TicketStatus" asp-items="Html.GetEnumSelectList<TicketStatus>()"></select>
+            <span asp-validation-for="TicketStatus"></span>
+        </div>
+        <div class="row">
+            <label asp-for="Notes" class="col-md-2"></label>
+            <textarea asp-for="Notes" rows="5" class="col-md-5"></textarea>
+            <span asp-validation-for="Notes"></span>
+        </div>
+        <input type="hidden" asp-for="TicketId" />
+        <input class="btn btn-group btn-success" type="submit" value="Save Contact" />
+    </div>
+</form>
