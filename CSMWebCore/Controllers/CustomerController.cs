@@ -176,7 +176,7 @@ namespace CSMWebCore.Controllers
             {
                 //Retrieve each Customer by getting the CustomerID stored in the Device that is
                 //stored in the Ticket
-                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId)             
+                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId)               
             });
             //return View
             return View(model);

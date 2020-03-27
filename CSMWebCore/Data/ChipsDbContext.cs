@@ -15,7 +15,6 @@ namespace CSMWebCore.Data
         public DbSet<Log> Logs { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<Update> Updates { get; set; }
-        public DbSet<Consultation> Consultations { get; set; }
 
 
         //public DbSet<Customer> MyProperty { get; set; }
