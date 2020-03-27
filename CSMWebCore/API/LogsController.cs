@@ -1,4 +1,4 @@
-﻿/*
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,7 @@ using CSMWebCore.Entities;
 
 namespace CSMWebCore.API
 {
+    [ApiKeyAuth]
     [Route("api/[controller]")]
     [ApiController]
     public class LogsController : ControllerBase
@@ -125,4 +126,3 @@ namespace CSMWebCore.API
         }
     }
 }
-*/

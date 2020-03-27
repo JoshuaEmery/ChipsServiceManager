@@ -99,26 +99,26 @@ namespace CSMWebCore.API
             return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
         }
 
-        //// DELETE: api/Customers/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteCustomer([FromRoute] int id)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // DELETE: api/Customers/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCustomer([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    var customer = await _context.Customers.FindAsync(id);
-        //    if (customer == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var customer = await _context.Customers.FindAsync(id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
 
-        //    _context.Customers.Remove(customer);
-        //    await _context.SaveChangesAsync();
+            _context.Customers.Remove(customer);
+            await _context.SaveChangesAsync();
 
-        //    return Ok(customer);
-        //}
+            return Ok(customer);
+        }
 
         private bool CustomerExists(int id)
         {

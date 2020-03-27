@@ -99,7 +99,7 @@ namespace CSMWebCore.API
             return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
         }
         
-        /*
+        
         // DELETE: api/Tickets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket([FromRoute] int id)
@@ -120,7 +120,7 @@ namespace CSMWebCore.API
 
             return Ok(ticket);
         }
-        */
+     
 
         private bool TicketExists(int id)
         {
