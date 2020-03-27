@@ -77,7 +77,7 @@ namespace CSMWebCore.Areas.Identity.Pages.Account
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 
                 ChipsUser user = await _userManager.FindByNameAsync(Input.UserName);
-                if (!user.Active)
+                if (user != null && !user.Active)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();

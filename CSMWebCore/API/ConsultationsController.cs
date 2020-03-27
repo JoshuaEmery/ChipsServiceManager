@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,56 +13,56 @@ namespace CSMWebCore.API
     [ApiKeyAuth]
     [Route("api/[controller]")]
     [ApiController]
-    public class DevicesController : ControllerBase
+    public class ConsultationsController : ControllerBase
     {
         private readonly ChipsDbContext _context;
 
-        public DevicesController(ChipsDbContext context)
+        public ConsultationsController(ChipsDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Devices
+        // GET: api/Consultations
         [HttpGet]
-        public IEnumerable<Device> GetDevices()
+        public IEnumerable<Consultation> GetConsultations()
         {
-            return _context.Devices;
+            return _context.Consultations;
         }
 
-        // GET: api/Devices/5
+        // GET: api/Consultations/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDevice([FromRoute] int id)
+        public async Task<IActionResult> GetConsultation([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var device = await _context.Devices.FindAsync(id);
+            var consultation = await _context.Consultations.FindAsync(id);
 
-            if (device == null)
+            if (consultation == null)
             {
                 return NotFound();
             }
 
-            return Ok(device);
+            return Ok(consultation);
         }
 
-        // PUT: api/Devices/5
+        // PUT: api/Consultations/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDevice([FromRoute] int id, [FromBody] Device device)
+        public async Task<IActionResult> PutConsultation([FromRoute] int id, [FromBody] Consultation consultation)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != device.Id)
+            if (id != consultation.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(device).State = EntityState.Modified;
+            _context.Entry(consultation).State = EntityState.Modified;
 
             try
             {
@@ -71,7 +70,7 @@ namespace CSMWebCore.API
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DeviceExists(id))
+                if (!ConsultationExists(id))
                 {
                     return NotFound();
                 }
@@ -84,45 +83,45 @@ namespace CSMWebCore.API
             return NoContent();
         }
 
-        // POST: api/Devices
+        // POST: api/Consultations
         [HttpPost]
-        public async Task<IActionResult> PostDevice([FromBody] Device device)
+        public async Task<IActionResult> PostConsultation([FromBody] Consultation consultation)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Devices.Add(device);
+            _context.Consultations.Add(consultation);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDevice", new { id = device.Id }, device);
+            return CreatedAtAction("GetConsultation", new { id = consultation.Id }, consultation);
         }
 
-        // DELETE: api/Devices/5
+        // DELETE: api/Consultations/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDevice([FromRoute] int id)
+        public async Task<IActionResult> DeleteConsultation([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var device = await _context.Devices.FindAsync(id);
-            if (device == null)
+            var consultation = await _context.Consultations.FindAsync(id);
+            if (consultation == null)
             {
                 return NotFound();
             }
 
-            _context.Devices.Remove(device);
+            _context.Consultations.Remove(consultation);
             await _context.SaveChangesAsync();
 
-            return Ok(device);
+            return Ok(consultation);
         }
 
-        private bool DeviceExists(int id)
+        private bool ConsultationExists(int id)
         {
-            return _context.Devices.Any(e => e.Id == id);
+            return _context.Consultations.Any(e => e.Id == id);
         }
     }
 }

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CSMWebCore.Data;
 using CSMWebCore.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CSMWebCore.API
 {
+    [ApiKeyAuth]
     [Route("api/[controller]")]
     [ApiController]
     public class TicketsController : ControllerBase
@@ -97,7 +99,7 @@ namespace CSMWebCore.API
             return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
         }
         
-        /*
+        
         // DELETE: api/Tickets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket([FromRoute] int id)
@@ -118,7 +120,7 @@ namespace CSMWebCore.API
 
             return Ok(ticket);
         }
-        */
+     
 
         private bool TicketExists(int id)
         {
