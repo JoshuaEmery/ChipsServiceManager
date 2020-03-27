@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CSMWebCore.Data;
 using CSMWebCore.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CSMWebCore.API
-{
+{   [ApiKeyAuth]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomersController : ControllerBase

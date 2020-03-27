@@ -7,63 +7,62 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CSMWebCore.Data;
 using CSMWebCore.Entities;
-using Microsoft.AspNetCore.Authorization;
 
 namespace CSMWebCore.API
 {
     [ApiKeyAuth]
     [Route("api/[controller]")]
     [ApiController]
-    public class TicketsController : ControllerBase
+    public class ConsultationsController : ControllerBase
     {
         private readonly ChipsDbContext _context;
 
-        public TicketsController(ChipsDbContext context)
+        public ConsultationsController(ChipsDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Tickets
+        // GET: api/Consultations
         [HttpGet]
-        public IEnumerable<Ticket> GetTickets()
+        public IEnumerable<Consultation> GetConsultations()
         {
-            return _context.Tickets;
+            return _context.Consultations;
         }
 
-        // GET: api/Tickets/5
+        // GET: api/Consultations/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTicket([FromRoute] int id)
+        public async Task<IActionResult> GetConsultation([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var ticket = await _context.Tickets.FindAsync(id);
+            var consultation = await _context.Consultations.FindAsync(id);
 
-            if (ticket == null)
+            if (consultation == null)
             {
                 return NotFound();
             }
 
-            return Ok(ticket);
+            return Ok(consultation);
         }
 
-        // PUT: api/Tickets/5
+        // PUT: api/Consultations/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTicket([FromRoute] int id, [FromBody] Ticket ticket)
+        public async Task<IActionResult> PutConsultation([FromRoute] int id, [FromBody] Consultation consultation)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != ticket.Id)
+            if (id != consultation.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(ticket).State = EntityState.Modified;
+            _context.Entry(consultation).State = EntityState.Modified;
 
             try
             {
@@ -71,7 +70,7 @@ namespace CSMWebCore.API
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TicketExists(id))
+                if (!ConsultationExists(id))
                 {
                     return NotFound();
                 }
@@ -81,50 +80,48 @@ namespace CSMWebCore.API
                 }
             }
 
-            return Ok(ticket);
+            return NoContent();
         }
 
-        // POST: api/Tickets
+        // POST: api/Consultations
         [HttpPost]
-        public async Task<IActionResult> PostTicket([FromBody] Ticket ticket)
+        public async Task<IActionResult> PostConsultation([FromBody] Consultation consultation)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Tickets.Add(ticket);
+            _context.Consultations.Add(consultation);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
+            return CreatedAtAction("GetConsultation", new { id = consultation.Id }, consultation);
         }
-        
-        /*
-        // DELETE: api/Tickets/5
+
+        // DELETE: api/Consultations/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTicket([FromRoute] int id)
+        public async Task<IActionResult> DeleteConsultation([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var ticket = await _context.Tickets.FindAsync(id);
-            if (ticket == null)
+            var consultation = await _context.Consultations.FindAsync(id);
+            if (consultation == null)
             {
                 return NotFound();
             }
 
-            _context.Tickets.Remove(ticket);
+            _context.Consultations.Remove(consultation);
             await _context.SaveChangesAsync();
 
-            return Ok(ticket);
+            return Ok(consultation);
         }
-        */
 
-        private bool TicketExists(int id)
+        private bool ConsultationExists(int id)
         {
-            return _context.Tickets.Any(e => e.Id == id);
+            return _context.Consultations.Any(e => e.Id == id);
         }
     }
 }
