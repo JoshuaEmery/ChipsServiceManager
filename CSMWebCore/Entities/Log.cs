@@ -14,6 +14,7 @@ namespace CSMWebCore.Entities
         [Display(Name = "Technician")]
         public string UserId { get; set; }
         public int TicketId { get; set; }
+        public Ticket Ticket { get; set; }
         public DateTime Logged { get; set; }
         [Required(ErrorMessage = "Notes are required on all log entries")]        
         public string Notes { get; set; }

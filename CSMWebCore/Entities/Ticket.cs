@@ -12,6 +12,7 @@ namespace CSMWebCore.Entities
         public int Id { get; set; }
         public int TicketNumber { get; set; }
         public int DeviceId { get; set; }
+        public Device Device { get; set; }
         public TicketStatus TicketStatus { get; set; }
         [Display(Name = "Data Backup Needed?")]
         public bool NeedsBackup { get; set; }
