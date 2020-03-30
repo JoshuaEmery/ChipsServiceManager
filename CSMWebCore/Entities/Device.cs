@@ -9,6 +9,7 @@ namespace CSMWebCore.Entities
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
         public string Make { get; set; }
         public string  ModelNumber { get; set; }
         public string OperatingSystem { get; set; }

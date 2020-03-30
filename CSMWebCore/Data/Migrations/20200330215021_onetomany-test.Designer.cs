@@ -4,14 +4,16 @@ using CSMWebCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CSMWebCore.Data.Migrations
 {
     [DbContext(typeof(ChipsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200330215021_onetomany-test")]
+    partial class onetomanytest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,21 +78,6 @@ namespace CSMWebCore.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("CSMWebCore.Entities.Consultation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Time");
-
-                    b.Property<string>("UserName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Consultations");
                 });
 
             modelBuilder.Entity("CSMWebCore.Entities.Customer", b =>
@@ -194,39 +181,6 @@ namespace CSMWebCore.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("CSMWebCore.Entities.TicketHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AddedToHistory");
-
-                    b.Property<string>("CheckInUserId");
-
-                    b.Property<string>("CheckOutUserId");
-
-                    b.Property<DateTime>("CheckedIn");
-
-                    b.Property<DateTime>("CheckedOut");
-
-                    b.Property<int>("DeviceId");
-
-                    b.Property<DateTime>("Finished");
-
-                    b.Property<bool>("NeedsBackup");
-
-                    b.Property<int>("TicketId");
-
-                    b.Property<int>("TicketNumber");
-
-                    b.Property<int>("TicketStatus");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TicketsHistory");
                 });
 
             modelBuilder.Entity("CSMWebCore.Entities.Update", b =>
