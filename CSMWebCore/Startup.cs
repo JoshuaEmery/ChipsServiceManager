@@ -58,6 +58,8 @@ namespace CSMWebCore
             services.AddScoped<ILogData, SqlLogData>();
             services.AddScoped<ITicketData, SqlTicketData>();
             services.AddScoped<IUpdateData, SqlUpdateData>();
+            services.AddScoped<ITicketsHistoryData, SqlTicketsHistoryData>();
+            services.AddScoped<IConsultationData, SqlConsultationData>();
 
             //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
             services.AddDefaultIdentity<ChipsUser>().AddRoles<IdentityRole>()

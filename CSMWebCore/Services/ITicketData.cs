@@ -20,6 +20,8 @@ namespace CSMWebCore.Services
         IEnumerable<Ticket> Search(string searchValue);
         int CountByStatus(TicketStatus status);
         IEnumerable<Ticket> GetTicketsCompletedWithinTimeSpan(TimeSpan span);
+        IEnumerable<Ticket> GetTicketsCheckedInWithinTimeSpan(TimeSpan span);
+        IEnumerable<Ticket> GetTicketsCheckedOutWithinTimeSpan(TimeSpan span);
         IEnumerable<Ticket> GetAllCompletedTickets();
         Ticket GetRecentByDevice(int deviceId);
 

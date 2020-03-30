@@ -22,13 +22,15 @@ namespace CSMWebCore.Controllers
         private ICustomerData _customers;
         private ITicketData _tickets;
         private ILogData _logs;
+        private ITicketsHistoryData _ticketsHistory;
 
-        public LogController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs)
+        public LogController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, ITicketsHistoryData ticketsHistory)
         {
             _devices = devices;
             _customers = customers;
             _tickets = tickets;
             _logs = logs;
+            _ticketsHistory = ticketsHistory;
         }
         //Test Actions
         //public IActionResult Index()
@@ -127,10 +129,14 @@ namespace CSMWebCore.Controllers
             {
                 return View(model);
             }
+                      
+            var ticket = _tickets.Get(model.TicketId);
             //If this is the first log for a new ticket update the ticket status
-            if(model.TicketStatus == TicketStatus.New)
+            if (model.TicketStatus == TicketStatus.New)
             {
-                model.TicketStatus = TicketStatus.InProgress;
+                //Whenever a ticket is modified make an entry in tickethistory before changing
+                _ticketsHistory.AddTicketToHistory(ticket);
+                model.TicketStatus = TicketStatus.InProgress;                
             }
             //create a new Log entry
             Log log = new Log
@@ -144,8 +150,7 @@ namespace CSMWebCore.Controllers
             };
             _logs.Add(log);
             _logs.Commit();
-            //update the database with any changes that were made to the ticketstatus            
-            var ticket = _tickets.Get(model.TicketId);
+            //update the database with any changes that were made to the ticketstatus 
             ticket.TicketStatus = model.TicketStatus;
             _tickets.Commit();
             return RedirectToAction("Home", "Ticket");            
@@ -179,6 +184,11 @@ namespace CSMWebCore.Controllers
             if (!ModelState.IsValid || ticket == null)
             {
                 return View(model);
+            }
+            if(ticket.TicketStatus != model.TicketStatus)
+            {
+                //Whenever a ticket is modified make an entry in tickethistory before changing
+                _ticketsHistory.AddTicketToHistory(ticket);
             }
             //create new log
             Log log = new Log
