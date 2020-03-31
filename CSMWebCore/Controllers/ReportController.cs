@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CSMWebCore.Controllers
 {
+    //test1
     public class ReportController : Controller
     {
         private IDeviceData _devices;
