@@ -83,17 +83,20 @@ namespace CSMWebCore.Services
         //method that gets all tickets that have been completed within a timespan        
         public IEnumerable<Ticket> GetTicketsCompletedWithinTimeSpan(TimeSpan span)
         {
-            return _db.Tickets.Where(x => x.Finished > DateTime.Now - span);
+            DateTime date = (DateTime.Now - span);
+            return _db.Tickets.Where(x => x.Finished > date);
         }
         //method that returns all tickets checked in within a timespan
         public IEnumerable<Ticket> GetTicketsCheckedInWithinTimeSpan(TimeSpan span)
         {
-            return _db.Tickets.Where(x => x.CheckedIn > DateTime.Now - span);
+            DateTime date = (DateTime.Now - span);
+            return _db.Tickets.Where(x => x.CheckedIn > date);
         }
         //method that returns all tickets checked out within a timespan
         public IEnumerable<Ticket> GetTicketsCheckedOutWithinTimeSpan(TimeSpan span)
         {
-            return _db.Tickets.Where(x => x.CheckedOut > DateTime.Now - span);
+            DateTime date = (DateTime.Now - span);
+            return _db.Tickets.Where(x => x.CheckedOut > date);
         }
 
         public IEnumerable<Ticket> Search(string searchValue)

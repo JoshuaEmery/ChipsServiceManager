@@ -50,6 +50,25 @@ namespace CSMWebCore.Services
         {
             return _db.Logs.Where(log => log.TicketId == ticketId && log.ContactMethod != ContactMethod.NoContact);
         }
-
+        public IEnumerable<Log> GetServiceLogsByUserandTime(string userId, TimeSpan? span = null)
+        {
+            if (!span.HasValue)
+            {
+                return _db.Logs.Where(log => log.UserId == userId && log.ContactMethod == ContactMethod.NoContact);
+            }
+            DateTime date = (DateTime.Now - span.Value);
+            return _db.Logs.Where(log => log.UserId == userId  && log.ContactMethod == ContactMethod.NoContact
+            && log.Logged > date);
+        }
+        public IEnumerable<Log> GetContactLogsByUserandTime(string userId, TimeSpan? span = null)
+        {
+            if(!span.HasValue)
+            {
+                return _db.Logs.Where(log => log.UserId == userId && log.ContactMethod != ContactMethod.NoContact);
+            }
+            DateTime date = (DateTime.Now - span.Value);
+            return _db.Logs.Where(log => log.UserId == userId  && log.ContactMethod != ContactMethod.NoContact
+            && log.Logged > date);
+        }
     }
 }

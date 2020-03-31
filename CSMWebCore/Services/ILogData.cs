@@ -16,5 +16,7 @@ namespace CSMWebCore.Services
         IEnumerable<Log> GetLogsByTicketId(int ticketId);
         IEnumerable<Log> GetContactLogsByTicketId(int ticketId);
         IEnumerable<Log> GetServiceLogsByTicketId(int ticketId);
+        IEnumerable<Log> GetServiceLogsByUserandTime(string userId, TimeSpan? span = null);
+        IEnumerable<Log> GetContactLogsByUserandTime(string userId, TimeSpan? span = null);
     }
 }

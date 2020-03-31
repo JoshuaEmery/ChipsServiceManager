@@ -1,5 +1,6 @@
 ﻿using CSMWebCore.Data;
 using CSMWebCore.Entities;
+using CSMWebCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,5 +42,30 @@ namespace CSMWebCore.Services
             _db.SaveChanges();
             return ticketHistory.Id;
         }
+        //public TicketProgressReport GetTicketProgressReport(Ticket ticket)
+        //{
+        //    TicketProgressReport ticketProgressReport = new TicketProgressReport();
+        //    TimeSpan[] timeByStatus = new TimeSpan[5];
+        //    List<TicketHistory> ticketHistories = _db.TicketsHistory.Where(x => x.TicketId == ticket.Id).ToList();
+        //    ticketProgressReport.TicketId = ticket.Id;
+        //    if(ticketHistories.Count == 0)
+        //    {
+        //        ticketProgressReport.TicketProgress.Add(TicketStatus.New, DateTime.Now - ticket.CheckedIn);
+        //        return ticketProgressReport;
+        //    }
+        //    for (int i = 0; i < ticketHistories.Count; i++)
+        //    {
+        //        timeByStatus[(int)ticketHistories[i].TicketStatus] += (TimeSpaticketHistories[i].AddedToHistory;
+        //    }
+       
+        //        return ticketProgressReport;
+        //    foreach (var th in ticketHistories)
+        //    {
+        //        ticketProgressReport.TicketProgress.Add(th.TicketStatus, DateTime.Now - th.AddedToHistory);
+        //    }
+
+
+        //    return ticketProgressReport;
+        //}
     }
 }
