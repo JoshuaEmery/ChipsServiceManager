@@ -10,10 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CSMWebCore.Controllers
 {
-    //test1
     public class ReportController : Controller
     {
-        // Kyle's conflicting comment
         private IDeviceData _devices;
         private ICustomerData _customers;
         private ITicketData _tickets;
