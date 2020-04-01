@@ -6,7 +6,21 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
+    <li class="nav-item dropdown">
+        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
+            <a class="nav-link dropdown-toggle user-dropdown" href="#" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @User.Identity.Name
+                <img src="~/images/avatar.png" class="img-circle avatar" alt="" height="40">
+            </a>
+            <div class="dropdown-menu" aria-labelledby="loginDropdown">
+                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Settings</a>
+                <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+            </div>
+        </form>
+    </li>
+
+
+    @*<form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
         <ul class="nav navbar-nav navbar-right">
             <li>@User.Identity.Name</li>
             <li class="dropdown pull-right">
@@ -20,5 +34,5 @@
                 </ul>
             </li>
         </ul>
-    </form>
+    </form>*@
 }

@@ -1,8 +1,16 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
+
+/*
+    CHIPS Brand Colors (Web-safe)
+    Blue: #333366
+    Red: #cc0000
+
+
+*/
+
+
 body {
-    padding-top: 50px;
-    padding-bottom: 20px;
 }
 
 /* Wrapping element */
@@ -62,13 +70,29 @@ body {
     padding: 10px;
 }
 
-/*NavBar*/
+/* Navigation */
 .navbar {
-    border-bottom: 1px, solid #dadada;
-    background-color: #00ffff;
+    background-color: #333366;
+}
+.navbar-dark .nav-link {
+    color: #fff !important;
+}
+.navbar-brand {
+    padding: 0;
+}
+.navbar-brand img {
+    height: 40px;
+}
+.dropdown-menu {
+    min-width: 15rem;
 }
 
-.dropdown.pull-right {
+#loginDropdown {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/*.dropdown.pull-right {
     padding-top: 0px;
 }
 
@@ -91,11 +115,9 @@ body {
     .dropdown-menu li > a {
         color: #666c74;
         padding: 15px 40px 15px 20px;
-    }
+    }*/
 
-.nav-button{
-    margin:10px;
-}
+
 /*NavBar*/
 
 .update-logo {
