@@ -1,13 +1,13 @@
 ﻿@model DeviceViewModel
 
 <tr>
-    <td class="panel-body">@Model.Customer.FirstName @Model.Customer.LastName</td>
-    <td class="panel-body">@Model.Make</td>
-    <td class="panel-body">@Model.ModelNumber</td>
-    <td class="panel-body">@Model.OperatingSystem</td>
-    <td class="panel-body">@Model.Password</td>
-    <td class="panel-body">@Model.Serviced</td>
-    <td class="panel-body">@if (Model.Ticket != null) { @Model.Ticket.TicketStatus; }</td>
-    <td class="panel-body">@if (Model.Ticket != null) { @Model.Ticket.TicketNumber; 
+    <td>@Model.Customer.FirstName @Model.Customer.LastName</td>
+    <td>@Model.Make</td>
+    <td>@Model.ModelNumber</td>
+    <td>@Model.OperatingSystem</td>
+    <td>@Model.Password</td>
+    <td>@Model.Serviced</td>
+    <td>@if (Model.Ticket != null) { @Model.Ticket.TicketStatus; }</td>
+    <td>@if (Model.Ticket != null) { @Model.Ticket.TicketNumber; 
         <a class="btn btn-group btn-success pull-right" asp-controller="Ticket" asp-action="TicketsByDeviceId" asp-route-deviceId="@Model.Id">Open Ticket</a>}</td>
 </tr>

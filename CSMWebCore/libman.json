@@ -22,10 +22,18 @@
       "files": [
         "css/bootstrap.min.css",
         "css/bootstrap.min.css.map",
-        "js/bootstrap.bundle.js",
-        "js/bootstrap.bundle.js.map"
+        "js/bootstrap.bundle.min.js",
+        "js/bootstrap.bundle.min.js.map"
       ],
       "destination": "wwwroot/lib/bootstrap"
+    },
+    {
+      "library": "font-awesome@5.13.0",
+      "files": [
+        "css/all.min.css",
+        "webfonts/*"
+      ],
+      "destination": "wwwroot/lib/fontawesome"
     }
   ]
 }

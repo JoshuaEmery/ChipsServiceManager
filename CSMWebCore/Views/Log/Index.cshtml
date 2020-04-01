@@ -2,14 +2,14 @@
 @{ViewBag.Title = "Log Summary";}
 <h2>@ViewBag.Title</h2>
 <table class="table table-bordered table-responsive table-striped">
-    <tr class="panel">
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.Id)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.UserId)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.TicketId)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.Logged)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.Notes)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.LogType)</th>
-        <th class="panel-heading">@Html.DisplayNameFor(model => model.ContactMethod)</th>
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Id)</th>
+        <th>@Html.DisplayNameFor(model => model.UserId)</th>
+        <th>@Html.DisplayNameFor(model => model.TicketId)</th>
+        <th>@Html.DisplayNameFor(model => model.Logged)</th>
+        <th>@Html.DisplayNameFor(model => model.Notes)</th>
+        <th>@Html.DisplayNameFor(model => model.LogType)</th>
+        <th>@Html.DisplayNameFor(model => model.ContactMethod)</th>
     </tr>
 
     @foreach (var log in Model)

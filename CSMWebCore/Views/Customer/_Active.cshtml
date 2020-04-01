@@ -1,24 +1,24 @@
 ﻿@model CustomerActiveViewModel
-<div class="panel-group">
-    <div class="panel panel-default">
-        <div class="panel-heading">
+<div>
+    <div>
+        <div>
             <a asp-controller="Customer" asp-action="Details" asp-route-id="@Model.Customer.Id">
                 <table class="table-responsive table-striped">
-                    <tr class="panel">
-                        <th class="panel-heading">First Name</th>
-                        <th class="panel-heading">Last Name</th>
-                        <th class="panel-heading">Phone</th>
-                        <th class="panel-heading">E-mail</th>
-                        <th class="panel-heading">Student Id</th>
-                        <th class="panel-heading">Contact Method</th>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone</th>
+                        <th>E-mail</th>
+                        <th>Student Id</th>
+                        <th>Contact Method</th>
                     </tr>
-                    <tr class="panel-default">
-                        <td class="panel-body">@Model.Customer.FirstName</td>
-                        <td class="panel-body">@Model.Customer.LastName</td>
-                        <td class="panel-body">@Model.Customer.Phone</td>
-                        <td class="panel-body">@Model.Customer.Email</td>
-                        <td class="panel-body">@Model.Customer.StudentId</td>
-                        <td class="panel-body">@Model.Customer.ContactPref.ToString()</td>
+                    <tr>
+                        <td>@Model.Customer.FirstName</td>
+                        <td>@Model.Customer.LastName</td>
+                        <td>@Model.Customer.Phone</td>
+                        <td>@Model.Customer.Email</td>
+                        <td>@Model.Customer.StudentId</td>
+                        <td>@Model.Customer.ContactPref.ToString()</td>
                     </tr>
                 </table>
             </a>
