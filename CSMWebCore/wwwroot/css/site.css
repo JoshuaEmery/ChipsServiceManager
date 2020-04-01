@@ -75,22 +75,27 @@ body {
     background-color: #333366;
 }
 .navbar-dark .nav-link {
+    color: #ddf !important;
+}
+.navbar-dark .nav-link:hover {
     color: #fff !important;
 }
-.navbar-brand {
-    padding: 0;
+.navbar-dark .nav-link.disabled {
+    color: #88a !important;
 }
+
 .navbar-brand img {
     height: 40px;
 }
-.dropdown-menu {
-    min-width: 15rem;
+
+/*navbar dropdown search bars*/
+.navbar .dropdown .input-group {
+    min-width: 15rem !important;
+    margin-left: -.75rem;
+    margin-right: -.75rem;
 }
 
-#loginDropdown {
-    padding-top: 0;
-    padding-bottom: 0;
-}
+
 
 /*.dropdown.pull-right {
     padding-top: 0px;

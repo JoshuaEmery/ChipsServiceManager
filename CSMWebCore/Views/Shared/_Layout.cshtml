@@ -13,71 +13,81 @@
 </head>
 <body>
     <nav class="navbar navbar-dark navbar-expand-lg fixed-top">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/ChipsLogoColor.png" /></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenuCollapse" aria-controls="mainMenuCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mainMenuCollapse">
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="customersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Customers
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="customersDropdown">
-                        <a class="dropdown-item" asp-controller="Customer" asp-action="Create">Create New Customer</a>
-                        <a class="dropdown-item" asp-controller="Customer" asp-action="Index">All Customers</a>
-                        <a class="dropdown-item" asp-controller="Customer" asp-action="Active">Customers With Open Tickets</a>
-                        <div class="dropdown-item">
-                            <form role="search">
-                                <div class="input-group">
-                                    <input class="form-control form-control-sm" type="text" placeholder="Search Customers" aria-label="searchCustomer">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-sm btn-success" asp-controller="Customer" asp-action="Search" type="submit">Go</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="ticketsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Tickets
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="ticketsDropdown">
-                        <a class="dropdown-item" asp-controller="Ticket" asp-action="Home">Open Tickets</a>
-                        <div class="dropdown-item">
-                            <form role="search">
-                                <div class="input-group">
-                                    <input class="form-control form-control-sm" type="text" placeholder="Search Closed Tickets" aria-label="searchTicket">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-sm btn-success" asp-controller="Ticket" asp-action="Search" type="submit">Go</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Device" asp-action="Index">
-                        Devices On Hand
-                    </a>
-                </li>
+        <div class="container d-flex">
 
-
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle user-dropdown" href="#" id="usersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Users
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="usersDropdown">
-                        <a class="dropdown-item" asp-controller="User" asp-action="Index">View All Users</a>
-                        <a class="dropdown-item" asp-controller="User" asp-action="ActiveUsers">View All Active Users</a>
-                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Create New User</a>
-                    </div>
-                </li>
-
+            <a class="navbar-brand py-0" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/ChipsLogoColor.png" /></a>
+            <div class="d-flex flex-row order-lg-1">
                 @await Html.PartialAsync("_LoginPartial")
-            </ul>
+                <button class="navbar-toggler order-2" type="button" data-toggle="collapse" data-target="#mainMenuCollapse" aria-controls="mainMenuCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="mainMenuCollapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="customersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Customers
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="customersDropdown">
+                            <a class="dropdown-item" asp-controller="Customer" asp-action="Create">Create New Customer</a>
+                            <a class="dropdown-item" asp-controller="Customer" asp-action="Index">All Customers</a>
+                            <a class="dropdown-item" asp-controller="Customer" asp-action="Active">Customers With Open Tickets</a>
+                            <div class="dropdown-item">
+                                <form role="search">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="Search Customers" aria-label="searchCustomer">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sm btn-success" asp-controller="Customer" asp-action="Search" type="submit">Go</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="ticketsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Tickets
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="ticketsDropdown">
+                            <a class="dropdown-item" asp-controller="Ticket" asp-action="Home">Open Tickets</a>
+                            <div class="dropdown-item">
+                                <form role="search">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="Search Closed Tickets" aria-label="searchTicket">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sm btn-success" asp-controller="Ticket" asp-action="Search" type="submit">Go</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Device" asp-action="Index">
+                            Devices On Hand
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">
+                            Reports
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle user-dropdown" href="#" id="usersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Users
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="usersDropdown">
+                            <a class="dropdown-item" asp-controller="User" asp-action="Index">View All Users</a>
+                            <a class="dropdown-item" asp-controller="User" asp-action="ActiveUsers">View All Active Users</a>
+                            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Create New User</a>
+                        </div>
+                    </li>
+
+
+                </ul>
+            </div>
+
+
         </div>
 
     </nav>
