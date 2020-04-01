@@ -10,5 +10,6 @@ namespace CSMWebCore.Services
     {
         IEnumerable<Consultation> GetAll();
         IEnumerable<Consultation> GetConsultationsWithinTimeSpan(TimeSpan span);
+        IEnumerable<Consultation> GetContactLogsByUserandTime(string userName, TimeSpan? span = null);
     }
 }

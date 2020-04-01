@@ -1,4 +1,5 @@
 ﻿using CSMWebCore.Entities;
+using CSMWebCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace CSMWebCore.Services
     {
         IEnumerable<TicketHistory> GetAll();
         int AddTicketToHistory(Ticket ticket);
+        TicketProgressReport GetTicketProgressReport(Ticket ticket);
     }
 }
