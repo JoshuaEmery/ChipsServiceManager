@@ -39,12 +39,12 @@
     <div class="col-md-12 bottomFormPanel">
         <div class="row">
             <label asp-for="ContactMethod" class="col-md-2"></label>
-            <select class="col-md-2" asp-for="ContactMethod" asp-items='Html.GetEnumSelectList<ContactMethod>().Where(x => x.Value != ContactMethod.NoContact.ToString())'></select>
+            <select class="col-md-2" asp-for="ContactMethod" asp-items='Html.GetEnumSelectList<ContactMethod>().Where(x => x.Text != ContactMethod.NoContact.ToString())'></select>
             <span asp-validation-for="ContactMethod"></span>
         </div>
         <div class="row">
             <label asp-for="TicketStatus" class="col-md-2"></label>
-            <select class="col-md-2" asp-for="TicketStatus" asp-items='Html.GetEnumSelectList<TicketStatus>().Where(x => x.Value != TicketStatus.New.ToString())'></select>
+            <select class="col-md-2" asp-for="TicketStatus" asp-items='Html.GetEnumSelectList<TicketStatus>().Where(x => x.Text != TicketStatus.New.ToString())'></select>
             <span asp-validation-for="TicketStatus"></span>
         </div>
         <div class="row">
