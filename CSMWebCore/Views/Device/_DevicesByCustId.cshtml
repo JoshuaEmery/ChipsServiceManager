@@ -1,19 +1,19 @@
 ﻿@model DeviceViewModel
-<div class="panel-group">
-    <div class="panel panel-default">
-        <div class="panel-heading">
+<div>
+    <div>
+        <div>
             <a data-toggle="collapse" href=@string.Format($"#collapse{ Model.Id}")>
                 <table class="table-responsive table-striped">
-                    <tr class="panel">
-                        <th class="panel-heading">Make</th>
-                        <th class="panel-heading">Model</th>
-                        <th class="panel-heading">Operating System</th>
+                    <tr>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Operating System</th>
 
                     </tr>
-                    <tr class="panel-default">
-                        <td class="panel-body">@Model.Make</td>
-                        <td class="panel-body">@Model.ModelNumber</td>
-                        <td class="panel-body">@Model.OperatingSystem</td>
+                    <tr>
+                        <td>@Model.Make</td>
+                        <td>@Model.ModelNumber</td>
+                        <td>@Model.OperatingSystem</td>
                     </tr>
                 </table>
             </a>

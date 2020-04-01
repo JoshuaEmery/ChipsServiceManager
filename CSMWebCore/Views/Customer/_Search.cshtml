@@ -1,24 +1,24 @@
 ﻿@model CustomerViewModel
-<div class="panel-group">
-    <div class="panel panel-default">
-        <div class="panel-heading">
+<div>
+    <div>
+        <div>
             <a asp-controller="Customer" asp-action="Details" asp-route-id="@Model.Id">
                 <table class="table-responsive table-striped">
-                    <tr class="panel">
-                        <th class="panel-heading">First Name</th>
-                        <th class="panel-heading">Last Name</th>
-                        <th class="panel-heading">Phone</th>
-                        <th class="panel-heading">E-mail</th>
-                        <th class="panel-heading">Student Id</th>
-                        <th class="panel-heading">Contact Method</th>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone</th>
+                        <th>E-mail</th>
+                        <th>Student Id</th>
+                        <th>Contact Method</th>
                     </tr>
-                    <tr class="panel-default">
-                        <td class="panel-body">@Model.FirstName</td>
-                        <td class="panel-body">@Model.LastName</td>
-                        <td class="panel-body">@Model.Phone</td>
-                        <td class="panel-body">@Model.Email</td>
-                        <td class="panel-body">@Model.StudentId</td>
-                        <td class="panel-body">@Model.ContactPref.ToString()</td>
+                    <tr>
+                        <td>@Model.FirstName</td>
+                        <td>@Model.LastName</td>
+                        <td>@Model.Phone</td>
+                        <td>@Model.Email</td>
+                        <td>@Model.StudentId</td>
+                        <td>@Model.ContactPref.ToString()</td>
                     </tr>
                 </table>
             </a>

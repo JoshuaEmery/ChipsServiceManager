@@ -28,18 +28,18 @@
 <body>
 
     <div class="panel panel-primary">
-        <div class="panel-heading">Status update for @Model.Device.Make @Model.Device.ModelNumber<span class="pull-right">Ticket #@Model.Ticket.TicketNumber</span></div>
+        <div>Status update for @Model.Device.Make @Model.Device.ModelNumber<span class="pull-right">Ticket #@Model.Ticket.TicketNumber</span></div>
 
         <table class="table table-hover">
-            <tr class="panel-body">
+            <tr>
                 <td>Ticket Status: </td>
                 <td>@Model.Ticket.TicketStatus.ToString()</td>
             </tr>
-            <tr class="panel-body">
+            <tr>
                 <td>Check in date: </td>
                 <td>@Model.Ticket.CheckedIn.ToString()</td>
             </tr>
-            <tr class="panel-body">
+            <tr>
                 <td>Most recent service:  </td>
                 <td>@Model.Log.LogType.ToString() performed at @Model.Log.Logged.ToString()</td>
             </tr>
