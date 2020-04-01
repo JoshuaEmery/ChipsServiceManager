@@ -4,14 +4,16 @@ using CSMWebCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CSMWebCore.Data.Migrations
 {
     [DbContext(typeof(ChipsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200401232837_priceslist")]
+    partial class priceslist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,27 +184,6 @@ namespace CSMWebCore.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ServicePrices");
-
-                    b.HasData(
-                        new { Id = 1, Price = 0m, Service = 0 },
-                        new { Id = 2, Price = 0m, Service = 1 },
-                        new { Id = 3, Price = 0m, Service = 2 },
-                        new { Id = 4, Price = 50m, Service = 3 },
-                        new { Id = 5, Price = 150m, Service = 4 },
-                        new { Id = 6, Price = 50m, Service = 5 },
-                        new { Id = 7, Price = 150m, Service = 6 },
-                        new { Id = 8, Price = 50m, Service = 7 },
-                        new { Id = 9, Price = 100m, Service = 8 },
-                        new { Id = 10, Price = 100m, Service = 9 },
-                        new { Id = 11, Price = 150m, Service = 10 },
-                        new { Id = 12, Price = 125m, Service = 11 },
-                        new { Id = 13, Price = 150m, Service = 12 },
-                        new { Id = 14, Price = 150m, Service = 13 },
-                        new { Id = 15, Price = 150m, Service = 14 },
-                        new { Id = 16, Price = 50m, Service = 15 },
-                        new { Id = 17, Price = 150m, Service = 16 },
-                        new { Id = 18, Price = 100m, Service = 17 }
-                    );
                 });
 
             modelBuilder.Entity("CSMWebCore.Entities.Ticket", b =>
