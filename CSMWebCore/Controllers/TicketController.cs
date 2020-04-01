@@ -74,7 +74,7 @@ namespace CSMWebCore.Controllers
                 Password = device.Password,
                 Serviced = device.Serviced,
                 Ticket = new Ticket(),
-                Owner = _customers.Get(device.CustomerId),
+                Customer = _customers.Get(device.CustomerId),
                 CustomerId = device.CustomerId
 
             };
@@ -90,7 +90,7 @@ namespace CSMWebCore.Controllers
             model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
             if (!ModelState.IsValid)
             {
-                model.Owner = _customers.Get(model.CustomerId);
+                model.Customer = _customers.Get(model.CustomerId);
                 return View(model);
 
             }

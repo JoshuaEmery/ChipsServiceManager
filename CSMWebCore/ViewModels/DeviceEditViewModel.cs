@@ -11,8 +11,8 @@ namespace CSMWebCore.ViewModels
     public class DeviceEditViewModel
     {
         public int Id { get; set; }
-        public List<SelectListItem> Customer { get; set; }
-        public Customer Owner { get; set; }
+        public List<SelectListItem> CustomerList { get; set; }
+        public Customer Customer { get; set; }
         public Log Log { get; set; }
         public Ticket Ticket { get; set; }
         public int CustomerId { get; set; }
