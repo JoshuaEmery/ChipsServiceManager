@@ -10,7 +10,7 @@
     <div class="col-md-12 bottomFormPanel">
         <div class="row">
             <label asp-for="LogType" class="col-md-2"></label>
-            <select class="col-md-2" asp-for="LogType" asp-items='Html.GetEnumSelectList<LogType>().Where(x => x.Value != "0").Where(x => x.Value != "15")'></select>
+            <select class="col-md-2" asp-for="LogType" asp-items='Html.GetEnumSelectList<LogType>().Where(x => x.Value != "0").Where(x => x.Value != "15").Where(x => x.Value != "2")'></select>
             <span asp-validation-for="LogType"></span>
         </div>
         <div class="row">
