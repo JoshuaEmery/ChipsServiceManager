@@ -8,28 +8,30 @@ namespace CSMWebCore.Models
     public enum LogType
     {
         CheckIn,
-        InitialInspection,
-        ContactCustomer,
-        GeneralTroubleshooting,
-        HardwareTroubleshooting,
-        HardwareReplacement,
-        DataBackup,
-        DataRestore,
+        Contact,
+        Checkout,
+        Diagnostic,
+        OsInstallation,
+        OsUpdate,
+        DataBackupRestore,      
         SoftwareInstallation,
-        SoftwareUpdates,
-        OSInstallation,
-        OSUpdate,
-        OfficeInstallation,
-        MalwareScan,
-        MalwareRemoval,
-        Checkout
+        DriveInstallation,
+        RamInstallation,
+        ScreenReplacement,
+        KeyboardReplacement,
+        TouchpadReplacement,
+        HingeRepair,
+        VirusRemoval,
+        BatteryReplacment,
+        PowerJackReplacement,               
+        MiscRepair        
     }
     /*
      * CheckIn - Not available through views, automatic when creating a new ticket
      * Diagnostic - $50 // This is only charged if nothing else is charged
      * Contact - Not available through views, automatic when logging contact
      * OsInstallation - $150
-     * OsUpdate
+     * OsUpdate - $50
      * SoftwareInstallation - $50
      * ScreenReplacement - $150
      * KeyboardReplacement - $125
@@ -42,22 +44,7 @@ namespace CSMWebCore.Models
      * RamUpgrade - $100
      * DriveInstallation - $100  
      * MiscRepair - $100 
-     * Checkout // Not available through views, automic on pickup log
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
+     * Checkout // Not available through views, automic on pickup log 
      * 
      */
 
