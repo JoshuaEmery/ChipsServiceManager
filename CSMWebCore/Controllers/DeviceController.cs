@@ -36,22 +36,21 @@ namespace CSMWebCore.Controllers
             _updates = updates;
         }
         //Device/Index
-        //This Method returns a list of DeviceViewModel for each
-        //active Ticket
+        // returns view for list of devices assigned to *active* tickets
         public IActionResult Index()
         {
-            //Create List
+            // create list
             List<DeviceViewModel> model = new List<DeviceViewModel>();
             //Get all active tickets
             var activetickets = _tickets.GetAllActiveTickets();
-            //Sequence through activs tickets and create a DeviceViewModel for each one            
+            // sequence thru active tickets, add viewmodel for each device to list     
             foreach (var ticket in activetickets)
             {
                 var device = _devices.Get(ticket.DeviceId);
                 model.Add(new DeviceViewModel
                 {
                     Id = device.Id,
-                    Owner = _customers.Get(device.CustomerId),
+                    Customer = _customers.Get(device.CustomerId),
                     Make = device.Make,
                     ModelNumber = device.ModelNumber,
                     OperatingSystem = device.OperatingSystem,
@@ -60,7 +59,7 @@ namespace CSMWebCore.Controllers
                     Ticket = ticket
                 });
             }
-            //return model
+            // pass viewmodel to view, return
             return View(model);
         }
         //Device/Edit
@@ -157,7 +156,7 @@ namespace CSMWebCore.Controllers
             var model = new DeviceEditViewModel
             {
                 Id = device.Id,
-                Owner = _customers.Get(device.CustomerId),
+                Customer = _customers.Get(device.CustomerId),
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
@@ -173,12 +172,12 @@ namespace CSMWebCore.Controllers
         public IActionResult CreateByCustId(int customerId)
         {
             //The DeviceEditViewModel stores a Ticket, a Customer and TicketID and CustomerID
-            //On get Owner is populated, on Post Ticket is populated, the owner will
+            //On get Customer is populated, on Post Ticket is populated, the customer will
             //have to be retrieved again if needed on post.
             DeviceEditViewModel model = new DeviceEditViewModel();
             model.Ticket = new Ticket();
             model.CustomerId = customerId;
-            model.Owner = _customers.Get(customerId);
+            model.Customer = _customers.Get(customerId);
             //Get the next ticketnumber, this check is run again after post
             model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
             return View(model);
@@ -197,9 +196,9 @@ namespace CSMWebCore.Controllers
             //Check if Model State is Valid
             if (!ModelState.IsValid)
             {
-                //Get the owner object again from the database as no customer
+                //Get the customer object again from the database as no customer
                 //is posted back from the method
-                model.Owner = _customers.Get(model.CustomerId);
+                model.Customer = _customers.Get(model.CustomerId);
                 return View(model);
             }
             //Create a new device using the Customer ID and form data
@@ -323,7 +322,7 @@ namespace CSMWebCore.Controllers
             var model = _devices.Search(searchValue).Select(device => new DeviceViewModel
             {
                 Id = device.Id,
-                Owner = _customers.Get(device.CustomerId),
+                Customer = _customers.Get(device.CustomerId),
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,

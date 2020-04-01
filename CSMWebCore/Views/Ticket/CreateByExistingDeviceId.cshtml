@@ -1,5 +1,5 @@
 ﻿@model DeviceEditViewModel
-@{ ViewBag.Title = $"Create new Ticket for {Model.Owner.FirstName} {Model.Owner.LastName}";}
+@{ ViewBag.Title = $"Create new Ticket for {Model.Customer.FirstName} {Model.Customer.LastName}";}
 <div class="col-md-12 topFormPanel">
     <h2>@ViewBag.Title</h2>         <div class="pull-right">
         <label asp-for="Ticket.TicketNumber"></label>

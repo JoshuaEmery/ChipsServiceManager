@@ -9,7 +9,7 @@ namespace CSMWebCore.ViewModels
     public class DeviceViewModel
     {
         public int Id { get; set; }
-        public Customer Owner { get; set; }
+        public Customer Customer { get; set; }
         public int CustomerId { get; set; }
         public Ticket Ticket { get; set; }
         public string Make { get; set; }
@@ -17,6 +17,5 @@ namespace CSMWebCore.ViewModels
         public string OperatingSystem { get; set; }
         public string Password { get; set; }
         public bool Serviced { get; set; }
-        
     }
 }
