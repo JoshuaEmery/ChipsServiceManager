@@ -93,25 +93,13 @@
 
     </nav>
     <main class="container">
-       
         <partial name="_CookieConsentPartial" />
-
-        <div class="container body-content">
-            @*<div class="sidenav">
-                    <a href="#">New customer and new ticket</a>
-                    <a href="#">Lookup existing customer</a>
-                    <a href="#">Clients</a>
-                    <a href="#">Contact</a>
-                </div>*@
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year CHIPS</p>
-            </footer>
-        </div>
-
-
+        @RenderBody()
     </main>
+    <footer class="container">
+        <hr />
+        <p class="text-center">&copy; @DateTime.Now.Year CHIPS</p>
+    </footer>
     @RenderSection("Scripts", required: false)
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
             asp-fallback-src="~/lib/jquery/jquery.min.js"

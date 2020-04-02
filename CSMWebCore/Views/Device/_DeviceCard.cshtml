@@ -1,0 +1,13 @@
+﻿@model DeviceViewModel
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">model.Make model.ModelNumber</h5>
+        <h6 class="card-subtitle">model.OperatingSystem</h6>
+        <div class="btn-group">
+            <a class="btn btn-primary" asp-controller="Ticket" asp-action="CreateByExistingDeviceId" asp-route-deviceId="model.Id"><i class="fas fa-plus"></i> New Ticket</a>
+            <a class="btn btn-secondary" asp-controller="Device" asp-action="Edit" asp-route-deviceId="model.Id"><i class="fas fa-pencil-alt"></i> Edit</a>
+            <a class="btn btn-outline-secondary" asp-controller="Ticket" asp-action="TicketsByDeviceId" asp-route-deviceId="model.Id">View All Tickets</a>
+        </div>
+    </div>
+</div>

@@ -1,11 +1,20 @@
 ﻿@model IEnumerable<DeviceViewModel>
 @{ ViewBag.Title = "Ticket Home";}
-<div class="col-md-12 topFormPanel">
-    <h2>@ViewBag.Customer.FirstName @ViewBag.Customer.LastName - Device List</h2>
-</div>
-<div class="col-md-12 bottomFormPanel">
+<h2>Devices Owned by @ViewBag.Customer.FirstName @ViewBag.Customer.LastName</h2>
+
+<div class="card-deck">
     @foreach (var device in Model)
     {
-        @await Html.PartialAsync("_DevicesByCustId", device)
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@device.Make @device.ModelNumber</h5>
+                <h6 class="card-subtitle">@device.OperatingSystem</h6>
+                <div class="btn-group">
+                    <a class="btn btn-primary" asp-controller="Ticket" asp-action="CreateByExistingDeviceId" asp-route-deviceId="@device.Id"><i class="fas fa-plus"></i> New Ticket</a>
+                    <a class="btn btn-secondary" asp-controller="Device" asp-action="Edit" asp-route-deviceId="@device.Id"><i class="fas fa-pencil-alt"></i> Edit</a>
+                    <a class="btn btn-outline-secondary" asp-controller="Ticket" asp-action="TicketsByDeviceId" asp-route-deviceId="@device.Id">View All Tickets</a>
+                </div>
+            </div>
+        </div>
     }
 </div>

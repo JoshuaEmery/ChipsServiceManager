@@ -1,0 +1,30 @@
+﻿@model DeviceViewModel
+@using CSMWebCore.Services
+<tr>
+    <td scope="row">
+        @if (Model.Ticket != null)
+        {
+            @Model.Ticket.TicketNumber;
+            <a class="btn btn-sm btn-outline-primary" asp-controller="Ticket" asp-action="TicketsByDeviceId" asp-route-deviceId="@Model.Id">Open</a>
+        }
+        else
+        {
+            <em>none</em>
+        }
+    </td>
+    <td>
+        @if (Model.Ticket != null)
+        {
+            @EnumHelper.GetDisplayName(Model.Ticket.TicketStatus);
+        }
+        else
+        {
+            <em>none</em>
+        }
+    </td>
+    <td>@Model.Customer.FirstName @Model.Customer.LastName</td>
+    <td>@Model.Make @Model.ModelNumber</td>
+    <td>@Model.OperatingSystem</td>
+    <td>@Model.Password</td>
+    <td>@Model.Serviced</td>
+</tr>

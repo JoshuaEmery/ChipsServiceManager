@@ -276,7 +276,7 @@ namespace CSMWebCore.Controllers
             var model = _devices.GetAllByCustId(customerId).Select(device => new DeviceViewModel
             {
                 Id = device.Id,
-                CustomerId = device.CustomerId,
+                Customer = device.Customer,
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
