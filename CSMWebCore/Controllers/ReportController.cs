@@ -18,10 +18,12 @@ namespace CSMWebCore.Controllers
         private ILogData _logs;
         private ITicketsHistoryData _ticketsHistory;
         private IConsultationData _consultations;
+        private IServicePriceData _servicePrices;
         private readonly UserManager<ChipsUser> _userManager;
 
         public ReportController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, 
-            ITicketsHistoryData ticketsHistory, IConsultationData consultations, UserManager<ChipsUser> userManager)
+            ITicketsHistoryData ticketsHistory, IConsultationData consultations, 
+            IServicePriceData servicePrices ,UserManager<ChipsUser> userManager)
         {
             _devices = devices;
             _customers = customers;
@@ -30,6 +32,7 @@ namespace CSMWebCore.Controllers
             _ticketsHistory = ticketsHistory;
             _consultations = consultations;
             _userManager = userManager;
+            _servicePrices = servicePrices;
         }
         //Quick testing index method that just creates a string response
         public IActionResult Index()
@@ -70,6 +73,10 @@ namespace CSMWebCore.Controllers
                 output += GetTotalConsultationsLogsByUser(user.UserName);
                 output += GetTotalConsultationsLogsByUser(user.UserName, new TimeSpan(30, 0, 0, 0));
                 output += GetTotalConsultationsLogsByUser(user.UserName, new TimeSpan(90, 0, 0, 0));
+            }
+            foreach (var ticket in _tickets.GetAll())
+            {
+                output += GetCostOfTicket(ticket.Id);
             }
 
             return Content(output);
@@ -143,6 +150,12 @@ namespace CSMWebCore.Controllers
             }            
             return output;
         }
-
+        //------------Financial Reports
+        public string GetCostOfTicket(int ticketId)
+        {
+            string output = "";
+            output += $"The total cost for ticketId: {ticketId} {_servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticketId))}\n";
+            return output;
+        }
     }
 }

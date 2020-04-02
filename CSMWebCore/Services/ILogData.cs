@@ -1,4 +1,5 @@
 ﻿using CSMWebCore.Entities;
+using CSMWebCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace CSMWebCore.Services
         int Commit();
         Log GetLastByTicketId(int ticketId);
         IEnumerable<Log> GetLogsByTicketId(int ticketId);
+        IEnumerable<LogType> GetDistinctLogTypesByTicketId(int ticketId);
         IEnumerable<Log> GetContactLogsByTicketId(int ticketId);
         IEnumerable<Log> GetServiceLogsByTicketId(int ticketId);
         IEnumerable<Log> GetServiceLogsByUserandTime(string userId, TimeSpan? span = null);
