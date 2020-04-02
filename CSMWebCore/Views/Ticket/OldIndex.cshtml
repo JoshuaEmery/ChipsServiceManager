@@ -1,0 +1,22 @@
+﻿@model IEnumerable<TicketOldIndexViewModel>
+@{ ViewBag.Title = "Open Tickets";}
+<h2>@ViewBag.Title</h2>
+<table class="table table-hover table-responsive">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Id)</th>
+        <th>@Html.DisplayNameFor(model => model.DeviceId)</th>
+        <th>@Html.DisplayNameFor(model => model.CheckedIn)</th>
+        <th>@Html.DisplayNameFor(model => model.CheckedOut)</th>
+        <th>@Html.DisplayNameFor(model => model.Finished)</th>
+        <th>@Html.DisplayNameFor(model => model.CheckInUserId)</th>
+        <th>@Html.DisplayNameFor(model => model.CheckOutUserId)</th>
+        <th>@Html.DisplayNameFor(model => model.NeedsBackup)</th>
+        <th>@Html.DisplayNameFor(model => model.TicketStatus)</th>
+    </tr>
+
+    @foreach (var ticket in Model)
+    {
+
+        @await Html.PartialAsync("_Ticket", ticket)
+    }
+</table>

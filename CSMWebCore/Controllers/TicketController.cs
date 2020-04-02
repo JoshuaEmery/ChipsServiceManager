@@ -15,17 +15,16 @@ using QRCoder;
 
 namespace CSMWebCore.Controllers
 {
-    //Check for Authorization
     [Authorize]
     public class TicketController : Controller
     {
-        //Ticket Controller needs access to all 5 tables
         private IDeviceData _devices;
         private ICustomerData _customers;
         private ITicketData _tickets;
         private ILogData _logs;
         private IUpdateData _updates;
-        //constructor
+
+        // constructor with dependency injection for all five tables
         public TicketController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates)
         {
             _devices = devices;
@@ -34,28 +33,27 @@ namespace CSMWebCore.Controllers
             _logs = logs;
             _updates = updates;
         }
+
         //Ticket/Index
-        //This method was used early in testing, I dont think the application still uses it for anything
         public IActionResult Index()
         {
-            var model = _tickets.GetAll().Select(cust => new TicketViewModel
+            //create an IEnumerable of TicketViewModel from the active tickets IENumerable
+            var model = _tickets.GetAllActiveTickets().Select(ticket => new TicketViewModel
             {
-                Id = cust.Id,
-                DeviceId = cust.DeviceId,
-                CheckedIn = cust.CheckedIn.ToShortDateString(),
-                CheckedOut = cust.CheckedOut.ToShortDateString(),
-                Finished = cust.Finished.ToShortDateString(),
-                CheckInUserId = cust.CheckInUserId,
-                CheckOutUserId = cust.CheckOutUserId,
-                NeedsBackup = cust.NeedsBackup,
-                TicketStatus = cust.TicketStatus.ToString()
+                Ticket = ticket,
+                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                Log = _logs.GetLastByTicketId(ticket.Id),
+                ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
+
             });
+            //return
             return View(model);
         }
-        //Ticket/CreateByExistingDeviceId
-        //Method for creating a ticket when a device has already been created.  That also
-        //means that a customer has already been created.
+
         [HttpGet]
+        //Ticket/CreateByExistingDeviceId
+        // create ticket for existing device (and thus existing customer)
         public IActionResult CreateByExistingDeviceId(int deviceId)
         {
             //get the device and check it
@@ -82,7 +80,6 @@ namespace CSMWebCore.Controllers
             model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
             return View(model);
         }
-        //Post for CreateByExistingDeviceId
         [HttpPost]
         public IActionResult CreateByExistingDeviceId(DeviceEditViewModel model)
         {
@@ -139,9 +136,9 @@ namespace CSMWebCore.Controllers
                 updateId = update.Id
             });
         }
+
         [HttpGet]
         //Ticket/Edit
-        //Method that allows editing of a Ticket
         public IActionResult Edit(int id)
         {
             var model = _tickets.Get(id);
@@ -151,7 +148,6 @@ namespace CSMWebCore.Controllers
             }
             return View(model);
         }
-        //Post for Edit
         [HttpPost]
         public IActionResult Edit(TicketEditViewModel model)
         {
@@ -172,41 +168,48 @@ namespace CSMWebCore.Controllers
             ticket.TicketStatus = model.TicketStatus;
             //save changes
             _tickets.Commit();
-            return RedirectToAction("Home");
+            return RedirectToAction("Index");
 
         }
-        //Ticket/Home
-        //This is the Method that is called to display the Primary Ticket Page, this really shoud
-        //be Ticket/Index
-        public IActionResult Home()
+
+        //Ticket/Details
+        // TODO review usage, since tickets can be accessed via TicketsByDeviceId
+        public IActionResult Details(int ticketId)
         {
-            //create an IEnumerable of TicketHomeViewModel from the active tickets IENumerable
-            var model = _tickets.GetAllActiveTickets().Select(ticket => new TicketHomeViewModel
+            //get the ticket
+            var ticket = _tickets.Get(ticketId);
+            //check that it is not null
+            if (ticket != null)
             {
-                Ticket = ticket,
-                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
-                Log = _logs.GetLastByTicketId(ticket.Id),
-                ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
-                ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
-
-            });
-            //return
-            return View(model);
+                var model = new TicketViewModel
+                {
+                    Ticket = ticket,
+                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                    Log = _logs.GetLastByTicketId(ticket.Id),
+                    ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
+                    ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
+                };
+                return View("_Index", model);
+            }
+            //return ticket Index if it is null
+            return RedirectToAction("Index");
         }
+
+        // -- SORTING, FILTERING, SEARCHING
+
         //Ticket/FilterByStatus
-        //Method that is called by the status drop down menu on click located in Ticket/Home.cshtml
-        //The only property of the ViewModel that will be populated is the TicketStatus Property when this
-        //method is called.
+        // called by status dropdown in Index view; selects relevant tickets for model and
+        // populates TicketViewModel DateFilter with corresp. enum value
         [HttpPost]
-        public IActionResult FilterByStatus(TicketHomeViewModel result)
+        public IActionResult FilterByStatus(TicketViewModel result)
         {
-            //If they chose all show the default Ticket/Home View
+            //If they chose all show the default Ticket/Index View
             if (result.Status == "All")
             {
-                return RedirectToAction("Home");
+                return RedirectToAction("Index");
             }
             //Create IEnumerable of Tickets that match the Ticketstatus given
-            var model = _tickets.GetByStatus(result.TicketStatus).Select(ticket => new TicketHomeViewModel
+            var model = _tickets.GetByStatus(result.TicketStatus).Select(ticket => new TicketViewModel
             {
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -215,24 +218,24 @@ namespace CSMWebCore.Controllers
                 ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
             });
             //return
-            return View("Home", model);
+            return View("Index", model);
         }
+
         //Ticket/FilterByDate
-        //Method that is called by the date drop down menu on click located in Ticket/Home.cshtml
-        //The only property of the ViewModel that will be populated is the DateFilter Property when this
-        //method is called.
+        // called by date dropdown in Index view; sorts model and populates TicketViewModel 
+        // DateFilter with corresp. enum value
         [HttpPost]
-        public IActionResult FilterByDate(TicketHomeViewModel result)
+        public IActionResult FilterByDate(TicketViewModel result)
         {
-            //If all return default Ticket/Home View
+            //If all return default Ticket/Index View
             if (result.Status == "All")
             {
-                return RedirectToAction("Home");
+                return RedirectToAction("Index");
             }
-            //Check which filter was used and return corresponsding IENumerable of TicketHomeViewModel
+            //Check which filter was used and return corresponsding IENumerable of TicketViewModel
             else if (result.DateFilter == DateFilter.Oldest)
             {
-                var model = _tickets.GetAll().OrderBy(x => x.CheckedIn).Select(ticket => new TicketHomeViewModel
+                var model = _tickets.GetAll().OrderBy(x => x.CheckedIn).Select(ticket => new TicketViewModel
                 {
                     Ticket = ticket,
                     Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -242,11 +245,11 @@ namespace CSMWebCore.Controllers
 
                 });
 
-                return View("Home", model);
+                return View("Index", model);
             }
             else if (result.DateFilter == DateFilter.Newest)
             {
-                var model = _tickets.GetAll().OrderByDescending(x => x.CheckedIn).Select(ticket => new TicketHomeViewModel
+                var model = _tickets.GetAll().OrderByDescending(x => x.CheckedIn).Select(ticket => new TicketViewModel
                 {
                     Ticket = ticket,
                     Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -256,11 +259,11 @@ namespace CSMWebCore.Controllers
 
                 });
 
-                return View("Home", model);
+                return View("Index", model);
             }
             else if (result.DateFilter == DateFilter.Idle)
             {
-                var model = _tickets.GetAll().OrderBy(x => x.CheckedIn).Select(ticket => new TicketHomeViewModel
+                var model = _tickets.GetAll().OrderBy(x => x.CheckedIn).Select(ticket => new TicketViewModel
                 {
                     Ticket = ticket,
                     Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -271,17 +274,18 @@ namespace CSMWebCore.Controllers
                 });
                 var sorted = model.OrderByDescending(x => x.DaysIdle).ToList();
 
-                return View("Home", sorted);
+                return View("Index", sorted);
             }
             //this should never run, but if it does return default view
-            return View("Home");
+            return View("Index");
         }
+
         //Ticket/TicketsByDeviceId
-        //Method that gets all tickets for a given device
+        // gets tickets for device given id
         public IActionResult TicketsByDeviceId(int deviceId)
         {
-            //Create an IEnumerable of TicketHomeViewModel that match the given deviceID
-            var model = _tickets.GetAllByDevice(deviceId).Select(ticket => new TicketHomeViewModel
+            //Create an IEnumerable of TicketViewModel that match the given deviceID
+            var model = _tickets.GetAllByDevice(deviceId).Select(ticket => new TicketViewModel
             {
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -293,21 +297,19 @@ namespace CSMWebCore.Controllers
             //Check if model is null
             if (model != null)
             {
-                return View("Home",model);
+                return View("Index", model);
             }
             return View();
         }
+
         //Ticket/Search
-        //Method that performs a basic search on the Tickets.  This is actually somewhat useless 
-        //compared to the device or customer search.  This only searches the Ticket Table and most
-        //of the Data stored in the ticket table is not easily searched, could be used to search
-        //by ticket number, or checkin technician.  Other than that it is easier to find a specific
-        //ticket by first finding the customer.
+        // TODO review usage, currently only searches Ticket fields incl. Ticket No. and checkin technician.
+        // Customer or Device search has more functionality
         public IActionResult Search(string searchValue)
         {
-            //Create an IEnumerable of TicketHomeViewModel that match the searchvalue.  Check SQLTicket for
+            //Create an IEnumerable of TicketViewModel that match the searchvalue.  Check SQLTicket for
             //search method
-            var model = _tickets.Search(searchValue).Select(ticket => new TicketHomeViewModel
+            var model = _tickets.Search(searchValue).Select(ticket => new TicketViewModel
             {
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -316,33 +318,12 @@ namespace CSMWebCore.Controllers
                 ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 
             });
-            return View("Home", model);
+            return View("Index", model);
         }
-        //Ticket/Details
-        //I dont think this method is used in the application, but I cant remember.  Most requests for a single ticket will come to
-        //TicketsByDeviceId as the application primarily goes through the device table to get the ticket.
-        public IActionResult Details(int ticketId)
-        {
-            //get the ticket
-            var ticket = _tickets.Get(ticketId);
-            //check that it is not null
-            if(ticket != null)
-            {
-                var model = new TicketHomeViewModel
-                {
-                    Ticket = ticket,
-                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
-                    Log = _logs.GetLastByTicketId(ticket.Id),
-                    ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
-                    ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
-                };
-                return View("_Home", model);
-            }
-            //return ticket home if it is null
-            return RedirectToAction("Index", "Home");
-        }
+
+        // methods for QR code generation and printout page view for customer
         [Authorize]
-        //This code it duplicated from the Device Controller
+        // returns QR code jpeg (duplicate code from DeviceController)
         public ActionResult GetQRByGuid(Guid code)
         {
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -352,10 +333,8 @@ namespace CSMWebCore.Controllers
             Bitmap qrCodeImage = qrCode.GetGraphic(20);
             byte[] image = BitmapToBytes(qrCodeImage);
             return File(image, "image/jpeg");
-
-
         }
-        //Method used by the GetQRByGuid Method
+        // converts bitmap to byte array
         private static byte[] BitmapToBytes(Bitmap img)
         {
             using (MemoryStream stream = new MemoryStream())
@@ -364,7 +343,7 @@ namespace CSMWebCore.Controllers
                 return stream.ToArray();
             }
         }
-        //MEthod that displays the confirmation printout page to the customer
+        // displays Update view for printout
         public IActionResult Confirmation(int ticketId, int deviceId, int customerId, Guid updateId)
         {
             var model = new UpdateViewModel
@@ -378,7 +357,24 @@ namespace CSMWebCore.Controllers
         }
 
 
-
+        //Ticket/OldIndex
+        // Early testing method
+        //public IActionResult OldIndex()
+        //{
+        //    var model = _tickets.GetAll().Select(cust => new TicketOldIndexViewModel
+        //    {
+        //        Id = cust.Id,
+        //        DeviceId = cust.DeviceId,
+        //        CheckedIn = cust.CheckedIn.ToShortDateString(),
+        //        CheckedOut = cust.CheckedOut.ToShortDateString(),
+        //        Finished = cust.Finished.ToShortDateString(),
+        //        CheckInUserId = cust.CheckInUserId,
+        //        CheckOutUserId = cust.CheckOutUserId,
+        //        NeedsBackup = cust.NeedsBackup,
+        //        TicketStatus = cust.TicketStatus.ToString()
+        //    });
+        //    return View(model);
+        //}
 
     }
 }
