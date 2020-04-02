@@ -153,7 +153,7 @@ namespace CSMWebCore.Controllers
             //update the database with any changes that were made to the ticketstatus 
             ticket.TicketStatus = model.TicketStatus;
             _tickets.Commit();
-            return RedirectToAction("Home", "Ticket");            
+            return RedirectToAction("Index", "Ticket");            
         }        
         //Log/Contact
         //Get Method to log contact with customer
@@ -217,7 +217,7 @@ namespace CSMWebCore.Controllers
             }
             //update tickets table
             _tickets.Commit();
-            return RedirectToAction("Home", "Ticket");            
+            return RedirectToAction("Index", "Ticket");            
         }
     }
 }

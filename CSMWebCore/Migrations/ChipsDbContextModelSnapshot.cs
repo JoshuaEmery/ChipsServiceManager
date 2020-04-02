@@ -4,22 +4,94 @@ using CSMWebCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CSMWebCore.Data.Migrations
+namespace CSMWebCore.Migrations
 {
     [DbContext(typeof(ChipsDbContext))]
-    [Migration("20190713183741_addedTicketumber")]
-    partial class addedTicketumber
+    partial class ChipsDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("CSMWebCore.Entities.ChipsUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("Phone");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("CSMWebCore.Entities.Consultation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Time");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Consultations");
+                });
 
             modelBuilder.Entity("CSMWebCore.Entities.Customer", b =>
                 {
@@ -31,9 +103,11 @@ namespace CSMWebCore.Data.Migrations
 
                     b.Property<string>("Email");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
                     b.Property<string>("Phone");
 
@@ -64,6 +138,8 @@ namespace CSMWebCore.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
                     b.ToTable("Devices");
                 });
 
@@ -79,7 +155,8 @@ namespace CSMWebCore.Data.Migrations
 
                     b.Property<DateTime>("Logged");
 
-                    b.Property<string>("Notes");
+                    b.Property<string>("Notes")
+                        .IsRequired();
 
                     b.Property<int>("TicketId");
 
@@ -87,7 +164,45 @@ namespace CSMWebCore.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TicketId");
+
                     b.ToTable("Logs");
+                });
+
+            modelBuilder.Entity("CSMWebCore.Entities.ServicePrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<int>("Service");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServicePrices");
+
+                    b.HasData(
+                        new { Id = 1, Price = 0m, Service = 0 },
+                        new { Id = 2, Price = 0m, Service = 1 },
+                        new { Id = 3, Price = 0m, Service = 2 },
+                        new { Id = 4, Price = 50m, Service = 3 },
+                        new { Id = 5, Price = 150m, Service = 4 },
+                        new { Id = 6, Price = 50m, Service = 5 },
+                        new { Id = 7, Price = 150m, Service = 6 },
+                        new { Id = 8, Price = 50m, Service = 7 },
+                        new { Id = 9, Price = 100m, Service = 8 },
+                        new { Id = 10, Price = 100m, Service = 9 },
+                        new { Id = 11, Price = 150m, Service = 10 },
+                        new { Id = 12, Price = 125m, Service = 11 },
+                        new { Id = 13, Price = 150m, Service = 12 },
+                        new { Id = 14, Price = 150m, Service = 13 },
+                        new { Id = 15, Price = 150m, Service = 14 },
+                        new { Id = 16, Price = 50m, Service = 15 },
+                        new { Id = 17, Price = 150m, Service = 16 },
+                        new { Id = 18, Price = 100m, Service = 17 }
+                    );
                 });
 
             modelBuilder.Entity("CSMWebCore.Entities.Ticket", b =>
@@ -116,7 +231,56 @@ namespace CSMWebCore.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DeviceId");
+
                     b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("CSMWebCore.Entities.TicketHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AddedToHistory");
+
+                    b.Property<string>("CheckInUserId");
+
+                    b.Property<string>("CheckOutUserId");
+
+                    b.Property<DateTime>("CheckedIn");
+
+                    b.Property<DateTime>("CheckedOut");
+
+                    b.Property<int>("DeviceId");
+
+                    b.Property<DateTime>("Finished");
+
+                    b.Property<bool>("NeedsBackup");
+
+                    b.Property<int>("TicketId");
+
+                    b.Property<int>("TicketNumber");
+
+                    b.Property<int>("TicketStatus");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketsHistory");
+                });
+
+            modelBuilder.Entity("CSMWebCore.Entities.Update", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("TicketId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("Updates");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -161,57 +325,6 @@ namespace CSMWebCore.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("EmailConfirmed");
-
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -284,6 +397,38 @@ namespace CSMWebCore.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CSMWebCore.Entities.Device", b =>
+                {
+                    b.HasOne("CSMWebCore.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CSMWebCore.Entities.Log", b =>
+                {
+                    b.HasOne("CSMWebCore.Entities.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CSMWebCore.Entities.Ticket", b =>
+                {
+                    b.HasOne("CSMWebCore.Entities.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CSMWebCore.Entities.Update", b =>
+                {
+                    b.HasOne("CSMWebCore.Entities.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -294,7 +439,7 @@ namespace CSMWebCore.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("CSMWebCore.Entities.ChipsUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -302,7 +447,7 @@ namespace CSMWebCore.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("CSMWebCore.Entities.ChipsUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -315,7 +460,7 @@ namespace CSMWebCore.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("CSMWebCore.Entities.ChipsUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -323,7 +468,7 @@ namespace CSMWebCore.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("CSMWebCore.Entities.ChipsUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
