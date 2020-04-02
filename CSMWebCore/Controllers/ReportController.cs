@@ -76,9 +76,12 @@ namespace CSMWebCore.Controllers
             }
             foreach (var ticket in _tickets.GetAll())
             {
-                output += GetCostOfTicket(ticket.Id);
+                output += GetSavingsByTicket(ticket.Id);
             }
-
+            output += GetConsultSavingsOverTimePeriod(new TimeSpan(7, 0, 0, 0));
+            output += GetConsultSavingsOverTimePeriod(new TimeSpan(30, 0, 0, 0));
+            output += GetConsultSavingsOverTimePeriod(new TimeSpan(90, 0, 0, 0));
+            output += GetConsultSavingsOverTimePeriod();
             return Content(output);
         }
         //-------------------Ticket Reports
@@ -151,12 +154,52 @@ namespace CSMWebCore.Controllers
             return output;
         }
         //------------Financial Reports
-        public string GetCostOfTicket(int ticketId)
+        public string GetSavingsByTicket(int ticketId)
         {
             string output = "";
             output += $"The total cost for ticketId: " +
                 $"{_tickets.Get(ticketId).TicketNumber} " +
                 $"{_servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticketId))}\n";
+            return output;
+        }
+        public string GetTicketSavingsOverTimePeriod(TimeSpan? span = null)
+        {
+            IEnumerable<Ticket> tickets;            
+            if (!span.HasValue)
+            {
+                tickets = _tickets.GetAll();                
+            }
+            else
+            {
+                tickets = _tickets.GetTicketsCheckedInWithinTimeSpan(span.Value);
+            }
+            decimal total = 0m;           
+            foreach (var ticket in tickets)
+            {
+                total += _servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticket.Id));
+            }
+            
+            string output = "";
+            string timePeriod = (span.HasValue) ? span.Value.Days.ToString() : "All Time";
+            output += $"The total ticket savings over last {timePeriod}: {total:C2}\n";
+            return output;
+        }
+        public string GetConsultSavingsOverTimePeriod(TimeSpan? span = null)
+        {
+            IEnumerable<Consultation> consults;
+            if (!span.HasValue)
+            {
+                consults = _consultations.GetAll();
+            }
+            else
+            {
+                consults = _consultations.GetConsultationsWithinTimeSpan(span.Value);
+            }
+            decimal total = 0m;
+            string output = "";
+            string timePeriod = (span.HasValue) ? span.Value.Days.ToString() : "All Time";
+            total += _servicePrices.GetPriceOfServiceType(LogType.Diagnostic) * consults.Count();
+            output += $"The total consultation savings over last {timePeriod}: {total:C2}\n";
             return output;
         }
     }

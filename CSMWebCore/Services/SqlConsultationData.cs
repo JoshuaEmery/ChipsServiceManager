@@ -22,7 +22,7 @@ namespace CSMWebCore.Services
         public IEnumerable<Consultation> GetConsultationsWithinTimeSpan(TimeSpan span)
         {
             DateTime date = (DateTime.Now - span);
-            return _db.Consultations.Where(x => x.Time > date);
+            return _db.Consultations.Where(x => x.Time < date);
         }
 
         public IEnumerable<Consultation> GetContactLogsByUserandTime(string userName, TimeSpan? span = null)
@@ -32,7 +32,7 @@ namespace CSMWebCore.Services
                 return _db.Consultations.Where(x => x.UserName == userName);
             }
             DateTime date = (DateTime.Now - span.Value);
-            return _db.Consultations.Where(x => x.UserName == userName && x.Time > date);
+            return _db.Consultations.Where(x => x.UserName == userName && x.Time < date);
         }
     }
 }

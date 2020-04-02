@@ -26,6 +26,10 @@ namespace CSMWebCore.Services
             }
             return total;
         }
+        public decimal GetPriceOfServiceType(LogType service)
+        {
+            return _db.ServicePrices.SingleOrDefault(x => x.Service == service).Price;
+        }
 
     }
 }

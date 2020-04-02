@@ -45,9 +45,10 @@ namespace CSMWebCore.Services
         //Method that takes a ticketId and returns all of the Unique LogType values that
         //ticket had performed on it
         public IEnumerable<LogType> GetDistinctLogTypesByTicketId(int ticketId)
-        {
+        {            
             return _db.Logs.Where(x => x.TicketId == ticketId).Select(x => x.LogType).Distinct();
         }
+
         public IEnumerable<Log> GetServiceLogsByTicketId(int ticketId)
         {
             return _db.Logs.Where(log => log.TicketId == ticketId && log.ContactMethod == ContactMethod.NoContact);
