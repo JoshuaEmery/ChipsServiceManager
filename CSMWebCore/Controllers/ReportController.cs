@@ -154,7 +154,9 @@ namespace CSMWebCore.Controllers
         public string GetCostOfTicket(int ticketId)
         {
             string output = "";
-            output += $"The total cost for ticketId: {ticketId} {_servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticketId))}\n";
+            output += $"The total cost for ticketId: " +
+                $"{_tickets.Get(ticketId).TicketNumber} " +
+                $"{_servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticketId))}\n";
             return output;
         }
     }
