@@ -26,5 +26,10 @@
     <td>@Model.Make @Model.ModelNumber</td>
     <td>@Model.OperatingSystem</td>
     <td>@Model.Password</td>
-    <td>@Model.Serviced</td>
+    <td>
+        @if (Model.Serviced)
+        {
+            <i class="fas fa-check"></i>
+        }
+    </td>
 </tr>

@@ -18,6 +18,7 @@ namespace CSMWebCore.ViewModels
         [Display(Name = "OS")]
         public string OperatingSystem { get; set; }
         public string Password { get; set; }
+        [Display(Name = "Prior Service")]
         public bool Serviced { get; set; }
     }
 }
