@@ -78,6 +78,10 @@ namespace CSMWebCore.Controllers
             {
                 output += GetSavingsByTicket(ticket.Id);
             }
+            output += GetTicketSavingsOverTimePeriod(new TimeSpan(7, 0, 0, 0));
+            output += GetTicketSavingsOverTimePeriod(new TimeSpan(30, 0, 0, 0));
+            output += GetTicketSavingsOverTimePeriod(new TimeSpan(90, 0, 0, 0));
+            output += GetTicketSavingsOverTimePeriod();
             output += GetConsultSavingsOverTimePeriod(new TimeSpan(7, 0, 0, 0));
             output += GetConsultSavingsOverTimePeriod(new TimeSpan(30, 0, 0, 0));
             output += GetConsultSavingsOverTimePeriod(new TimeSpan(90, 0, 0, 0));
@@ -87,7 +91,7 @@ namespace CSMWebCore.Controllers
         //-------------------Ticket Reports
         //Method that return values based on status or time etc... eventually these will just
         //return int but string is easier to work with for displaying in testing
-        public string TotalActiveTickets(TicketStatus? status = null)
+        private string TotalActiveTickets(TicketStatus? status = null)
         {
             if (!status.HasValue)
                 return $"Total Active Tickets: {_tickets.GetAllActiveTickets().Count()}\n";
@@ -95,14 +99,14 @@ namespace CSMWebCore.Controllers
                 return $"{status.ToString()}: {_tickets.GetByStatus(status.Value).Count()}\n";
         }
 
-        public string TotalCompletedTickets(TimeSpan? span = null)
+        private string TotalCompletedTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
                 return $"Tickets Completed all time: {_tickets.GetAllCompletedTickets().Count()}\n";
             else
                 return $"Tickets Completed in the last {span.Value.TotalDays} days {_tickets.GetTicketsCompletedWithinTimeSpan(span.Value).Count()}\n";            
         }
-        public string TotalCheckedInTickets(TimeSpan? span = null)
+        private string TotalCheckedInTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
                 return $"Tickets Checked in all time: {_tickets.GetAll().Count()}\n";
@@ -110,14 +114,14 @@ namespace CSMWebCore.Controllers
                 return $"Tickets Checked in last {span.Value.TotalDays} days {_tickets.GetTicketsCheckedInWithinTimeSpan(span.Value).Count()}\n";
         }
         //-----------------User Reports
-        public string GetTotalContactLogsByUser(string userName, TimeSpan? span = null)
+        private string GetTotalContactLogsByUser(string userName, TimeSpan? span = null)
         {
             if (!span.HasValue)
                 return $"Total Contacts By {userName}: {_logs.GetContactLogsByUserandTime(userName).Count()}\n";
             else
                 return $"Total Contacts By {userName} in last {span.Value.TotalDays}: {_logs.GetContactLogsByUserandTime(userName, span.Value).Count()}\n";
         }
-        public string GetTotalServiceLogsByUser(string userName, TimeSpan? span = null)
+        private string GetTotalServiceLogsByUser(string userName, TimeSpan? span = null)
         {
             if (!span.HasValue)
                 return $"Total Service By {userName}: {_logs.GetServiceLogsByUserandTime(userName).Count()}\n";
@@ -125,7 +129,7 @@ namespace CSMWebCore.Controllers
                 return $"Total Service By {userName} in last {span.Value.TotalDays}: {_logs.GetServiceLogsByUserandTime(userName, span.Value).Count()}\n";
         }
         //-----------Consultations completed 
-        public string GetTotalConsultations(TimeSpan? span = null)
+        private string GetTotalConsultations(TimeSpan? span = null)
         {
             if (!span.HasValue)
                 return $"Consultations Completed all time: {_consultations.GetAll().Count()}\n";
@@ -133,7 +137,7 @@ namespace CSMWebCore.Controllers
                 return $"Consultations Completed in the last {span.Value.TotalDays} days {_consultations.GetConsultationsWithinTimeSpan(span.Value).Count()}\n";
         }
         //-----------Consultations completed by user
-        public string GetTotalConsultationsLogsByUser(string userName, TimeSpan? span = null)
+        private string GetTotalConsultationsLogsByUser(string userName, TimeSpan? span = null)
         {
             if (!span.HasValue)
                 return $"Total Consultations By {userName}: {_consultations.GetContactLogsByUserandTime(userName).Count()}\n";
@@ -142,7 +146,7 @@ namespace CSMWebCore.Controllers
         }
 
         //-----------Ticket Progress Report
-        public string PrintProgressReport(int ticketId)
+        private string PrintProgressReport(int ticketId)
         {
             string output = "";
             TicketProgressReport tpr = _ticketsHistory.GetTicketProgressReport(_tickets.Get(ticketId));
@@ -154,7 +158,7 @@ namespace CSMWebCore.Controllers
             return output;
         }
         //------------Financial Reports
-        public string GetSavingsByTicket(int ticketId)
+        private string GetSavingsByTicket(int ticketId)
         {
             string output = "";
             output += $"The total cost for ticketId: " +
@@ -162,7 +166,7 @@ namespace CSMWebCore.Controllers
                 $"{_servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticketId))}\n";
             return output;
         }
-        public string GetTicketSavingsOverTimePeriod(TimeSpan? span = null)
+        private string GetTicketSavingsOverTimePeriod(TimeSpan? span = null)
         {
             IEnumerable<Ticket> tickets;            
             if (!span.HasValue)
@@ -184,7 +188,7 @@ namespace CSMWebCore.Controllers
             output += $"The total ticket savings over last {timePeriod}: {total:C2}\n";
             return output;
         }
-        public string GetConsultSavingsOverTimePeriod(TimeSpan? span = null)
+        private string GetConsultSavingsOverTimePeriod(TimeSpan? span = null)
         {
             IEnumerable<Consultation> consults;
             if (!span.HasValue)
