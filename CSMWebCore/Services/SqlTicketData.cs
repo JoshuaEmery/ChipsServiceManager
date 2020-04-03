@@ -81,22 +81,37 @@ namespace CSMWebCore.Services
             return _db.Tickets.Where(x => x.TicketStatus == TicketStatus.Done);
         }
         //method that gets all tickets that have been completed within a timespan        
-        public IEnumerable<Ticket> GetTicketsCompletedWithinTimeSpan(TimeSpan span)
+        public IEnumerable<Ticket> GetCompletedTickets(TimeSpan span)
         {
             DateTime date = (DateTime.Now - span);
             return _db.Tickets.Where(x => x.Finished > date);
         }
+        //method that gets all tickets that have been completed between two dates        
+        public IEnumerable<Ticket> GetCompletedTickets(DateTime startDate, DateTime endDate)
+        {            
+            return _db.Tickets.Where(x => x.Finished > startDate && x.Finished < endDate);
+        }
         //method that returns all tickets checked in within a timespan
-        public IEnumerable<Ticket> GetTicketsCheckedInWithinTimeSpan(TimeSpan span)
+        public IEnumerable<Ticket> GetCheckedInTickets(TimeSpan span)
         {
             DateTime date = (DateTime.Now - span);
             return _db.Tickets.Where(x => x.CheckedIn > date);
         }
+        //method that returns all tickets checked in between two dates
+        public IEnumerable<Ticket> GetCheckedInTickets(DateTime startDate, DateTime endDate)
+        {
+            return _db.Tickets.Where(x => x.CheckedIn > startDate && x.CheckedIn < endDate);
+        }
         //method that returns all tickets checked out within a timespan
-        public IEnumerable<Ticket> GetTicketsCheckedOutWithinTimeSpan(TimeSpan span)
+        public IEnumerable<Ticket> GetCheckedOutTickets(TimeSpan span)
         {
             DateTime date = (DateTime.Now - span);
             return _db.Tickets.Where(x => x.CheckedOut > date);
+        }
+        //method that returns all tickets checked out between two dates
+        public IEnumerable<Ticket> GetCheckedOutTickets(DateTime startDate, DateTime endDate)
+        {
+            return _db.Tickets.Where(x => x.CheckedOut > startDate && x.CheckedOut < endDate);
         }
 
         public IEnumerable<Ticket> Search(string searchValue)

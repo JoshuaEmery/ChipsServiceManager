@@ -18,7 +18,9 @@ namespace CSMWebCore.Services
         IEnumerable<LogType> GetDistinctLogTypesByTicketId(int ticketId);
         IEnumerable<Log> GetContactLogsByTicketId(int ticketId);
         IEnumerable<Log> GetServiceLogsByTicketId(int ticketId);
-        IEnumerable<Log> GetServiceLogsByUserandTime(string userId, TimeSpan? span = null);
-        IEnumerable<Log> GetContactLogsByUserandTime(string userId, TimeSpan? span = null);
+        IEnumerable<Log> GetServiceLogsByUser(string userId, TimeSpan? span = null);
+        IEnumerable<Log> GetServiceLogsByUser(string userId, DateTime startDate, DateTime endDate);
+        IEnumerable<Log> GetContactLogsByUser(string userId, TimeSpan? span = null);
+        IEnumerable<Log> GetContactLogsByUser(string userId, DateTime startDate, DateTime endDate);
     }
 }

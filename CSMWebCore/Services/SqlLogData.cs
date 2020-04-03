@@ -57,7 +57,7 @@ namespace CSMWebCore.Services
         {
             return _db.Logs.Where(log => log.TicketId == ticketId && log.ContactMethod != ContactMethod.NoContact);
         }
-        public IEnumerable<Log> GetServiceLogsByUserandTime(string userId, TimeSpan? span = null)
+        public IEnumerable<Log> GetServiceLogsByUser(string userId, TimeSpan? span = null)
         {
             if (!span.HasValue)
             {
@@ -67,7 +67,12 @@ namespace CSMWebCore.Services
             return _db.Logs.Where(log => log.UserId == userId  && log.ContactMethod == ContactMethod.NoContact
             && log.Logged > date);
         }
-        public IEnumerable<Log> GetContactLogsByUserandTime(string userId, TimeSpan? span = null)
+        public IEnumerable<Log> GetServiceLogsByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+             return _db.Logs.Where(log => log.UserId == userId && log.ContactMethod == ContactMethod.NoContact
+            && log.Logged > startDate && log.Logged < endDate);
+        }
+        public IEnumerable<Log> GetContactLogsByUser(string userId, TimeSpan? span = null)
         {
             if(!span.HasValue)
             {
@@ -77,5 +82,11 @@ namespace CSMWebCore.Services
             return _db.Logs.Where(log => log.UserId == userId  && log.ContactMethod != ContactMethod.NoContact
             && log.Logged > date);
         }
+        public IEnumerable<Log> GetContactLogsByUser(string userId, DateTime startDate, DateTime endDate)
+        {
+            return _db.Logs.Where(log => log.UserId == userId && log.ContactMethod != ContactMethod.NoContact
+           && log.Logged > startDate && log.Logged < endDate);
+        }
+
     }
 }
