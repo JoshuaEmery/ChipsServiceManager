@@ -65,7 +65,7 @@ namespace CSMWebCore.Services
             for (int i = 0; i < ticketHistories.Count; i++)
             {
                 //if it is the first entry in the tickethistories list
-                if(i == 0)
+                if (i == 0)
                 {
                     //add time to the timebyStatus array at the index of the status in the current tickethistories
                     //item.  The amount of time is the difference between when this log was made and the ticket checked in
@@ -78,19 +78,54 @@ namespace CSMWebCore.Services
                     //item.  The amount of time is the difference between when this log was made and the previous log
                     //was made.
                     timeByStatus[(int)ticketHistories[i].TicketStatus] += ticketHistories[i].AddedToHistory - ticketHistories[i - 1].AddedToHistory;
-                }                
+                }
             }
             //iterate through the timeByStatus array and if there is
             //a time at the given index add both the index(as a ticketStatus)
             //and the amount of time to the ticketprogress dictionary
             for (int i = 0; i < timeByStatus.Length; i++)
             {
-                if(timeByStatus[i] > TimeSpan.Zero)
+                if (timeByStatus[i] > TimeSpan.Zero)
                 {
                     ticketProgressReport.TicketProgress.Add((TicketStatus)i, timeByStatus[i]);
-                }                
+                }
             }
             return ticketProgressReport;
+        }
+        public IEnumerable<TicketProgressReport> GetTicketProgressReports(TimeSpan? span)
+        {
+            List<TicketProgressReport> result = new List<TicketProgressReport>();
+            if (!span.HasValue)
+            {
+                foreach (var ticketHistory in _db.TicketsHistory)
+                {
+
+                    result.Add(GetTicketProgressReport(_db.Tickets.Find(ticketHistory.TicketId)));
+                }
+            }
+            else
+            {
+                DateTime date = (DateTime.Now - span.Value);
+                IEnumerable<TicketHistory> ticketHistories = _db.TicketsHistory.Where(x => x.AddedToHistory > date);
+                foreach (var ticketHistory in ticketHistories)
+                {
+
+                    result.Add(GetTicketProgressReport(_db.Tickets.Find(ticketHistory.TicketId)));
+                }
+            }
+            return result;
+        }
+        public IEnumerable<TicketProgressReport> GetTicketProgressReports(DateTime startDate, DateTime endDate)
+        {
+            List<TicketProgressReport> result = new List<TicketProgressReport>();
+            IEnumerable<TicketHistory> ticketHistories = _db.TicketsHistory.Where(x => x.AddedToHistory > startDate && x.AddedToHistory < endDate);
+            foreach (var ticketHistory in ticketHistories)
+            {
+
+                result.Add(GetTicketProgressReport(_db.Tickets.Find(ticketHistory.TicketId)));
+            }
+
+            return result;
         }
     }
 }
