@@ -38,6 +38,6 @@ namespace CSMWebCore.Services
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        IEnumerable<TicketProgressReport> GetTicketProgressReports(DateTime startDate, DateTime endDate)
+        IEnumerable<TicketProgressReport> GetTicketProgressReports(DateTime startDate, DateTime endDate);
     }
 }
