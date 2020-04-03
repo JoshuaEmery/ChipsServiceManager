@@ -16,7 +16,7 @@ namespace CSMWebCore.Entities
         public Device Device { get; set; }
         [Display(Name = "Status")]
         public TicketStatus TicketStatus { get; set; }
-        [Display(Name = "Data Backup Needed?")]
+        [Display(Name = "Data Backup")]
         public bool NeedsBackup { get; set; }
         public DateTime CheckedIn { get; set; }
         public DateTime Finished { get; set; }

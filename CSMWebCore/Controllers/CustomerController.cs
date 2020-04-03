@@ -35,8 +35,7 @@ namespace CSMWebCore.Controllers
             new CustomerViewModel
             {
                 Id = cust.Id,
-                FirstName = cust.FirstName,
-                LastName = cust.LastName,
+                FullName = $"{cust.FirstName} {cust.LastName}",
                 Email = cust.Email,
                 StudentId = cust.StudentId,
                 Phone = cust.Phone,
@@ -59,8 +58,7 @@ namespace CSMWebCore.Controllers
             return View(new CustomerViewModel
             {
                 Id = cust.Id,
-                FirstName = cust.FirstName,
-                LastName = cust.LastName,
+                FullName = $"{cust.FirstName} {cust.LastName}",
                 Email = cust.Email,
                 StudentId = cust.StudentId,
                 Phone = cust.Phone,
@@ -149,8 +147,7 @@ namespace CSMWebCore.Controllers
             //Create a IENumerable of CustomerViewModel, see SQLCustomer for Search Method
             var model = _customers.Search(searchValue).Select(cust => new CustomerViewModel {
                 Id = cust.Id,
-                FirstName = cust.FirstName,
-                LastName = cust.LastName,
+                FullName = $"{cust.FirstName} {cust.LastName}",
                 Email = cust.Email,
                 StudentId = cust.StudentId,
                 Phone = cust.Phone,

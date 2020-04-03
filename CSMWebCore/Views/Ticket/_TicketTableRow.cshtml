@@ -1,93 +1,15 @@
 ﻿@model TicketViewModel
-<div>
-    <div>
-        <div>
-            <a data-toggle="collapse" href=@string.Format($"#collapse{ Model.Ticket.TicketNumber}")>
-                <table class="table-responsive table-striped">
-                    <tr>
-                        <th>Ticket</th>
-                        <th>Status</th>
-                        <th>Customer</th>
-                        <th>Check-In Date</th>
-                        <th>Last Serviced</th>
-                        <th>Needs Backup</th>
-                        <th>Notes</th>
-                    </tr>
-                    <tr>
-                        <td>@Model.Ticket.TicketNumber</td>
-                        <td>@Model.Ticket.TicketStatus.ToString()</td>
-                        <td>@Model.Customer.LastName</td>
-                        <td>@Model.Ticket.CheckedIn.ToShortDateString()</td>
-                        <td>@Model.Log.Logged.ToShortDateString()</td>
-                        <td>@Model.Ticket.NeedsBackup.ToString()</td>
-                        <td>@Model.Log.Notes.ToString()</td>
-                    </tr>
-                </table>
-            </a>
-        </div>
-        <div id='@string.Format($"collapse{Model.Ticket.TicketNumber}")' class="panel-collapse collapse table-bordered">
-            @if (Model.ServiceLogs.Count() > 0)
-            {
-
-
-                <div style="border:2px solid black">
-                    <span style="width:100%" class="glyphicon glyphicon-hdd alert alert-info"> <strong>Service Logs</strong></span>
-                    @foreach (var log in Model.ServiceLogs)
-                    {
-                        <table class="table-responsive">
-                            <tr>
-                                <th>Technician</th>
-                                <th>Time Service Performed</th>
-                            </tr>
-                            <tr>
-                                <td>@log.UserId</td>
-                                <td>@log.Logged</td>
-                            </tr>
-                        </table>
-
-                        <div class="panel-body table-bordered">@log.Notes</div>
-
-
-                    }
-                </div>
-            }
-            @if (Model.ContactLogs.Count() > 0)
-            {
-                <div style="border:2px solid black">
-                    <span style="width:100%" class="glyphicon glyphicon-earphone alert alert-info"> <strong>Contact Logs</strong></span>
-
-                    @foreach (var log in Model.ContactLogs)
-                    {
-                        <table class="table-responsive">
-                            <tr>
-                                <th>Technician</th>
-                                <th>Contact Date</th>
-                                <th>Contact Method</th>
-                            </tr>
-                            <tr>
-                                <td>@log.UserId</td>
-                                <td>@log.Logged</td>
-                                <td>@log.ContactMethod</td>
-                            </tr>
-                        </table>
-
-                        <div class="panel-body table-bordered">@log.Notes</div>
-
-
-                    }
-                </div>
-                }
-                <div class="btn-group">
-                    <a class="btn btn-primary" asp-controller="Log" asp-action="Service" asp-route-ticketId="@Model.Ticket.Id">Log Service</a>
-                    <a class="btn btn-success" asp-controller="Log" asp-action="Contact" asp-route-ticketId="@Model.Ticket.Id">Log Contact</a>
-                    <a class="btn btn-info" asp-controller="Customer" asp-action="Details" asp-route-id="@Model.Customer.Id">Customer Details</a>
-                    <a class="btn btn-warning" asp-controller="Device" asp-action="Details" asp-route-deviceId="@Model.Ticket.DeviceId">Device Details</a>
-                </div>
-
-
-
-            </div>
-    </div>
-</div>
-
-
+<tr>
+    <td scope="row">@Model.Ticket.TicketNumber</td>
+    <td>@EnumHelper.GetDisplayName(Model.Ticket.TicketStatus)</td>
+    <td>@Model.Customer.LastName</td>
+    <td>@Model.Ticket.CheckedIn.ToShortDateString()</td>
+    <td>@Model.Log.Logged.ToShortDateString()</td>
+    <td>
+        @if (Model.Ticket.NeedsBackup)
+        {
+            <i class="fas fa-check"></i>
+        }
+    </td>
+    <td>@Model.Log.Notes.ToString()</td>
+</tr>

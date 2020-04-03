@@ -1,27 +1,30 @@
 ﻿@model IEnumerable<TicketViewModel>
 @{ ViewBag.Title = "Ticket Home";}
-<div class="col-md-12 topFormPanel">
-    <h2>@ViewBag.Title</h2>
-    </div>
+<h2>@ViewBag.Title</h2>
+<form asp-action="FilterByStatus" method="post">
+    <select onchange="this.form.submit()" name="TicketStatus" asp-items="Html.GetEnumSelectList<TicketStatus>()">
+        <option disabled selected>Filter By Status</option>
 
+    </select>
+</form>
+<form asp-action="FilterByDate" method="post">
+    <select onchange="this.form.submit()" name="DateFilter" asp-items="Html.GetEnumSelectList<DateFilter>()">
+        <option disabled selected>Filter By Date</option>
 
-<div class="col-md-12 bottomFormPanel">
-    <form asp-action="FilterByStatus" method="post" class="btn-group">
-        <select onchange="this.form.submit()" name="TicketStatus" asp-items="Html.GetEnumSelectList<TicketStatus>()">
-            <option disabled selected>Filter By Status</option>
-            
-        </select>
-    </form>
-    <form asp-action="FilterByDate" method="post" class="btn-group">
-        <select onchange="this.form.submit()" name="DateFilter" asp-items="Html.GetEnumSelectList<DateFilter>()">
-            <option disabled selected>Filter By Date</option>
-            
-        </select>
-    </form>
-
-    @foreach (var ticketView in Model)
+    </select>
+</form>
+<table class="table table-hover table-responsive">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Ticket.TicketNumber)</th>
+        <th>@Html.DisplayNameFor(model => model.Ticket.TicketStatus)</th>
+        <th>@Html.DisplayNameFor(model => model.Ticket.Device.Customer)</th>
+        <th>@Html.DisplayNameFor(model => model.Ticket.CheckedIn)</th>
+        <th>@Html.DisplayNameFor(model => model.Log.Logged)</th>
+        <th>@Html.DisplayNameFor(model => model.Ticket.NeedsBackup)</th>
+        <th>@Html.DisplayNameFor(model => model.Log.Notes)</th>
+    </tr>
+    @foreach (var ticket in Model)
     {
-
-        @await Html.PartialAsync("_TicketTableRow", ticketView)
+        @await Html.PartialAsync("_TicketTableRow", ticket)
     }
-</div>
+</table>
