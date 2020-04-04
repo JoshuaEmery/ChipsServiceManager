@@ -1,13 +1,22 @@
 ﻿@model IEnumerable<CustomerViewModel>
-
-<div class="col-md-12 topFormPanel">
-    <h2>All Customers</h2>
-</div>
-<div class="col-md-12 bottomFormPanel">
-    @foreach (var customer in Model)
-    {
-        @await Html.PartialAsync("_Search", customer)
-    }
-</div>
+<h2>Customers</h2>
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.FullName)</th>
+            <th>@Html.DisplayNameFor(model => model.StudentId)</th>
+            <th>@Html.DisplayNameFor(model => model.Phone)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.ContactPref)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            @await Html.PartialAsync("_CustomerTableRow", customer)
+        }
+    </tbody>
+</table>
 
 

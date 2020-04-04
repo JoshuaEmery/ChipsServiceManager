@@ -4,7 +4,6 @@
         @if (Model.Ticket != null)
         {
             @Model.Ticket.TicketNumber;
-            <a class="btn btn-sm btn-outline-primary" asp-controller="Ticket" asp-action="TicketsByDeviceId" asp-route-deviceId="@Model.Id">Open</a>
         }
         else
         {
@@ -30,5 +29,8 @@
         {
             <i class="fas fa-check"></i>
         }
+    </td>
+    <td>
+        <a class="btn btn-sm btn-outline-primary" asp-controller="Ticket" asp-action="TicketsByDeviceId" asp-route-deviceId="@Model.Id">Open Ticket</a>
     </td>
 </tr>

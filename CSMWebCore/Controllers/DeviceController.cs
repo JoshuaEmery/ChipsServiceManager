@@ -262,10 +262,10 @@ namespace CSMWebCore.Controllers
         //Device/DevicesByCustId
         //Method that gets all devices owned by a given customer
         [HttpGet]
-        public IActionResult DevicesByCustId(int customerId)
+        public IActionResult DevicesByCustId(int id)
         {
             //check to see if customer exists
-            var cust = _customers.Get(customerId);
+            var cust = _customers.Get(id);
             if (cust == null)
             {
                 return View();
@@ -273,7 +273,7 @@ namespace CSMWebCore.Controllers
             //ViewBag used to display Customer Name
             ViewBag.Customer = cust;
             //create a IEnumerable of DeviceViewModel by customer ID
-            var model = _devices.GetAllByCustId(customerId).Select(device => new DeviceViewModel
+            var model = _devices.GetAllByCustId(id).Select(device => new DeviceViewModel
             {
                 Id = device.Id,
                 Customer = device.Customer,

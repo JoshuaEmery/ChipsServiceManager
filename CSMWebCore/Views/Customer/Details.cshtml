@@ -1,6 +1,7 @@
 ﻿@model CustomerViewModel
 @{ ViewBag.Title = Model.FullName;}
 <h2>@ViewBag.Title</h2>
+<p class="alert alert-danger">This view is no longer needed, dummy!</p>
 <form asp-action="CreateByCustId" method="get">
     <div asp-validation-summary="All"></div>
     <table class="table">
@@ -27,8 +28,8 @@
     </table>
     <input asp-for="Id" type="hidden" />
     <div class="btn-group">
-        <a class="btn btn-primary" asp-controller="Device" asp-action="CreateByCustId" asp-route-customerId="@Model.Id">Create New Device for this Customer</a>
-        <a class="btn btn-success" asp-controller="Device" asp-action="DevicesByCustId" asp-route-customerId="@Model.Id">Show all Devices owned by this Customer</a>
-        <input class="btn btn-warning" asp-controller="Customer" asp-action="Edit" asp-route-customerId="@Model.Id" type="submit" value="Edit this customer" />
+        <a class="btn btn-primary" asp-controller="Device" asp-action="CreateByCustId" asp-route-id="@Model.Id">Create New Device for this Customer</a>
+        <a class="btn btn-success" asp-controller="Device" asp-action="DevicesByCustId" asp-route-id="@Model.Id">Show all Devices owned by this Customer</a>
+        <a class="btn btn-warning" asp-controller="Customer" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
     </div>
 </form>

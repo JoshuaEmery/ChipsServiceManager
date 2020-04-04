@@ -1,0 +1,15 @@
+﻿@model CustomerViewModel
+<tr>
+    <td role="row">@Model.FullName</td>
+    <td>@Model.StudentId</td>
+    <td>@Model.Phone</td>
+    <td>@Model.Email</td>
+    <td>@Model.ContactPref.ToString()</td>
+    <td>
+        <div class="btn-group-sm">
+            <a class="btn btn-primary" asp-controller="Customer" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn btn-secondary" asp-controller="Device" asp-action="DevicesByCustId" asp-route-id="@Model.Id">Devices</a>
+        </div>
+        
+    </td>
+</tr>
