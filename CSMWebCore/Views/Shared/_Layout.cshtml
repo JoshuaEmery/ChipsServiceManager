@@ -1,26 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CHIPS Service Manager</title>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"
-          asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css"
-          asp-fallback-test-class="bootstrap-nocdn" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
-          integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous"
-          asp-fallback-href="~/lib/fontawesome/css/all.min.css" 
-          asp-fallback-test-class="fontawesome-nocdn" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    @await Html.PartialAsync("_LayoutHeadPartial")
 </head>
 <body>
     <nav class="navbar navbar-dark navbar-expand-lg fixed-top">
         <div class="container d-flex">
             <a class="navbar-brand py-0" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/ChipsLogoColor.png" /></a>
             <div class="d-flex flex-row order-lg-1">
-                @await Html.PartialAsync("_LoginPartial")
+                @await Html.PartialAsync("_AccountOptionsPartial")
                 <button class="navbar-toggler order-2" type="button" data-toggle="collapse" data-target="#mainMenuCollapse" aria-controls="mainMenuCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -100,19 +88,7 @@
         <hr />
         <p class="text-center">&copy; @DateTime.Now.Year CHIPS</p>
     </footer>
+    @await Html.PartialAsync("_LayoutScriptsPartial")
     @RenderSection("Scripts", required: false)
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-            asp-fallback-src="~/lib/jquery/jquery.min.js"
-            asp-fallback-test="window.jQuery"
-            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-            crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
-            asp-fallback-src="~/lib/bootstrap/js/bootstrap.bundle.min.js"
-            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-            integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm"
-            crossorigin="anonymous">
-    </script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
