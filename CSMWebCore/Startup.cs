@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CSMWebCore.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.IO;
 using CSMWebCore.Services;
 using CSMWebCore.Entities;
@@ -24,7 +24,7 @@ namespace CSMWebCore
     {
         public IConfiguration Configuration { get; set; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -51,19 +51,6 @@ namespace CSMWebCore
             services.AddDbContext<ChipsDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-
-            //This line of code routes my default to the login page
-            //services.AddMvc().AddRazorPagesOptions(options => {
-            //    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
-            //}).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
-            services.AddDefaultIdentity<ChipsUser>().AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<ChipsDbContext>();
-            //This line allows to check the User object inside of a view 
-            services.AddScoped<IUserClaimsPrincipalFactory<ChipsUser>, UserClaimsPrincipalFactory<ChipsUser, IdentityRole>>();
-
             //this adds the service to access Customer data through the SqlCustomerData object which implements the
             //ICusomerData Interface.  Add scoped must be used in order for services to work with EF
             services.AddScoped<ICustomerData, SqlCustomerData>();
@@ -75,13 +62,27 @@ namespace CSMWebCore
             services.AddScoped<IConsultationData, SqlConsultationData>();
             services.AddScoped<IServicePriceData, SqlServicePriceData>();
             services.AddScoped<IReportsService, ReportsService>();
+            //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
+            services.AddDefaultIdentity<ChipsUser>().AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ChipsDbContext>();
+            //This line allows to check the User object inside of a view 
+            services.AddScoped<IUserClaimsPrincipalFactory<ChipsUser>, UserClaimsPrincipalFactory<ChipsUser, IdentityRole>>();
 
+            //This line of code routes my default to the login page
+            //services.AddMvc().AddRazorPagesOptions(options => {
+            //    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
+            //}).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddRazorPages();
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
+
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -101,11 +102,16 @@ namespace CSMWebCore
 
             app.UseAuthentication();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+                endpoints.MapDefaultControllerRoute();
+                // method above acccomlishes same as below for .NET 3.1
+                //.MapRoute(
+                //    name: "default",
+                //    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
