@@ -17,7 +17,6 @@ namespace CSMWebCore.Controllers
         
         public IActionResult Index()
         {
-            
             return View();
         }
     }

@@ -51,6 +51,19 @@ namespace CSMWebCore
             services.AddDbContext<ChipsDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            //This line of code routes my default to the login page
+            //services.AddMvc().AddRazorPagesOptions(options => {
+            //    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
+            //}).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
+            services.AddDefaultIdentity<ChipsUser>().AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ChipsDbContext>();
+            //This line allows to check the User object inside of a view 
+            services.AddScoped<IUserClaimsPrincipalFactory<ChipsUser>, UserClaimsPrincipalFactory<ChipsUser, IdentityRole>>();
+
             //this adds the service to access Customer data through the SqlCustomerData object which implements the
             //ICusomerData Interface.  Add scoped must be used in order for services to work with EF
             services.AddScoped<ICustomerData, SqlCustomerData>();
@@ -62,23 +75,9 @@ namespace CSMWebCore
             services.AddScoped<IConsultationData, SqlConsultationData>();
             services.AddScoped<IServicePriceData, SqlServicePriceData>();
             services.AddScoped<IReportsService, ReportsService>();
-            //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
-            services.AddDefaultIdentity<ChipsUser>().AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<ChipsDbContext>();
-            //This line allows to check the User object inside of a view 
-            services.AddScoped<IUserClaimsPrincipalFactory<ChipsUser>, UserClaimsPrincipalFactory<ChipsUser, IdentityRole>>();
 
-            //This line of code routes my default to the login page
-            //services.AddMvc().AddRazorPagesOptions(options => {
-            //    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
-            //}).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
-
-
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

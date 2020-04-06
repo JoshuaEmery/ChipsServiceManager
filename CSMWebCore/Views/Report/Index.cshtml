@@ -1,0 +1,58 @@
+﻿@inject IReportsService rpt
+
+@{ ViewBag.Title = "Report";}
+<h2>@ViewBag.Title - @DateTime.Today.ToShortDateString()</h2>
+<div class="card mb-3">
+    <h5 class="card-header">Ticket Statuses</h5>
+    <div class="card-body d-flex flex-md-row flex-column text-center">
+        <div class="flex-row flex-md-column flex-grow-1 border-right">
+            <span>Open Tickets</span>
+            <h2 class="mb-md-2 mb-4 mt-2">@rpt.TotalActiveTickets()</h2>
+        </div>
+        @for (int i = 0; i < 4; i++)
+        {
+            // gray out status if 0 tickets
+            string statusName = @EnumHelper.GetDisplayName((TicketStatus)i);
+            int count = rpt.TotalActiveTickets((TicketStatus)i);
+            string grayClass = "";
+            if (count == 0) grayClass = "text-black-50";
+            <div class="flex-row flex-md-column flex-grow-1 @grayClass" style="flex:1">
+                <span>@statusName</span>
+                <h2 class="mb-md-2 mb-4 mt-2">@count</h2>
+            </div>
+        }
+    </div>
+</div>
+    <div class="card mb-3">
+        <h5 class="card-header">History</h5>
+            <table class="card-body table table-responsive">
+                <tr>
+                    <th></th>
+                    <th>Today</th>
+                    <th>7d</th>
+                    <th>3d</th>
+                    <th>9d</th>
+                    <th>1yr</th>
+                </tr>
+                <tr class="text-right">
+                    <td>Tickets Closed</td>
+                    @{// TODO snap timespans to whole days by constructing spans from start and end date
+                    }
+                    <td>@rpt.TotalCompletedTickets(new TimeSpan(1, 0, 0, 0))</td>
+                    <td>@rpt.TotalCompletedTickets(new TimeSpan(7, 0, 0, 0))</td>
+                    <td>@rpt.TotalCompletedTickets(new TimeSpan(30, 0, 0, 0))</td>
+                    <td>@rpt.TotalCompletedTickets(new TimeSpan(90, 0, 0, 0))</td>
+                    <td>@rpt.TotalCompletedTickets(new TimeSpan(365, 0, 0, 0))</td>
+                </tr>
+                <tr class="text-right">
+                    <td>Consultations</td>
+                    @{// TODO snap timespans to whole days by constructing spans from start and end date
+                    }
+                    <td>@rpt.GetConsultations(new TimeSpan(1, 0, 0, 0))</td>
+                    <td>@rpt.GetConsultations(new TimeSpan(7, 0, 0, 0))</td>
+                    <td>@rpt.GetConsultations(new TimeSpan(30, 0, 0, 0))</td>
+                    <td>@rpt.GetConsultations(new TimeSpan(90, 0, 0, 0))</td>
+                    <td>@rpt.GetConsultations(new TimeSpan(365, 0, 0, 0))</td>
+                </tr>
+            </table>
+    </div>

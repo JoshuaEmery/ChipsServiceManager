@@ -83,6 +83,7 @@ namespace CSMWebCore.Services
         //method that gets all tickets that have been completed within a timespan        
         public IEnumerable<Ticket> GetCompletedTickets(TimeSpan span)
         {
+            // TODO make overflow for method which takes start/end datetime params
             DateTime date = (DateTime.Now - span);
             return _db.Tickets.Where(x => x.Finished > date);
         }
