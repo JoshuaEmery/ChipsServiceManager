@@ -169,15 +169,15 @@ namespace CSMWebCore.Controllers
         //Create a new Device, in order to create a new device a customer must
         //first be selected
         [HttpGet]
-        public IActionResult CreateByCustId(int id)
+        public IActionResult CreateByCustId(int customerId)
         {
             //The DeviceEditViewModel stores a Ticket, a Customer and TicketID and CustomerID
             //On get Customer is populated, on Post Ticket is populated, the customer will
             //have to be retrieved again if needed on post.
             DeviceEditViewModel model = new DeviceEditViewModel();
             model.Ticket = new Ticket();
-            model.CustomerId = id;
-            model.Customer = _customers.Get(id);
+            model.CustomerId = customerId;
+            model.Customer = _customers.Get(customerId);
             //Get the next ticketnumber, this check is run again after post
             model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
             return View(model);
