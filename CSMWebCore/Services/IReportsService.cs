@@ -151,5 +151,13 @@ namespace CSMWebCore.Services
         /// <param name="endDate"></param>
         /// <returns></returns>
         decimal GetConsultSavingsOverTimePeriod(DateTime startDate, DateTime endDate);
+        /// <summary>
+        /// Gets the average handle time (from checkedin to finished) of tickets completed within
+        /// the given timeSpan.  Returns TimeSpan.Zero if no tickets were completed in the 
+        /// TimeSpan.
+        /// </summary>
+        /// <param name="span"></param>
+        /// <returns></returns>
+        TimeSpan GetAverageHandleTime(TimeSpan span);
     }
 }

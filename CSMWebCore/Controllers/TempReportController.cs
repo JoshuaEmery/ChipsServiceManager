@@ -103,6 +103,9 @@ namespace CSMWebCore.Controllers
             output += GetConsultSavingsOverTimePeriod(new TimeSpan(90, 0, 0, 0));
             output += GetConsultSavingsOverTimePeriod();
             output += GetConsultSavingsOverTimePeriod(new DateTime(2020, 01, 01), DateTime.Now);
+            output += GetAverageHandleTime(new TimeSpan(7, 0, 0, 0));
+            output += GetAverageHandleTime(new TimeSpan(30, 0, 0, 0));
+            output += GetAverageHandleTime(new TimeSpan(90, 0, 0, 0));
             return Content(output);
         }
         private string TotalActiveTickets(TicketStatus? status = null)
@@ -276,6 +279,20 @@ namespace CSMWebCore.Controllers
             total += _servicePrices.GetPriceOfServiceType(LogType.Diagnostic) * consults.Count();
             output += $"The total consultation savings between {startDate} and {endDate}: {total:C2}\n";
             return output;
+        }
+        private string GetAverageHandleTime(TimeSpan span)
+        {
+            IEnumerable<Ticket> tickets = _tickets.GetCompletedTickets(span);
+            if(tickets.Count() == 0)
+            {
+                return $"The average handle time over the last {span.TotalDays} - No Tickets Completed";
+            }
+            TimeSpan handleTime = new TimeSpan();
+            foreach (var ticket in tickets)
+            {
+                handleTime += (ticket.Finished - ticket.CheckedIn);
+            }
+            return $"The average handle time over the last {span.TotalDays} - {handleTime.TotalDays / tickets.Count()}\n";
         }
     }
 }

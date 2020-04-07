@@ -196,5 +196,20 @@ namespace CSMWebCore.Services
             total += _servicePrices.GetPriceOfServiceType(LogType.Diagnostic) * consults.Count();
             return total;
         }
+
+        public TimeSpan GetAverageHandleTime(TimeSpan span)
+        {
+            IEnumerable<Ticket> tickets = _tickets.GetCompletedTickets(span);
+            if (tickets.Count() == 0)
+            {
+                return TimeSpan.Zero;
+            }
+            TimeSpan handleTime = new TimeSpan();
+            foreach (var ticket in tickets)
+            {
+                handleTime += (ticket.Finished - ticket.CheckedIn);
+            }
+            return handleTime / tickets.Count();
+        }
     }
 }
