@@ -112,7 +112,7 @@ namespace CSMWebCore.Controllers
         {
 
             if (!status.HasValue)
-                return $"Total Active Tickets: {_tickets.GetAllActiveTickets().Count()}\n";
+                return $"Total Active Tickets: {_tickets.GetOpen().Count()}\n";
             else
                 return $"{status.ToString()}: {_tickets.GetByStatus(status.Value).Count()}\n";
         }
@@ -120,13 +120,13 @@ namespace CSMWebCore.Controllers
         private string TotalCompletedTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return $"Tickets Completed all time: {_tickets.GetAllCompletedTickets().Count()}\n";
+                return $"Tickets Completed all time: {_tickets.GetClosed().Count()}\n";
             else
-                return $"Tickets Completed in the last {span.Value.TotalDays} days {_tickets.GetCompletedTickets(span.Value).Count()}\n";            
+                return $"Tickets Completed in the last {span.Value.TotalDays} days {_tickets.GetClosed(span.Value).Count()}\n";            
         }
         private string TotalCompletedTickets(DateTime startDate, DateTime endDate)
         {
-            return $"Tickets Completed between {startDate} and {endDate} {_tickets.GetCompletedTickets(startDate, endDate).Count()}\n";
+            return $"Tickets Completed between {startDate} and {endDate} {_tickets.GetClosed(startDate, endDate).Count()}\n";
         }
         private string TotalCheckedInTickets(TimeSpan? span = null)
         {
@@ -202,7 +202,7 @@ namespace CSMWebCore.Controllers
         private string PrintProgressReport(int ticketId)
         {
             string output = "";
-            TicketProgressReport tpr = _ticketsHistory.GetTicketProgressReport(_tickets.Get(ticketId));
+            TicketProgressReport tpr = _ticketsHistory.GetTicketProgressReport(_tickets.GetById(ticketId));
             output += $"Ticket number {tpr.TicketId} time spent in each category:\n";            
             foreach (var item in tpr.TicketProgress)
             {
@@ -215,7 +215,7 @@ namespace CSMWebCore.Controllers
         {
             string output = "";
             output += $"The total cost for ticketId: " +
-                $"{_tickets.Get(ticketId).TicketNumber} " +
+                $"{_tickets.GetById(ticketId).TicketNumber} " +
                 $"{_servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticketId))}\n";
             return output;
         }
@@ -282,7 +282,7 @@ namespace CSMWebCore.Controllers
         }
         private string GetAverageHandleTime(TimeSpan span)
         {
-            IEnumerable<Ticket> tickets = _tickets.GetCompletedTickets(span);
+            IEnumerable<Ticket> tickets = _tickets.GetClosed(span);
             if(tickets.Count() == 0)
             {
                 return $"The average handle time over the last {span.TotalDays} - No Tickets Completed";
@@ -290,7 +290,7 @@ namespace CSMWebCore.Controllers
             TimeSpan handleTime = new TimeSpan();
             foreach (var ticket in tickets)
             {
-                handleTime += (ticket.Finished - ticket.CheckedIn);
+                handleTime += (ticket.FinishDate - ticket.CheckInDate);
             }
             return $"The average handle time over the last {span.TotalDays} - {handleTime.TotalDays / tickets.Count()}\n";
         }

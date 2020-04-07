@@ -1,0 +1,40 @@
+﻿@model IEnumerable<TicketViewModel>
+
+<table class="table table-hover table-responsive">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Ticket.TicketNumber)</th>
+        <th>@Html.DisplayNameFor(model => model.Ticket.TicketStatus)</th>
+        <th>@Html.DisplayNameFor(model => model.Ticket.Device.Customer)</th>
+        <th>@Html.DisplayNameFor(model => model.Ticket.CheckInDate)</th>
+        <th>@Html.DisplayNameFor(model => model.Log.Logged)</th>
+        <th>@Html.DisplayNameFor(model => model.Ticket.NeedsBackup)</th>
+        <th>@Html.DisplayNameFor(model => model.Log.Notes)</th>
+        <th></th>
+    </tr>
+    @foreach (var ticket in Model)
+    {
+        <tr>
+            <td scope="row">@ticket.Ticket.TicketNumber</td>
+            <td>@EnumHelper.GetDisplayName(ticket.Ticket.TicketStatus)</td>
+            <td>@ticket.Customer.LastName</td>
+            <td>@ticket.Ticket.CheckInDate.ToShortDateString()</td>
+            <td>@ticket.Log.Logged.ToShortDateString()</td>
+            <td>
+                @if (ticket.Ticket.NeedsBackup)
+                {
+                    <i class="fas fa-check"></i>
+                }
+            </td>
+            <td>@ticket.Log.Notes.ToString()</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-outline-primary" asp-controller="Log" asp-action="Service" asp-route-ticketId="@ticket.Ticket.Id">Log Service</a>
+                    <a class="btn btn-sm btn-outline-primary" asp-controller="Log" asp-action="Contact" asp-route-ticketId="@ticket.Ticket.Id">Log Contact</a>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Customer" asp-action="Details" asp-route-id="@ticket.Customer.Id">Customer Details</a>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Device" asp-action="Details" asp-route-deviceId="@ticket.Ticket.DeviceId">Device Details</a>
+                </div>
+            </td>
+        </tr>
+
+    }
+</table>

@@ -37,7 +37,7 @@ namespace CSMWebCore.Services
         {
 
             if (!status.HasValue)
-                return _tickets.GetAllActiveTickets().Count();
+                return _tickets.GetOpen().Count();
             else
                 return _tickets.GetByStatus(status.Value).Count();
         }
@@ -45,14 +45,14 @@ namespace CSMWebCore.Services
         public int TotalCompletedTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return _tickets.GetAllCompletedTickets().Count();
+                return _tickets.GetClosed().Count();
             else
-                return _tickets.GetCompletedTickets(span.Value).Count();
+                return _tickets.GetClosed(span.Value).Count();
         }
 
         public int TotalCompletedTickets(DateTime startDate, DateTime endDate)
         {
-            return _tickets.GetCompletedTickets(startDate, endDate).Count();
+            return _tickets.GetClosed(startDate, endDate).Count();
         }
 
         public int TotalCheckedInTickets(TimeSpan? span = null)
@@ -135,7 +135,7 @@ namespace CSMWebCore.Services
 
         public TicketProgressReport PrintProgressReport(int ticketId)
         {
-            return _ticketsHistory.GetTicketProgressReport(_tickets.Get(ticketId));
+            return _ticketsHistory.GetTicketProgressReport(_tickets.GetById(ticketId));
         }
 
         public decimal GetSavingsByTicket(int ticketId)
@@ -199,7 +199,7 @@ namespace CSMWebCore.Services
 
         public TimeSpan GetAverageHandleTime(TimeSpan span)
         {
-            IEnumerable<Ticket> tickets = _tickets.GetCompletedTickets(span);
+            IEnumerable<Ticket> tickets = _tickets.GetClosed(span);
             if (tickets.Count() == 0)
             {
                 return TimeSpan.Zero;
@@ -207,7 +207,7 @@ namespace CSMWebCore.Services
             TimeSpan handleTime = new TimeSpan();
             foreach (var ticket in tickets)
             {
-                handleTime += (ticket.Finished - ticket.CheckedIn);
+                handleTime += (ticket.FinishDate - ticket.CheckInDate);
             }
             return handleTime / tickets.Count();
         }

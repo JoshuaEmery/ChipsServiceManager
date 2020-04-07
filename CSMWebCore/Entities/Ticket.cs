@@ -18,9 +18,9 @@ namespace CSMWebCore.Entities
         public TicketStatus TicketStatus { get; set; }
         [Display(Name = "Data Backup")]
         public bool NeedsBackup { get; set; }
-        public DateTime CheckedIn { get; set; }
-        public DateTime Finished { get; set; }
-        public DateTime CheckedOut { get; set; }
+        public DateTime CheckInDate { get; set; }
+        public DateTime FinishDate { get; set; }
+        public DateTime CheckOutDate { get; set; }
         public string CheckInUserId { get; set; }
         public string CheckOutUserId { get; set; }
     }

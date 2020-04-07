@@ -111,7 +111,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Service(int ticketId)
         {
             //get the ticket Object
-            var ticket = _tickets.Get(ticketId);
+            var ticket = _tickets.GetById(ticketId);
             //create LogEditViewModel
             var model = new LogEditViewModel
             {
@@ -130,7 +130,7 @@ namespace CSMWebCore.Controllers
                 return View(model);
             }
                       
-            var ticket = _tickets.Get(model.TicketId);
+            var ticket = _tickets.GetById(model.TicketId);
             //If this is the first log for a new ticket update the ticket status
             if (model.TicketStatus == TicketStatus.New)
             {
@@ -161,7 +161,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Contact(int ticketId)
         {
             //get th ticket and the customer associated with that ticket
-            var ticket = _tickets.Get(ticketId);
+            var ticket = _tickets.GetById(ticketId);
             var customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId);
             //create LogEditViewModel
             var model = new LogEditViewModel
@@ -180,7 +180,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Contact(LogEditViewModel model)
         {
             //get the ticket and check for valid
-            Ticket ticket = _tickets.Get(model.TicketId);
+            Ticket ticket = _tickets.GetById(model.TicketId);
             if (!ModelState.IsValid || ticket == null)
             {
                 return View(model);
@@ -208,11 +208,11 @@ namespace CSMWebCore.Controllers
             ticket.TicketStatus = model.TicketStatus;
             if (model.TicketStatus == TicketStatus.PendingPickup)
             {
-                ticket.Finished = DateTime.Now;
+                ticket.FinishDate = DateTime.Now;
             }
             else if (model.TicketStatus == TicketStatus.Done)
             {
-                ticket.CheckedOut = DateTime.Now;
+                ticket.CheckOutDate = DateTime.Now;
                 ticket.CheckOutUserId = User.FindFirst(ClaimTypes.Name).Value.ToString();
             }
             //update tickets table

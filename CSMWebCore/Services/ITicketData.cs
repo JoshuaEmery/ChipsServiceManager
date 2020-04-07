@@ -10,24 +10,23 @@ namespace CSMWebCore.Services
     public interface ITicketData
     {
         IEnumerable<Ticket> GetAll();
-        Ticket Get(int id);
+        Ticket GetById(int id);
         void Add(Ticket ticket);
         int Commit();
         IEnumerable<Ticket> GetByStatus(TicketStatus status);
-        int CurrentTicketNumber();
+        int GetLatestTicketNum();
         IEnumerable<Ticket> GetAllByDevice(int deviceId);
-        IEnumerable<Ticket> GetAllActiveTickets();
+        IEnumerable<Ticket> GetOpen();
         IEnumerable<Ticket> Search(string searchValue);
-        int CountByStatus(TicketStatus status);
         IEnumerable<Ticket> GetCheckedInTickets(DateTime startDate, DateTime endDate);
         IEnumerable<Ticket> GetCheckedInTickets(TimeSpan span);
         IEnumerable<Ticket> GetCheckedOutTickets(DateTime startDate, DateTime endDate);
         IEnumerable<Ticket> GetCheckedOutTickets(TimeSpan span);
-        IEnumerable<Ticket> GetCompletedTickets(DateTime startDate, DateTime endDate);
-        IEnumerable<Ticket> GetCompletedTickets(TimeSpan span);
+        IEnumerable<Ticket> GetClosed(DateTime startDate, DateTime endDate);
+        IEnumerable<Ticket> GetClosed(TimeSpan span);
 
-        IEnumerable<Ticket> GetAllCompletedTickets();
-        Ticket GetRecentByDevice(int deviceId);
+        IEnumerable<Ticket> GetClosed();
+        Ticket GetLatestForDevice(int deviceId);
 
 
     }

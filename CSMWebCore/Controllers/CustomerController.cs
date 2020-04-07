@@ -169,7 +169,7 @@ namespace CSMWebCore.Controllers
         {
             //the model will be a list of CustomerActiveViewModel that is created from a list
             //of Tickets that are active
-            var model = _tickets.GetAllActiveTickets().Select(ticket => new CustomerActiveViewModel
+            var model = _tickets.GetOpen().Select(ticket => new CustomerActiveViewModel
             {
                 //Retrieve each Customer by getting the CustomerID stored in the Device that is
                 //stored in the Ticket

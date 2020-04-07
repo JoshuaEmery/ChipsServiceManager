@@ -42,7 +42,7 @@ namespace CSMWebCore.Controllers
             // create list
             List<DeviceViewModel> model = new List<DeviceViewModel>();
             //Get all active tickets
-            var activetickets = _tickets.GetAllActiveTickets();
+            var activetickets = _tickets.GetOpen();
             // sequence thru active tickets, add viewmodel for each device to list     
             foreach (var ticket in activetickets)
             {
@@ -179,7 +179,7 @@ namespace CSMWebCore.Controllers
             model.CustomerId = customerId;
             model.Customer = _customers.Get(customerId);
             //Get the next ticketnumber, this check is run again after post
-            model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
+            model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
             return View(model);
         }
         //Post for CreateuByCustId
@@ -215,14 +215,14 @@ namespace CSMWebCore.Controllers
             _devices.Add(device);
             _devices.Commit();
             //Check that the ticketNumber has not changed
-            model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
+            model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
             //Create a new ticket with the device ID as a foreign key from the newly saved device object
             Ticket ticket = new Ticket
             {                
                 DeviceId = device.Id,
                 //Gets a string representation of the ChipsUser currently logged in
                 CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                CheckedIn = DateTime.Now,
+                CheckInDate = DateTime.Now,
                 NeedsBackup = model.Ticket.NeedsBackup,
                 TicketStatus = TicketStatus.New,
                 TicketNumber = model.Ticket.TicketNumber
@@ -328,7 +328,7 @@ namespace CSMWebCore.Controllers
                 OperatingSystem = device.OperatingSystem,
                 Password = device.Password,
                 Serviced = device.Serviced,
-                Ticket = _tickets.GetRecentByDevice(device.Id)                
+                Ticket = _tickets.GetLatestForDevice(device.Id)                
 
             });
             return View("Index", model);
@@ -340,7 +340,7 @@ namespace CSMWebCore.Controllers
         {
             var model = new UpdateViewModel
             {
-                Ticket = _tickets.Get(ticketId),
+                Ticket = _tickets.GetById(ticketId),
                 Device = _devices.Get(deviceId),
                 Customer = _customers.Get(customerId),
                 Update = _updates.Get(updateId)

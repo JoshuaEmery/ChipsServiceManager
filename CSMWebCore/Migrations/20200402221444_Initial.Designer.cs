@@ -217,13 +217,13 @@ namespace CSMWebCore.Migrations
 
                     b.Property<string>("CheckOutUserId");
 
-                    b.Property<DateTime>("CheckedIn");
+                    b.Property<DateTime>("CheckInDate");
 
-                    b.Property<DateTime>("CheckedOut");
+                    b.Property<DateTime>("CheckOutDate");
 
                     b.Property<int>("DeviceId");
 
-                    b.Property<DateTime>("Finished");
+                    b.Property<DateTime>("FinishDate");
 
                     b.Property<bool>("NeedsBackup");
 
@@ -250,13 +250,13 @@ namespace CSMWebCore.Migrations
 
                     b.Property<string>("CheckOutUserId");
 
-                    b.Property<DateTime>("CheckedIn");
+                    b.Property<DateTime>("CheckInDate");
 
-                    b.Property<DateTime>("CheckedOut");
+                    b.Property<DateTime>("CheckOutDate");
 
                     b.Property<int>("DeviceId");
 
-                    b.Property<DateTime>("Finished");
+                    b.Property<DateTime>("FinishDate");
 
                     b.Property<bool>("NeedsBackup");
 

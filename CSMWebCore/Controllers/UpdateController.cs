@@ -35,7 +35,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Index(string id)
         {
             var guid = new Guid(id);
-            var ticket = _tickets.Get(_updates.GetTicketId(guid));
+            var ticket = _tickets.GetById(_updates.GetTicketId(guid));
             var model = new UpdateViewModel
             {
                 Ticket = ticket,

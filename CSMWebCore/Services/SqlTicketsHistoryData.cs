@@ -27,12 +27,12 @@ namespace CSMWebCore.Services
             TicketHistory ticketHistory = new TicketHistory
             {
                 TicketId = ticket.Id,
-                CheckedIn = ticket.CheckedIn,
-                CheckedOut = ticket.CheckedOut,
+                CheckedIn = ticket.CheckInDate,
+                CheckedOut = ticket.CheckOutDate,
                 CheckInUserId = ticket.CheckInUserId,
                 CheckOutUserId = ticket.CheckOutUserId,
                 DeviceId = ticket.DeviceId,
-                Finished = ticket.Finished,
+                Finished = ticket.FinishDate,
                 NeedsBackup = ticket.NeedsBackup,
                 TicketNumber = ticket.TicketNumber,
                 TicketStatus = ticket.TicketStatus,
@@ -58,7 +58,7 @@ namespace CSMWebCore.Services
             //the difference between today and checkin
             if (ticketHistories.Count == 0)
             {
-                ticketProgressReport.TicketProgress.Add(TicketStatus.New, DateTime.Now - ticket.CheckedIn);
+                ticketProgressReport.TicketProgress.Add(TicketStatus.New, DateTime.Now - ticket.CheckInDate);
                 return ticketProgressReport;
             }
             //for loop to iterate through tickethistories list

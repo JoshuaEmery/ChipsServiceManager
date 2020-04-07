@@ -12,34 +12,27 @@ namespace CSMWebCore.Services
     //Implementation of ITicketData
     public class SqlTicketData : ITicketData
     {
-        //get the db context and inject into the constructor
+        //db context and injection
         private ChipsDbContext _db;
         public SqlTicketData(ChipsDbContext db)
         {
             _db = db;
         }
-        //Add a ticket to the database
+
+        //track ticket entity for later saving to db
         public void Add(Ticket ticket)
         {
             _db.Add(ticket);
         }
-        //method that saves changes
-        public int Commit()
-        {
-            return _db.SaveChanges();
-        }
-        //method that takes a ticketstatus and returns all tickets of that status
-        public IEnumerable<Ticket> GetByStatus(TicketStatus status)
-        {
-            return _db.Tickets.Where(x => x.TicketStatus == status);
-        }
-        //method that takes a ticket status and returns the count of active tickets in that status
-        public int CountByStatus(TicketStatus status)
-        {
-            return _db.Tickets.Where(x => x.TicketStatus == status).Count();
-        }
-        //method that gets the current ticket number
-        public int CurrentTicketNumber()
+
+        //save to db (returns # of entries written)
+        public int Commit() => _db.SaveChanges();
+
+        //get all tickets of a given status
+        public IEnumerable<Ticket> GetByStatus(TicketStatus status) => _db.Tickets.Where(x => x.TicketStatus == status);
+
+        //get latest ticket number
+        public int GetLatestTicketNum()
         {            
             try
             {
@@ -51,68 +44,65 @@ namespace CSMWebCore.Services
             }
         }
         //get ticket by ID
-        public Ticket Get(int id)
-        {
-            return _db.Find<Ticket>(id);
-        }
+        public Ticket GetById(int id) => _db.Find<Ticket>(id);
+
         //get all tickets
-        public IEnumerable<Ticket> GetAll()
-        {
-            return _db.Tickets;
-        }
-        //get all active tickets
-        public IEnumerable<Ticket> GetAllActiveTickets()
-        {
-            return _db.Tickets.Where(x => x.TicketStatus != TicketStatus.Done);
-        }
+        public IEnumerable<Ticket> GetAll() => _db.Tickets;
+
+        //get all open tickets
+        public IEnumerable<Ticket> GetOpen() => _db.Tickets.Where(x => x.TicketStatus != TicketStatus.Done);
+
+        //get all closed tickets
+        public IEnumerable<Ticket> GetClosed() => GetByStatus(TicketStatus.Done);
+
         //get all tickets for a given device
-        public IEnumerable<Ticket> GetAllByDevice(int deviceId)
-        {
-            return _db.Tickets.Where(x => x.DeviceId == deviceId);
-        }
+        public IEnumerable<Ticket> GetAllByDevice(int deviceId) => _db.Tickets.Where(x => x.DeviceId == deviceId);
+
         //get most recent ticket for a device
-        public Ticket GetRecentByDevice(int deviceId)
-        {
-            return _db.Find<Ticket>(_db.Tickets.Where(x => x.DeviceId == deviceId).LastOrDefault().Id);
-        }
-        //get all completed tickets
-        public IEnumerable<Ticket> GetAllCompletedTickets()
-        {
-            return _db.Tickets.Where(x => x.TicketStatus == TicketStatus.Done);
-        }
+        public Ticket GetLatestForDevice(int deviceId) => _db.Find<Ticket>(_db.Tickets.Where(x => x.DeviceId == deviceId).LastOrDefault().Id);
+
         //method that gets all tickets that have been completed within a timespan        
-        public IEnumerable<Ticket> GetCompletedTickets(TimeSpan span)
+        //public IEnumerable<Ticket> GetClosed(TimeSpan span)
+        //{
+        //    DateTime date = (DateTime.Now - span);
+        //    return _db.Tickets.Where(x => x.FinishDate > date);
+        //}
+        // TODO overflow method that takes a span and "snaps" to days rather than a 
+
+        //get tickets closed within date range        
+        public IEnumerable<Ticket> GetClosed(DateTime startDate, DateTime endDate) => _db.Tickets.Where(x => x.FinishDate > startDate && x.FinishDate < endDate);
+
+        //get closed tickets 
+        public IEnumerable<Ticket> GetClosed(TimeSpan span)
         {
-            // TODO make overflow for method which takes start/end datetime params
-            DateTime date = (DateTime.Now - span);
-            return _db.Tickets.Where(x => x.Finished > date);
+            // get midnight tomorrow as end date
+            DateTime end = DateTime.Today.AddDays(1);
+            DateTime start = end.Subtract(span);
+            return GetClosed(start, end);
         }
-        //method that gets all tickets that have been completed between two dates        
-        public IEnumerable<Ticket> GetCompletedTickets(DateTime startDate, DateTime endDate)
-        {            
-            return _db.Tickets.Where(x => x.Finished > startDate && x.Finished < endDate);
-        }
-        //method that returns all tickets checked in within a timespan
+
+        
+        //get tickets checked in within a timespan
         public IEnumerable<Ticket> GetCheckedInTickets(TimeSpan span)
         {
             DateTime date = (DateTime.Now - span);
-            return _db.Tickets.Where(x => x.CheckedIn > date);
+            return _db.Tickets.Where(x => x.CheckInDate > date);
         }
-        //method that returns all tickets checked in between two dates
+        //get tickets checked in between two dates
         public IEnumerable<Ticket> GetCheckedInTickets(DateTime startDate, DateTime endDate)
         {
-            return _db.Tickets.Where(x => x.CheckedIn > startDate && x.CheckedIn < endDate);
+            return _db.Tickets.Where(x => x.CheckInDate > startDate && x.CheckInDate < endDate);
         }
-        //method that returns all tickets checked out within a timespan
+        //get tickets checked out within a timespan
         public IEnumerable<Ticket> GetCheckedOutTickets(TimeSpan span)
         {
             DateTime date = (DateTime.Now - span);
-            return _db.Tickets.Where(x => x.CheckedOut > date);
+            return _db.Tickets.Where(x => x.CheckOutDate > date);
         }
-        //method that returns all tickets checked out between two dates
+        //get tickets checked out between two dates
         public IEnumerable<Ticket> GetCheckedOutTickets(DateTime startDate, DateTime endDate)
         {
-            return _db.Tickets.Where(x => x.CheckedOut > startDate && x.CheckedOut < endDate);
+            return _db.Tickets.Where(x => x.CheckOutDate > startDate && x.CheckOutDate < endDate);
         }
 
         public IEnumerable<Ticket> Search(string searchValue)
@@ -120,8 +110,8 @@ namespace CSMWebCore.Services
             var result = new List<Ticket>();
             if (!String.IsNullOrEmpty(searchValue))
             {
-                result.AddRange(_db.Tickets.Where(c => c.CheckedIn.ToShortDateString().Contains(searchValue)));
-                result.AddRange(_db.Tickets.Where(c => c.CheckedOut.ToShortDateString().Contains(searchValue)));
+                result.AddRange(_db.Tickets.Where(c => c.CheckInDate.ToShortDateString().Contains(searchValue)));
+                result.AddRange(_db.Tickets.Where(c => c.CheckOutDate.ToShortDateString().Contains(searchValue)));
                 result.AddRange(_db.Tickets.Where(c => c.CheckInUserId.Contains(searchValue)));
                 result.AddRange(_db.Tickets.Where(c => c.CheckOutUserId.Contains(searchValue)));
                 result.AddRange(_db.Tickets.Where(c => c.TicketNumber.ToString().Contains(searchValue)));

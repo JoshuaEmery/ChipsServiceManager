@@ -24,7 +24,6 @@ namespace CSMWebCore.Controllers
         private ILogData _logs;
         private IUpdateData _updates;
 
-        // constructor with dependency injection for all five tables
         public TicketController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates)
         {
             _devices = devices;
@@ -38,7 +37,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Index()
         {
             //create an IEnumerable of TicketViewModel from the active tickets IENumerable
-            var model = _tickets.GetAllActiveTickets().Select(ticket => new TicketViewModel
+            var model = _tickets.GetOpen().Select(ticket => new TicketViewModel
             {
                 Ticket = ticket,
                 Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -77,14 +76,14 @@ namespace CSMWebCore.Controllers
 
             };
             //Get the current Ticket Number
-            model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
+            model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
             return View(model);
         }
         [HttpPost]
         public IActionResult CreateByExistingDeviceId(DeviceEditViewModel model)
         {
             //Get Ticket Number again and check ModelState
-            model.Ticket.TicketNumber = _tickets.CurrentTicketNumber() + 1;
+            model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
             if (!ModelState.IsValid)
             {
                 model.Customer = _customers.Get(model.CustomerId);
@@ -97,7 +96,7 @@ namespace CSMWebCore.Controllers
             {
                 DeviceId = device.Id,
                 CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                CheckedIn = DateTime.Now,
+                CheckInDate = DateTime.Now,
                 NeedsBackup = model.Ticket.NeedsBackup,
                 TicketStatus = TicketStatus.New,
                 TicketNumber = model.Ticket.TicketNumber
@@ -141,7 +140,7 @@ namespace CSMWebCore.Controllers
         //Ticket/Edit
         public IActionResult Edit(int id)
         {
-            var model = _tickets.Get(id);
+            var model = _tickets.GetById(id);
             if (model == null)
             {
                 return RedirectToAction("Index");
@@ -152,16 +151,16 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(TicketEditViewModel model)
         {
             //get the ticket to edit
-            var ticket = _tickets.Get(model.Id);
+            var ticket = _tickets.GetById(model.Id);
             if (ticket == null || !ModelState.IsValid)
             {
                 return View(model);
             }
             //edit the ticket
             ticket.DeviceId = model.DeviceId;
-            ticket.CheckedIn = model.CheckedIn;
-            ticket.CheckedOut = model.CheckedOut;
-            ticket.Finished = model.Finished;
+            ticket.CheckInDate = model.CheckedIn;
+            ticket.CheckOutDate = model.CheckedOut;
+            ticket.FinishDate = model.Finished;
             ticket.CheckInUserId = model.CheckInUserId;
             ticket.CheckOutUserId = model.CheckOutUserId;
             ticket.NeedsBackup = model.NeedsBackup;
@@ -177,7 +176,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Details(int ticketId)
         {
             //get the ticket
-            var ticket = _tickets.Get(ticketId);
+            var ticket = _tickets.GetById(ticketId);
             //check that it is not null
             if (ticket != null)
             {
@@ -235,7 +234,7 @@ namespace CSMWebCore.Controllers
             //Check which filter was used and return corresponsding IENumerable of TicketViewModel
             else if (result.DateFilter == DateFilter.Oldest)
             {
-                var model = _tickets.GetAll().OrderBy(x => x.CheckedIn).Select(ticket => new TicketViewModel
+                var model = _tickets.GetAll().OrderBy(x => x.CheckInDate).Select(ticket => new TicketViewModel
                 {
                     Ticket = ticket,
                     Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -249,7 +248,7 @@ namespace CSMWebCore.Controllers
             }
             else if (result.DateFilter == DateFilter.Newest)
             {
-                var model = _tickets.GetAll().OrderByDescending(x => x.CheckedIn).Select(ticket => new TicketViewModel
+                var model = _tickets.GetAll().OrderByDescending(x => x.CheckInDate).Select(ticket => new TicketViewModel
                 {
                     Ticket = ticket,
                     Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -263,7 +262,7 @@ namespace CSMWebCore.Controllers
             }
             else if (result.DateFilter == DateFilter.Idle)
             {
-                var model = _tickets.GetAll().OrderBy(x => x.CheckedIn).Select(ticket => new TicketViewModel
+                var model = _tickets.GetAll().OrderBy(x => x.CheckInDate).Select(ticket => new TicketViewModel
                 {
                     Ticket = ticket,
                     Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
@@ -348,7 +347,7 @@ namespace CSMWebCore.Controllers
         {
             var model = new UpdateViewModel
             {
-                Ticket = _tickets.Get(ticketId),
+                Ticket = _tickets.GetById(ticketId),
                 Device = _devices.Get(deviceId),
                 Customer = _customers.Get(customerId),
                 Update = _updates.Get(updateId)
@@ -365,9 +364,9 @@ namespace CSMWebCore.Controllers
         //    {
         //        Id = cust.Id,
         //        DeviceId = cust.DeviceId,
-        //        CheckedIn = cust.CheckedIn.ToShortDateString(),
-        //        CheckedOut = cust.CheckedOut.ToShortDateString(),
-        //        Finished = cust.Finished.ToShortDateString(),
+        //        CheckInDate = cust.CheckInDate.ToShortDateString(),
+        //        CheckOutDate = cust.CheckOutDate.ToShortDateString(),
+        //        FinishDate = cust.FinishDate.ToShortDateString(),
         //        CheckInUserId = cust.CheckInUserId,
         //        CheckOutUserId = cust.CheckOutUserId,
         //        NeedsBackup = cust.NeedsBackup,

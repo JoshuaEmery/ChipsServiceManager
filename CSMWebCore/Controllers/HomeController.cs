@@ -33,7 +33,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Index()
         {
             //get all active tickets
-            var activeTickets = _tickets.GetAllActiveTickets();
+            var activeTickets = _tickets.GetOpen();
             //get all tickets
             var allTickets = _tickets.GetAll();
             //create new ViewModel
@@ -81,7 +81,7 @@ namespace CSMWebCore.Controllers
                         break;
                 }
                 //caculate age of ticket
-                TimeSpan daysOld = DateTime.Now - ticket.CheckedIn;
+                TimeSpan daysOld = DateTime.Now - ticket.CheckInDate;
                 //sum the age of the tickets, used for avg calc
                 sumAge += daysOld;
                 //check if this ticket is the oldest ticket
@@ -109,37 +109,37 @@ namespace CSMWebCore.Controllers
             //as well as the average handle time over that period
             foreach (var ticket in allTickets)
             {
-                if((DateTime.Now - ticket.Finished).TotalDays < 8)
+                if((DateTime.Now - ticket.FinishDate).TotalDays < 8)
                 {
                     weekCount++;
-                    weekTotal += ticket.Finished - ticket.CheckedIn;
+                    weekTotal += ticket.FinishDate - ticket.CheckInDate;
                     monthCount++;
-                    monthTotal += ticket.Finished - ticket.CheckedIn;
+                    monthTotal += ticket.FinishDate - ticket.CheckInDate;
                     ninetyCount++;
-                    ninetyTotal += ticket.Finished - ticket.CheckedIn;
+                    ninetyTotal += ticket.FinishDate - ticket.CheckInDate;
                     yearCount++;
-                    yearTotal += ticket.Finished - ticket.CheckedIn;
+                    yearTotal += ticket.FinishDate - ticket.CheckInDate;
                 }
-                else if ((DateTime.Now - ticket.Finished).TotalDays < 31)
+                else if ((DateTime.Now - ticket.FinishDate).TotalDays < 31)
                 {
                     monthCount++;
-                    monthTotal += ticket.Finished - ticket.CheckedIn;
+                    monthTotal += ticket.FinishDate - ticket.CheckInDate;
                     ninetyCount++;
-                    ninetyTotal += ticket.Finished - ticket.CheckedIn;
+                    ninetyTotal += ticket.FinishDate - ticket.CheckInDate;
                     yearCount++;
-                    yearTotal += ticket.Finished - ticket.CheckedIn;
+                    yearTotal += ticket.FinishDate - ticket.CheckInDate;
                 }
-                else if ((DateTime.Now - ticket.Finished).TotalDays < 91)
+                else if ((DateTime.Now - ticket.FinishDate).TotalDays < 91)
                 {
                     ninetyCount++;
-                    ninetyTotal += ticket.Finished - ticket.CheckedIn;
+                    ninetyTotal += ticket.FinishDate - ticket.CheckInDate;
                     yearCount++;
-                    yearTotal += ticket.Finished - ticket.CheckedIn;
+                    yearTotal += ticket.FinishDate - ticket.CheckInDate;
                 }
-                else if ((DateTime.Now - ticket.Finished).TotalDays < 366)
+                else if ((DateTime.Now - ticket.FinishDate).TotalDays < 366)
                 {
                     yearCount++;
-                    yearTotal += ticket.Finished - ticket.CheckedIn;
+                    yearTotal += ticket.FinishDate - ticket.CheckInDate;
                 }
 
             }
@@ -166,7 +166,7 @@ namespace CSMWebCore.Controllers
         //I have left it here to try out other google Charts if needed.  This is not needed by the application
         public IActionResult Charts()
         {
-            var activeTickets = _tickets.GetAllActiveTickets();
+            var activeTickets = _tickets.GetOpen();
             var model = new HomeIndexViewModel();
             model.newCount = 0;
             model.inProgressCount = 0;
@@ -195,7 +195,7 @@ namespace CSMWebCore.Controllers
                         model.pendingPickupCount++;
                         break;
                 }
-                TimeSpan daysOld = DateTime.Now - ticket.CheckedIn;
+                TimeSpan daysOld = DateTime.Now - ticket.CheckInDate;
                 sumAge += daysOld;
                 if (daysOld > maxAge)
                 {
