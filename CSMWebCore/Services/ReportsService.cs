@@ -45,14 +45,14 @@ namespace CSMWebCore.Services
         public int TotalCompletedTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return _tickets.GetClosed().Count();
+                return _tickets.GetCompleted().Count();
             else
-                return _tickets.GetClosed(span.Value).Count();
+                return _tickets.GetCompleted(span.Value).Count();
         }
 
         public int TotalCompletedTickets(DateTime startDate, DateTime endDate)
         {
-            return _tickets.GetClosed(startDate, endDate).Count();
+            return _tickets.GetCompleted(startDate, endDate).Count();
         }
 
         public int TotalCheckedInTickets(TimeSpan? span = null)
@@ -60,12 +60,12 @@ namespace CSMWebCore.Services
             if (!span.HasValue)
                 return _tickets.GetAll().Count();
             else
-                return _tickets.GetCheckedInTickets(span.Value).Count();
+                return _tickets.GetAll(span.Value).Count();
         }
 
         public int TotalCheckedInTickets(DateTime startDate, DateTime endDate)
         {
-            return _tickets.GetCheckedInTickets(startDate, endDate).Count();
+            return _tickets.GetAll(startDate, endDate).Count();
         }
 
         public int TotalCheckedOutTickets(TimeSpan? span = null)
@@ -73,12 +73,12 @@ namespace CSMWebCore.Services
             if (!span.HasValue)
                 return _tickets.GetAll().Count();
             else
-                return _tickets.GetCheckedOutTickets(span.Value).Count();
+                return _tickets.GetClosed(span.Value).Count();
         }
 
         public int TotalCheckedOutTickets(DateTime startDate, DateTime endDate)
         {
-            return _tickets.GetCheckedOutTickets(startDate, endDate).Count();
+            return _tickets.GetClosed(startDate, endDate).Count();
         }
 
         public int GetContactLogsByUser(string userName, TimeSpan? span = null)
@@ -152,7 +152,7 @@ namespace CSMWebCore.Services
             }
             else
             {
-                tickets = _tickets.GetCheckedInTickets(span.Value);
+                tickets = _tickets.GetAll(span.Value);
             }
             decimal total = 0m;
             foreach (var ticket in tickets)
@@ -164,7 +164,7 @@ namespace CSMWebCore.Services
 
         public decimal GetTicketSavingsOverTimePeriod(DateTime startDate, DateTime endDate)
         {
-            IEnumerable<Ticket> tickets = _tickets.GetCheckedInTickets(startDate, endDate);
+            IEnumerable<Ticket> tickets = _tickets.GetAll(startDate, endDate);
             decimal total = 0m;
             foreach (var ticket in tickets)
             {
@@ -199,7 +199,7 @@ namespace CSMWebCore.Services
 
         public TimeSpan GetAverageHandleTime(TimeSpan span)
         {
-            IEnumerable<Ticket> tickets = _tickets.GetClosed(span);
+            IEnumerable<Ticket> tickets = _tickets.GetCompleted(span);
             if (tickets.Count() == 0)
             {
                 return TimeSpan.Zero;

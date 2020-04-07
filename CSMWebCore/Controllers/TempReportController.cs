@@ -120,35 +120,35 @@ namespace CSMWebCore.Controllers
         private string TotalCompletedTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return $"Tickets Completed all time: {_tickets.GetClosed().Count()}\n";
+                return $"Tickets Completed all time: {_tickets.GetCompleted().Count()}\n";
             else
-                return $"Tickets Completed in the last {span.Value.TotalDays} days {_tickets.GetClosed(span.Value).Count()}\n";            
+                return $"Tickets Completed in the last {span.Value.TotalDays} days {_tickets.GetCompleted(span.Value).Count()}\n";            
         }
         private string TotalCompletedTickets(DateTime startDate, DateTime endDate)
         {
-            return $"Tickets Completed between {startDate} and {endDate} {_tickets.GetClosed(startDate, endDate).Count()}\n";
+            return $"Tickets Completed between {startDate} and {endDate} {_tickets.GetCompleted(startDate, endDate).Count()}\n";
         }
         private string TotalCheckedInTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
                 return $"Tickets Checked in all time: {_tickets.GetAll().Count()}\n";
             else
-                return $"Tickets Checked in last {span.Value.TotalDays} days {_tickets.GetCheckedInTickets(span.Value).Count()}\n";
+                return $"Tickets Checked in last {span.Value.TotalDays} days {_tickets.GetAll(span.Value).Count()}\n";
         }
         private string TotalCheckedInTickets(DateTime startDate, DateTime endDate)
         {
-            return $"Tickets Checked in between {startDate} and {endDate} {_tickets.GetCheckedInTickets(startDate, endDate).Count()}\n";
+            return $"Tickets Checked in between {startDate} and {endDate} {_tickets.GetAll(startDate, endDate).Count()}\n";
         }
         private string TotalCheckedOutTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
                 return $"Tickets Checked out all time: {_tickets.GetAll().Count()}\n";
             else
-                return $"Tickets Checked out last {span.Value.TotalDays} days {_tickets.GetCheckedOutTickets(span.Value).Count()}\n";
+                return $"Tickets Checked out last {span.Value.TotalDays} days {_tickets.GetClosed(span.Value).Count()}\n";
         }
         private string TotalCheckedOutTickets(DateTime startDate, DateTime endDate)
         {            
-            return $"Tickets Checked out between {startDate} and {endDate} {_tickets.GetCheckedOutTickets(startDate,endDate).Count()}\n";
+            return $"Tickets Checked out between {startDate} and {endDate} {_tickets.GetClosed(startDate,endDate).Count()}\n";
         }
         //-----------------User Reports
         private string GetContactLogsByUser(string userName, TimeSpan? span = null)
@@ -228,7 +228,7 @@ namespace CSMWebCore.Controllers
             }
             else
             {
-                tickets = _tickets.GetCheckedInTickets(span.Value);
+                tickets = _tickets.GetAll(span.Value);
             }
             decimal total = 0m;           
             foreach (var ticket in tickets)
@@ -243,7 +243,7 @@ namespace CSMWebCore.Controllers
         }
         private string GetTicketSavingsOverTimePeriod(DateTime startDate, DateTime endDate)
         {
-            IEnumerable<Ticket> tickets = _tickets.GetCheckedInTickets(startDate, endDate);
+            IEnumerable<Ticket> tickets = _tickets.GetAll(startDate, endDate);
             decimal total = 0m;
             foreach (var ticket in tickets)
             {
@@ -282,7 +282,7 @@ namespace CSMWebCore.Controllers
         }
         private string GetAverageHandleTime(TimeSpan span)
         {
-            IEnumerable<Ticket> tickets = _tickets.GetClosed(span);
+            IEnumerable<Ticket> tickets = _tickets.GetCompleted(span);
             if(tickets.Count() == 0)
             {
                 return $"The average handle time over the last {span.TotalDays} - No Tickets Completed";

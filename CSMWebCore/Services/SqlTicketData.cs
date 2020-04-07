@@ -53,7 +53,7 @@ namespace CSMWebCore.Services
         public IEnumerable<Ticket> GetOpen() => _db.Tickets.Where(x => x.TicketStatus != TicketStatus.Done);
 
         //get all closed tickets
-        public IEnumerable<Ticket> GetClosed() => GetByStatus(TicketStatus.Done);
+        public IEnumerable<Ticket> GetCompleted() => GetByStatus(TicketStatus.Done);
 
         //get all tickets for a given device
         public IEnumerable<Ticket> GetAllByDevice(int deviceId) => _db.Tickets.Where(x => x.DeviceId == deviceId);
@@ -62,7 +62,7 @@ namespace CSMWebCore.Services
         public Ticket GetLatestForDevice(int deviceId) => _db.Find<Ticket>(_db.Tickets.Where(x => x.DeviceId == deviceId).LastOrDefault().Id);
 
         //method that gets all tickets that have been completed within a timespan        
-        //public IEnumerable<Ticket> GetClosed(TimeSpan span)
+        //public IEnumerable<Ticket> GetCompleted(TimeSpan span)
         //{
         //    DateTime date = (DateTime.Now - span);
         //    return _db.Tickets.Where(x => x.FinishDate > date);
@@ -70,37 +70,37 @@ namespace CSMWebCore.Services
         // TODO overflow method that takes a span and "snaps" to days rather than a 
 
         //get tickets closed within date range        
-        public IEnumerable<Ticket> GetClosed(DateTime startDate, DateTime endDate) => _db.Tickets.Where(x => x.FinishDate > startDate && x.FinishDate < endDate);
+        public IEnumerable<Ticket> GetCompleted(DateTime startDate, DateTime endDate) => _db.Tickets.Where(x => x.FinishDate > startDate && x.FinishDate < endDate);
 
         //get closed tickets 
-        public IEnumerable<Ticket> GetClosed(TimeSpan span)
+        public IEnumerable<Ticket> GetCompleted(TimeSpan span)
         {
             // get midnight tomorrow as end date
             DateTime end = DateTime.Today.AddDays(1);
             DateTime start = end.Subtract(span);
-            return GetClosed(start, end);
+            return GetCompleted(start, end);
         }
 
         
         //get tickets checked in within a timespan
-        public IEnumerable<Ticket> GetCheckedInTickets(TimeSpan span)
+        public IEnumerable<Ticket> GetAll(TimeSpan span)
         {
             DateTime date = (DateTime.Now - span);
             return _db.Tickets.Where(x => x.CheckInDate > date);
         }
         //get tickets checked in between two dates
-        public IEnumerable<Ticket> GetCheckedInTickets(DateTime startDate, DateTime endDate)
+        public IEnumerable<Ticket> GetAll(DateTime startDate, DateTime endDate)
         {
             return _db.Tickets.Where(x => x.CheckInDate > startDate && x.CheckInDate < endDate);
         }
         //get tickets checked out within a timespan
-        public IEnumerable<Ticket> GetCheckedOutTickets(TimeSpan span)
+        public IEnumerable<Ticket> GetClosed(TimeSpan span)
         {
             DateTime date = (DateTime.Now - span);
             return _db.Tickets.Where(x => x.CheckOutDate > date);
         }
         //get tickets checked out between two dates
-        public IEnumerable<Ticket> GetCheckedOutTickets(DateTime startDate, DateTime endDate)
+        public IEnumerable<Ticket> GetClosed(DateTime startDate, DateTime endDate)
         {
             return _db.Tickets.Where(x => x.CheckOutDate > startDate && x.CheckOutDate < endDate);
         }

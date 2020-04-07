@@ -18,14 +18,14 @@ namespace CSMWebCore.Services
         IEnumerable<Ticket> GetAllByDevice(int deviceId);
         IEnumerable<Ticket> GetOpen();
         IEnumerable<Ticket> Search(string searchValue);
-        IEnumerable<Ticket> GetCheckedInTickets(DateTime startDate, DateTime endDate);
-        IEnumerable<Ticket> GetCheckedInTickets(TimeSpan span);
-        IEnumerable<Ticket> GetCheckedOutTickets(DateTime startDate, DateTime endDate);
-        IEnumerable<Ticket> GetCheckedOutTickets(TimeSpan span);
+        IEnumerable<Ticket> GetAll(DateTime startDate, DateTime endDate);
+        IEnumerable<Ticket> GetAll(TimeSpan span);
         IEnumerable<Ticket> GetClosed(DateTime startDate, DateTime endDate);
         IEnumerable<Ticket> GetClosed(TimeSpan span);
+        IEnumerable<Ticket> GetCompleted(DateTime startDate, DateTime endDate);
+        IEnumerable<Ticket> GetCompleted(TimeSpan span);
 
-        IEnumerable<Ticket> GetClosed();
+        IEnumerable<Ticket> GetCompleted();
         Ticket GetLatestForDevice(int deviceId);
 
 
