@@ -42,7 +42,7 @@ namespace CSMWebCore.Controllers
         //User/Edit
         //
         [HttpGet]
-        [Authorize (Roles = "Administrator,Director,Supervisor")]
+        [Authorize (Roles = "Supervisor")]
         //Get for Edit User, This could be expanded on in the future to allow administrators to change contact information
         //however for now it is primarily for granting or removing administrator access from accounts
         public async Task<IActionResult> Edit(string userId)
