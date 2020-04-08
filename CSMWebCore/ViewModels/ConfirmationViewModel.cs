@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace CSMWebCore.ViewModels
+{
+    public class ConfirmationViewModel
+    {
+        public int ticketId { get; set; }
+        public int deviceId { get; set; }
+        public int customerId { get; set; }
+        public Guid updateId { get; set; }        
+    }
+}

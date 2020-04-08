@@ -285,7 +285,7 @@ namespace CSMWebCore.Controllers
             IEnumerable<Ticket> tickets = _tickets.GetCompleted(span);
             if(tickets.Count() == 0)
             {
-                return $"The average handle time over the last {span.TotalDays} - No Tickets Completed";
+                return $"The average handle time over the last {span.TotalDays} - No Tickets Completed\n";
             }
             TimeSpan handleTime = new TimeSpan();
             foreach (var ticket in tickets)

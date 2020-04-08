@@ -26,14 +26,16 @@ namespace CSMWebCore.Controllers
         private ITicketData _tickets;
         private ILogData _logs;
         private IUpdateData _updates;
+        private ITicketCreator _ticketCreator;
         //constructor
-        public DeviceController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates)
+        public DeviceController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates, ITicketCreator ticketCreator)
         {
             _devices = devices;
             _customers = customers;
             _tickets = tickets;
             _logs = logs;
             _updates = updates;
+            _ticketCreator = ticketCreator;
         }
         //Device/Index
         // returns view for list of devices assigned to *active* tickets
@@ -169,15 +171,15 @@ namespace CSMWebCore.Controllers
         //Create a new Device, in order to create a new device a customer must
         //first be selected
         [HttpGet]
-        public IActionResult CreateByCustId(int customerId)
+        public IActionResult CreateByCustId(int id)
         {
             //The DeviceEditViewModel stores a Ticket, a Customer and TicketID and CustomerID
             //On get Customer is populated, on Post Ticket is populated, the customer will
             //have to be retrieved again if needed on post.
             DeviceEditViewModel model = new DeviceEditViewModel();
             model.Ticket = new Ticket();
-            model.CustomerId = customerId;
-            model.Customer = _customers.Get(customerId);
+            model.CustomerId = id;
+            model.Customer = _customers.Get(id);
             //Get the next ticketnumber, this check is run again after post
             model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
             return View(model);
@@ -214,50 +216,18 @@ namespace CSMWebCore.Controllers
             //Save the new devicesa
             _devices.Add(device);
             _devices.Commit();
-            //Check that the ticketNumber has not changed
-            model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
-            //Create a new ticket with the device ID as a foreign key from the newly saved device object
-            Ticket ticket = new Ticket
-            {                
-                DeviceId = device.Id,
-                //Gets a string representation of the ChipsUser currently logged in
-                CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                CheckInDate = DateTime.Now,
-                NeedsBackup = model.Ticket.NeedsBackup,
-                TicketStatus = TicketStatus.New,
-                TicketNumber = model.Ticket.TicketNumber
-            };
-            //Save the new Ticket
-            _tickets.Add(ticket);
-            _tickets.Commit();
-            //Create a log entry with the newly created Ticket.Id as a foreign key
-            Log log = new Log
-            {                
-                UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                TicketId = ticket.Id,
-                Logged = DateTime.Now,
-                Notes = model.Log.Notes,
-                LogType = LogType.CheckIn,
-                ContactMethod = ContactMethod.InPerson
-            };
-            //Add new Log
-            _logs.Add(log);
-            _logs.Commit();
-            //Create a new entry in the update table with a guid for the Primary Key and
-            //a foreign key from the Ticket
-            Update update = new Update
+            ConfirmationViewModel cvModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
             {
-                Id = new Guid(),
-                TicketId = ticket.Id
-            };
-            //Save Changes
-            _updates.Add(update);
-            _updates.Commit();
-            //Redirect to Confirmation Pags with the new Primary keys of the created objects
-            return RedirectToAction("Confirmation", new { ticketId = ticket.Id,
-            deviceId = device.Id,
-            customerId = model.CustomerId,
-            updateId = update.Id});
+                DeviceId = device.Id,
+                CustomerId = model.CustomerId,
+                NeedsBackup = model.Ticket.NeedsBackup,
+                Notes = model.Log.Notes,
+                UserName = User.FindFirst(ClaimTypes.Name).Value.ToString()
+            });
+            return RedirectToAction("Confirmation", "Ticket", new { ticketId = cvModel.ticketId,
+            deviceId = cvModel.deviceId,
+            customerId = cvModel.customerId,
+            updateId = cvModel.updateId});
         }
         //Device/DevicesByCustId
         //Method that gets all devices owned by a given customer

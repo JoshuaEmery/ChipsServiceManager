@@ -23,14 +23,16 @@ namespace CSMWebCore.Controllers
         private ITicketData _tickets;
         private ILogData _logs;
         private IUpdateData _updates;
+        private ITicketCreator _ticketCreator;
 
-        public TicketController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates)
+        public TicketController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates, ITicketCreator ticketCreator)
         {
             _devices = devices;
             _customers = customers;
             _tickets = tickets;
             _logs = logs;
             _updates = updates;
+            _ticketCreator = ticketCreator;
         }
 
         //Ticket/Index
@@ -92,47 +94,20 @@ namespace CSMWebCore.Controllers
             }
             //get the device and create a new ticket from the device
             var device = _devices.Get(model.Id);
-            Ticket ticket = new Ticket
+            ConfirmationViewModel cvModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
             {
                 DeviceId = device.Id,
-                CheckInUserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                CheckInDate = DateTime.Now,
+                CustomerId = device.CustomerId,
                 NeedsBackup = model.Ticket.NeedsBackup,
-                TicketStatus = TicketStatus.New,
-                TicketNumber = model.Ticket.TicketNumber
-            };
-            //save changes
-            _tickets.Add(ticket);
-            _tickets.Commit();
-            //create a new log
-            Log log = new Log
-            {
-                UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                TicketId = ticket.Id,
-                Logged = DateTime.Now,
                 Notes = model.Log.Notes,
-                LogType = LogType.CheckIn,
-                ContactMethod = ContactMethod.InPerson
-            };
-            //save changes
-            _logs.Add(log);
-            _logs.Commit();
-            //create a new Update
-            Update update = new Update
+                UserName = User.FindFirst(ClaimTypes.Name).Value.ToString()
+            });
+            return RedirectToAction("Confirmation", "Ticket", new
             {
-                Id = new Guid(),
-                TicketId = ticket.Id
-            };
-            //save changes
-            _updates.Add(update);
-            _updates.Commit();
-            //route to confirmation Page
-            return RedirectToAction("Confirmation", new
-            {
-                ticketId = ticket.Id,
-                deviceId = device.Id,
-                customerId = model.CustomerId,
-                updateId = update.Id
+                ticketId = cvModel.ticketId,
+                deviceId = cvModel.deviceId,
+                customerId = cvModel.customerId,
+                updateId = cvModel.updateId
             });
         }
 

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSMWebCore.Migrations
 {
     [DbContext(typeof(ChipsDbContext))]
-    [Migration("20200407215638_Ticket-Dates-Rename")]
-    partial class TicketDatesRename
+    [Migration("20200408114819_start")]
+    partial class start
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
