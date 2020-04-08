@@ -1,0 +1,59 @@
+﻿
+@{
+    Layout = null;
+}
+
+@using CSMWebCore
+@using CSMWebCore.Models
+@using CSMWebCore.Entities
+@using CSMWebCore.ViewModels
+@using CSMWebCore.Services
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model FoundationReportViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+</head>
+<body>
+    Default .net DatePicker:
+    <br />
+    <br />
+    <form asp-action="FoundationReport" method="post">
+        Select Start Date:
+        <input type="date" asp-for="EndDate" width="276" />
+        Select End Date:
+        <input type="date" asp-for="EndDate" width="276" />
+        <input type="submit" value="Submit" />
+    </form>
+    <hr />
+    Bootstrap Date Picker
+    <br />
+    <br />
+    <form asp-action="FoundationReport" method="post" class="form-inline row">
+        <div class="form-group col-sm-6">
+            <label for="datepicker" class="col-sm-4">Bootstrap-datepicker</label>
+            <input name="StartDate" type="text" class="form-control col-sm-8 datepicker" id="startDate" width="276" placeholder="Select Start Date" readonly>
+        </div>
+        <div class="form-group col-sm-6">
+            <label for="datepicker" class="col-sm-4">Bootstrap-datepicker</label>
+            <input name="EndDate" type="text" class="form-control col-sm-8 datepicker" id="endDate" width="276" placeholder="Select End Date" readonly>
+        </div>
+        <div class="form-group col-sm-6">
+            <input type="submit" value="Submit" />
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'mm-dd-yyyy'
+            });
+        });
+    </script>
+</body>
+</html>
