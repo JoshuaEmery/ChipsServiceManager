@@ -9,6 +9,6 @@ namespace CSMWebCore.Services
 {
     public interface ITicketCreator
     {
-        ConfirmationViewModel CreateTicket(TicketCreatorInfo model);
+        TicketConfirmationModel CreateTicket(TicketCreatorInfo model);
     }
 }

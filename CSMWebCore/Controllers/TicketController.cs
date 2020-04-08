@@ -75,7 +75,6 @@ namespace CSMWebCore.Controllers
                 Ticket = new Ticket(),
                 Customer = _customers.Get(device.CustomerId),
                 CustomerId = device.CustomerId
-
             };
             //Get the current Ticket Number
             model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
@@ -94,7 +93,7 @@ namespace CSMWebCore.Controllers
             }
             //get the device and create a new ticket from the device
             var device = _devices.Get(model.Id);
-            ConfirmationViewModel cvModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
+            TicketConfirmationModel tcModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
             {
                 DeviceId = device.Id,
                 CustomerId = device.CustomerId,
@@ -104,10 +103,10 @@ namespace CSMWebCore.Controllers
             });
             return RedirectToAction("Confirmation", "Ticket", new
             {
-                ticketId = cvModel.ticketId,
-                deviceId = cvModel.deviceId,
-                customerId = cvModel.customerId,
-                updateId = cvModel.updateId
+                ticketId = tcModel.ticketId,
+                deviceId = tcModel.deviceId,
+                customerId = tcModel.customerId,
+                updateId = tcModel.updateId
             });
         }
 
@@ -320,7 +319,7 @@ namespace CSMWebCore.Controllers
         // displays Update view for printout
         public IActionResult Confirmation(int ticketId, int deviceId, int customerId, Guid updateId)
         {
-            var model = new UpdateViewModel
+            var model = new ConfirmationViewModel
             {
                 Ticket = _tickets.GetById(ticketId),
                 Device = _devices.Get(deviceId),
@@ -329,26 +328,5 @@ namespace CSMWebCore.Controllers
             };
             return View(model);
         }
-
-
-        //Ticket/OldIndex
-        // Early testing method
-        //public IActionResult OldIndex()
-        //{
-        //    var model = _tickets.GetAll().Select(cust => new TicketOldIndexViewModel
-        //    {
-        //        Id = cust.Id,
-        //        DeviceId = cust.DeviceId,
-        //        CheckInDate = cust.CheckInDate.ToShortDateString(),
-        //        CheckOutDate = cust.CheckOutDate.ToShortDateString(),
-        //        FinishDate = cust.FinishDate.ToShortDateString(),
-        //        CheckInUserId = cust.CheckInUserId,
-        //        CheckOutUserId = cust.CheckOutUserId,
-        //        NeedsBackup = cust.NeedsBackup,
-        //        TicketStatus = cust.TicketStatus.ToString()
-        //    });
-        //    return View(model);
-        //}
-
     }
 }

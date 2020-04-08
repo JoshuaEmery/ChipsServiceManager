@@ -36,7 +36,7 @@ namespace CSMWebCore.Controllers
         {
             var guid = new Guid(id);
             var ticket = _tickets.GetById(_updates.GetTicketId(guid));
-            var model = new UpdateViewModel
+            var model = new ConfirmationViewModel
             {
                 Ticket = ticket,
                 Device = _devices.Get(ticket.DeviceId),

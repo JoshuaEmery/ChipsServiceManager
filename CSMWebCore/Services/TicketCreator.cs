@@ -25,7 +25,7 @@ namespace CSMWebCore.Services
             _updates = updates;
         }
 
-        public ConfirmationViewModel CreateTicket(TicketCreatorInfo info)
+        public TicketConfirmationModel CreateTicket(TicketCreatorInfo info)
         {
             Ticket ticket = new Ticket
             {
@@ -63,7 +63,7 @@ namespace CSMWebCore.Services
             //Save Changes
             _updates.Add(update);
             _updates.Commit();
-            return new ConfirmationViewModel
+            return new TicketConfirmationModel
             {
                 ticketId = ticket.Id,
                 deviceId = info.DeviceId,

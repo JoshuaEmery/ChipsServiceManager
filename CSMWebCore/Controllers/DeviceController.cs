@@ -216,7 +216,7 @@ namespace CSMWebCore.Controllers
             //Save the new devicesa
             _devices.Add(device);
             _devices.Commit();
-            ConfirmationViewModel cvModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
+            TicketConfirmationModel tcModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
             {
                 DeviceId = device.Id,
                 CustomerId = model.CustomerId,
@@ -224,10 +224,10 @@ namespace CSMWebCore.Controllers
                 Notes = model.Log.Notes,
                 UserName = User.FindFirst(ClaimTypes.Name).Value.ToString()
             });
-            return RedirectToAction("Confirmation", "Ticket", new { ticketId = cvModel.ticketId,
-            deviceId = cvModel.deviceId,
-            customerId = cvModel.customerId,
-            updateId = cvModel.updateId});
+            return RedirectToAction("Confirmation", "Ticket", new { ticketId = tcModel.ticketId,
+            deviceId = tcModel.deviceId,
+            customerId = tcModel.customerId,
+            updateId = tcModel.updateId});
         }
         //Device/DevicesByCustId
         //Method that gets all devices owned by a given customer
@@ -256,34 +256,6 @@ namespace CSMWebCore.Controllers
             });
             return View(model);
         }
-        //Extra Authorize here, not sure why but now scared to remove
-        //Method that takes a Guid and generates an image of a QRCode with the chips
-        //URL concatinated with the GUID.  This method is called directly by the
-        //Confirmation view and is given a file result.
-        [Authorize]
-        public ActionResult GetQRByGuid(Guid code)
-        {
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            //change to route to site url
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"http://chipsmgr.com/Update/Index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
-            QRCode qrCode = new QRCode(qrCodeData);
-            Bitmap qrCodeImage = qrCode.GetGraphic(20);
-            byte[] image = BitmapToBytes(qrCodeImage);
-            //this return sends a byte[] as well as a string representation of
-            //the file type of the byte[]
-            return File(image, "image/jpeg");
-        }
-        //This method is used by GetQRByCode and takes a BitMap
-        //and returns that same image as a byte array, which for whatever
-        //reason is what needs to be sent to the view.
-        private static byte[] BitmapToBytes(Bitmap img)
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                return stream.ToArray();
-            }
-        }
         //Device/Search
         public IActionResult Search(string searchValue)
         {
@@ -303,20 +275,5 @@ namespace CSMWebCore.Controllers
             });
             return View("Index", model);
         }
-        //Device/Confirmation
-        //Method gets the data needed for the confirmation view
-        //The confirmation view is the printout for the customer on checkin
-        public IActionResult Confirmation(int ticketId, int deviceId, int customerId, Guid updateId)
-        {
-            var model = new UpdateViewModel
-            {
-                Ticket = _tickets.GetById(ticketId),
-                Device = _devices.Get(deviceId),
-                Customer = _customers.Get(customerId),
-                Update = _updates.Get(updateId)
-            };
-            return View(model);
-        }
-
     }
 }
