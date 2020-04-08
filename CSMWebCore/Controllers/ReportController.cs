@@ -21,9 +21,9 @@ namespace CSMWebCore.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult FoundationReport()
+        public IActionResult ReadOnlyReport()
         {
-            return View(new FoundationReportViewModel
+            return View(new ReadOnlyReportViewModel
             {
                 StartDate = DateTime.Now.Date,
                 EndDate = DateTime.Now.Date,
@@ -31,7 +31,7 @@ namespace CSMWebCore.Controllers
             });
         }
         [HttpPost]
-        public IActionResult FoundationReport(FoundationReportViewModel model)
+        public IActionResult ReadOnlyReport(ReadOnlyReportViewModel model)
         {
             return Content($"{model.StartDate.Date.ToString()} {model.EndDate.Date.ToString()}");
         }

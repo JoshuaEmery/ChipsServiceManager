@@ -5,6 +5,7 @@ using System.Text;
 using CSMWebCore.Controllers;
 using CSMWebCore.Entities;
 using CSMWebCore.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,9 @@ namespace CSMWebCore.Data
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
+            // seed initial services
             builder.Entity<ServicePrice>().HasData(
                 new ServicePrice { Id = 1, Service = LogType.CheckIn, Price = 0m },
                 new ServicePrice { Id = 2, Service = LogType.Contact, Price = 0m },
@@ -48,7 +52,29 @@ namespace CSMWebCore.Data
                 new ServicePrice { Id = 16, Service = LogType.BatteryReplacment, Price = 50m },
                 new ServicePrice { Id = 17, Service = LogType.PowerJackReplacement, Price = 150m },
                 new ServicePrice { Id = 18, Service = LogType.MiscRepair, Price = 100m });
-            base.OnModelCreating(builder);
+
+            // seed user roles
+            builder.Entity<IdentityRole>().HasData(new IdentityRole[]
+            { 
+                new IdentityRole
+                {
+                    Name = "Administrator",
+                    NormalizedName = "ADMINISTRATOR"
+                },
+                new IdentityRole
+                {
+                    Name = "Technician",
+                    NormalizedName = "TECHNICIAN"
+                },
+                new IdentityRole
+                {
+                    Name = "ReadOnly",
+                    NormalizedName = "READONLY"
+                }
+            });
+
+            // seed sample data
+            SampleData.Seed(builder);
         }
     }
 }

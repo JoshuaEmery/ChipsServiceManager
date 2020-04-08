@@ -7,8 +7,8 @@ namespace CSMWebCore.Models
 {
     public enum UserRoles
     {
-        Foundation,
-        Technician,
-        Supervisor        
+        Administrator = 1,
+        Technician = 2,
+        ReadOnly = 3
     }
 }

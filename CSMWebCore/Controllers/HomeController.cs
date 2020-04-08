@@ -32,7 +32,7 @@ namespace CSMWebCore.Controllers
         //This method gathers all of the data needed for the Google Charts.  
         public IActionResult Index()
         {
-            if (User.IsInRole("Foundation"))
+            if (User.IsInRole("ReadOnly"))
             {
                 return RedirectToAction("Index", "TempReport");
             }
@@ -252,8 +252,5 @@ namespace CSMWebCore.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        
-
-
     }
 }

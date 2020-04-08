@@ -19,14 +19,14 @@
                         <td>@Model.UserName</td>
                         <td>@Model.FirstName</td>
                         <td>@Model.LastName</td>
-                        <td>@Model.Phone</td>
+                        <td>@Model.PhoneNumber</td>
                         <td>@Model.Email</td>
                         <td>@Model.Active.ToString()</td>
 
 
                     </tr>
                 </table>
-            @if(User.IsInRole("Administrator") || User.IsInRole("Supervisor"))
+            @if(User.IsInRole("Administrator"))
             {
                 <a class="btn btn-primary" asp-controller="User" asp-action="Edit" asp-route-userId="@Model.Id">Modify this account</a>
             }

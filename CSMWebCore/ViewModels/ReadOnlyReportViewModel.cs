@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.ViewModels
 {
-    public class FoundationReportViewModel
+    public class ReadOnlyReportViewModel
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200408213106_Init-UserRoles-Seeding.cs" />
+    <Compile Remove="Migrations\20200408213106_Init-UserRoles-Seeding.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="appsettings.Development.json" />
   </ItemGroup>
 

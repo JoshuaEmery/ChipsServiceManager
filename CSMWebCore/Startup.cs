@@ -78,12 +78,10 @@ namespace CSMWebCore
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
 
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ChipsUser> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -96,6 +94,9 @@ namespace CSMWebCore
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            // seed initial admin user
+            ChipsDbInitializer.SeedUsers(userManager);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

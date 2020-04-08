@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSMWebCore.Migrations
 {
     [DbContext(typeof(ChipsDbContext))]
-    [Migration("20200408114819_start")]
-    partial class start
+    [Migration("20200408223931_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,9 +64,6 @@ namespace CSMWebCore.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -144,6 +141,28 @@ namespace CSMWebCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ContactPref = 0,
+                            Email = "andy@yahoo.com",
+                            FirstName = "Andrew",
+                            LastName = "Bernard",
+                            Phone = "2063953029",
+                            StudentId = "830549793"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ContactPref = 1,
+                            Email = "pam01@gmail.com",
+                            FirstName = "Pam",
+                            LastName = "Beesly",
+                            Phone = "3921235324",
+                            StudentId = "223563434"
+                        });
                 });
 
             modelBuilder.Entity("CSMWebCore.Entities.Device", b =>
@@ -219,7 +238,7 @@ namespace CSMWebCore.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<int>("Service")
                         .HasColumnType("int");
@@ -466,6 +485,29 @@ namespace CSMWebCore.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "d0950a4f-486f-4327-aae5-eb44d259e2ef",
+                            ConcurrencyStamp = "228be113-97b3-4419-b0a6-61b8a502f7b4",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "5f10201a-f7cf-48de-a276-7e2599e08c75",
+                            ConcurrencyStamp = "dd499839-ce45-4651-a4b8-98fa4800859d",
+                            Name = "Technician",
+                            NormalizedName = "TECHNICIAN"
+                        },
+                        new
+                        {
+                            Id = "694f28e8-ef78-4d06-9b22-fcd375400489",
+                            ConcurrencyStamp = "05bd52ba-01c1-45c0-9422-93862247c074",
+                            Name = "ReadOnly",
+                            NormalizedName = "READONLY"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
