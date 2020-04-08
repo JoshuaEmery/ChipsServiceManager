@@ -32,6 +32,10 @@ namespace CSMWebCore.Controllers
         //This method gathers all of the data needed for the Google Charts.  
         public IActionResult Index()
         {
+            if (User.IsInRole("Foundation"))
+            {
+                return RedirectToAction("Index", "TempReport");
+            }
             //get all active tickets
             var activeTickets = _tickets.GetOpen();
             //get all tickets
