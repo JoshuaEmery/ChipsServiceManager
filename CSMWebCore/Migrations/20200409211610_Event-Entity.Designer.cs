@@ -4,14 +4,16 @@ using CSMWebCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CSMWebCore.Migrations
 {
     [DbContext(typeof(ChipsDbContext))]
-    partial class ChipsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200409211610_Event-Entity")]
+    partial class EventEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,21 +248,21 @@ namespace CSMWebCore.Migrations
                         new
                         {
                             Id = 4,
-                            Category = 1,
+                            Category = 2,
                             Name = "Data Backup",
                             Price = 150m
                         },
                         new
                         {
                             Id = 5,
-                            Category = 1,
+                            Category = 2,
                             Name = "Data Restore",
                             Price = 150m
                         },
                         new
                         {
                             Id = 6,
-                            Category = 1,
+                            Category = 2,
                             Description = "Installation of an OS on a blank drive or over an old OS, writing over existing user data",
                             Name = "OS Installation",
                             Price = 150m
@@ -268,7 +270,7 @@ namespace CSMWebCore.Migrations
                         new
                         {
                             Id = 7,
-                            Category = 1,
+                            Category = 2,
                             Description = "Incremental updates to an OS where user data is preserved",
                             Name = "OS Updates",
                             Price = 50m
@@ -276,84 +278,84 @@ namespace CSMWebCore.Migrations
                         new
                         {
                             Id = 8,
-                            Category = 1,
+                            Category = 2,
                             Name = "Program/Driver Installation",
                             Price = 50m
                         },
                         new
                         {
                             Id = 9,
-                            Category = 1,
+                            Category = 2,
                             Name = "Virus/Malware Removal",
                             Price = 150m
                         },
                         new
                         {
                             Id = 10,
-                            Category = 1,
+                            Category = 2,
                             Name = "Other",
                             Price = 50m
                         },
                         new
                         {
                             Id = 11,
-                            Category = 2,
+                            Category = 1,
                             Name = "Battery Replacement",
                             Price = 50m
                         },
                         new
                         {
                             Id = 12,
-                            Category = 2,
+                            Category = 1,
                             Name = "Display Replacement",
                             Price = 150m
                         },
                         new
                         {
                             Id = 13,
-                            Category = 2,
+                            Category = 1,
                             Name = "Hinge Replacement",
                             Price = 150m
                         },
                         new
                         {
                             Id = 14,
-                            Category = 2,
+                            Category = 1,
                             Name = "Keyboard Replacement",
                             Price = 125m
                         },
                         new
                         {
                             Id = 15,
-                            Category = 2,
+                            Category = 1,
                             Name = "Power Jack Replacement",
                             Price = 150m
                         },
                         new
                         {
                             Id = 16,
-                            Category = 2,
+                            Category = 1,
                             Name = "RAM Replacement",
                             Price = 100m
                         },
                         new
                         {
                             Id = 17,
-                            Category = 2,
+                            Category = 1,
                             Name = "Storage Drive Replacement",
                             Price = 100m
                         },
                         new
                         {
                             Id = 18,
-                            Category = 2,
+                            Category = 1,
                             Name = "Trackpad Replacement",
                             Price = 150m
                         },
                         new
                         {
                             Id = 19,
-                            Category = 2,
+                            Category = 1,
                             Name = "Other",
                             Price = 100m
                         },
@@ -679,22 +681,22 @@ namespace CSMWebCore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5ad335b4-3546-44a5-b0cb-fddc0a074c09",
-                            ConcurrencyStamp = "ea012894-a128-4d2e-9758-d3b7062ea19c",
+                            Id = "4ac3a91d-f82a-46db-9f8a-3fc704d4a5a2",
+                            ConcurrencyStamp = "77fd5d1f-1cb5-4bdd-8609-801f8048a75e",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "24e5ed31-26ab-4c73-8eb1-a0ac89f93df0",
-                            ConcurrencyStamp = "f86a0749-7875-409e-8f18-12ba5fc846f5",
+                            Id = "9effe992-42ad-485d-8b54-7b64404f3257",
+                            ConcurrencyStamp = "02ffc095-f615-4054-8013-dc8967e85bab",
                             Name = "Technician",
                             NormalizedName = "TECHNICIAN"
                         },
                         new
                         {
-                            Id = "5a7b079d-cf02-4677-8265-59d47f7dc972",
-                            ConcurrencyStamp = "6a9bd444-9945-44bf-b772-fe252f3b7463",
+                            Id = "4dc8bcd2-962f-4ea0-879c-ffa3d93125c1",
+                            ConcurrencyStamp = "6a2caa4a-2eaf-461a-bfe7-341336103879",
                             Name = "ReadOnly",
                             NormalizedName = "READONLY"
                         });

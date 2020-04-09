@@ -13,7 +13,7 @@ namespace CSMWebCore.Models
         Diagnostic,
         OsInstallation,
         OsUpdate,
-        DataBackupRestore,      
+        DataBackupRestore,
         SoftwareInstallation,
         DriveInstallation,
         RamInstallation,
@@ -23,8 +23,8 @@ namespace CSMWebCore.Models
         HingeRepair,
         VirusRemoval,
         BatteryReplacment,
-        PowerJackReplacement,               
-        MiscRepair        
+        PowerJackReplacement,
+        MiscRepair
     }
     /*
      * CheckIn - Not available through views, automatic when creating a new ticket
