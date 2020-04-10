@@ -38,9 +38,9 @@ namespace CSMWebCore.Controllers
         //    var model = _logs.GetAll().Select(log => new LogViewModel
         //    {
         //        Id = log.Id,
-        //        UserId = log.UserId,
+        //        UserCreated = log.UserCreated,
         //        TicketId = log.TicketId,
-        //        Logged = log.Logged.ToShortDateString(),
+        //        DateCreated = log.DateCreated.ToShortDateString(),
         //        Notes = log.Notes,
         //        LogType = log.LogType.ToString(),
         //        ContactMethod = log.ContactMethod.ToString()
@@ -60,9 +60,9 @@ namespace CSMWebCore.Controllers
         //    {
         //        Log log = new Log
         //        {
-        //            UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+        //            UserCreated = User.FindFirst(ClaimTypes.Name).Value.ToString(),
         //            TicketId = model.TicketId,
-        //            Logged = DateTime.Now,
+        //            DateCreated = DateTime.Now,
         //            Notes = model.Notes,
         //            LogType = model.LogType,
         //            ContactMethod = model.ContactMethod
@@ -92,9 +92,9 @@ namespace CSMWebCore.Controllers
         //    {
         //        return View(model);
         //    }
-        //    log.UserId = model.UserId;
+        //    log.UserCreated = model.UserCreated;
         //    log.TicketId = model.TicketId;
-        //    log.Logged = model.Logged;
+        //    log.DateCreated = model.DateCreated;
         //    log.Notes = model.Notes;
         //    log.LogType = model.LogType;
         //    log.ContactMethod = model.ContactMethod;
@@ -141,9 +141,9 @@ namespace CSMWebCore.Controllers
             //create a new Log entry
             Log log = new Log
             {
-                UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                UserCreated = User.FindFirst(ClaimTypes.Name).Value.ToString(),
                 TicketId = model.TicketId,
-                Logged = DateTime.Now,
+                DateCreated = DateTime.Now,
                 Notes = model.Notes,
                 LogType = model.LogType,
                 ContactMethod = model.ContactMethod
@@ -193,9 +193,9 @@ namespace CSMWebCore.Controllers
             //create new log
             Log log = new Log
             {
-                UserId = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                UserCreated = User.FindFirst(ClaimTypes.Name).Value.ToString(),
                 TicketId = model.TicketId,
-                Logged = DateTime.Now,
+                DateCreated = DateTime.Now,
                 Notes = model.Notes,
                 LogType = model.LogType,
                 ContactMethod = model.ContactMethod
@@ -210,7 +210,7 @@ namespace CSMWebCore.Controllers
             {
                 ticket.FinishDate = DateTime.Now;
             }
-            else if (model.TicketStatus == TicketStatus.Done)
+            else if (model.TicketStatus == TicketStatus.Closed)
             {
                 ticket.CheckOutDate = DateTime.Now;
                 ticket.CheckOutUserId = User.FindFirst(ClaimTypes.Name).Value.ToString();

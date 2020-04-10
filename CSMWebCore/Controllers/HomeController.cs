@@ -95,7 +95,7 @@ namespace CSMWebCore.Controllers
                     maxAgeTicketId = ticket.Id;
                 }
                 //check how long it has been since the ticket was worked on by a tech
-                TimeSpan daysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).Logged;
+                TimeSpan daysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).DateCreated;
                 //sum for the average
                 sumIdle += daysIdle;
                 if (daysIdle > maxIdle)
@@ -206,7 +206,7 @@ namespace CSMWebCore.Controllers
                     maxAge = daysOld;
                     maxAgeTicketId = ticket.Id;
                 }
-                TimeSpan daysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).Logged;
+                TimeSpan daysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).DateCreated;
                 sumIdle += daysIdle;
                 if (daysIdle > maxIdle)
                 {

@@ -8,11 +8,14 @@ namespace CSMWebCore.Models
 {
     public enum EventCategory
     {
-        General = 0,
+        OpenTicket = 0,
+        CloseTicket = 1,
+        [Display(Name = "General")]
+        GeneralService = 2,
         [Display(Name = "Software")]
-        SWService = 1,
+        SWService = 3,
         [Display(Name = "Hardware")]
-        HWService = 2,
-        Contact = 3
+        HWService = 4,
+        Contact = 5
     }
 }

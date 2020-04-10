@@ -61,31 +61,31 @@ namespace CSMWebCore.Services
         {
             if (!span.HasValue)
             {
-                return _db.Logs.Where(log => log.UserId == userId && log.ContactMethod == ContactMethod.NoContact);
+                return _db.Logs.Where(log => log.UserCreated == userId && log.ContactMethod == ContactMethod.NoContact);
             }
             DateTime date = (DateTime.Now - span.Value);
-            return _db.Logs.Where(log => log.UserId == userId  && log.ContactMethod == ContactMethod.NoContact
-            && log.Logged > date);
+            return _db.Logs.Where(log => log.UserCreated == userId  && log.ContactMethod == ContactMethod.NoContact
+            && log.DateCreated > date);
         }
         public IEnumerable<Log> GetServiceLogsByUser(string userId, DateTime startDate, DateTime endDate)
         {
-             return _db.Logs.Where(log => log.UserId == userId && log.ContactMethod == ContactMethod.NoContact
-            && log.Logged > startDate && log.Logged < endDate);
+             return _db.Logs.Where(log => log.UserCreated == userId && log.ContactMethod == ContactMethod.NoContact
+            && log.DateCreated > startDate && log.DateCreated < endDate);
         }
         public IEnumerable<Log> GetContactLogsByUser(string userId, TimeSpan? span = null)
         {
             if(!span.HasValue)
             {
-                return _db.Logs.Where(log => log.UserId == userId && log.ContactMethod != ContactMethod.NoContact);
+                return _db.Logs.Where(log => log.UserCreated == userId && log.ContactMethod != ContactMethod.NoContact);
             }
             DateTime date = (DateTime.Now - span.Value);
-            return _db.Logs.Where(log => log.UserId == userId  && log.ContactMethod != ContactMethod.NoContact
-            && log.Logged > date);
+            return _db.Logs.Where(log => log.UserCreated == userId  && log.ContactMethod != ContactMethod.NoContact
+            && log.DateCreated > date);
         }
         public IEnumerable<Log> GetContactLogsByUser(string userId, DateTime startDate, DateTime endDate)
         {
-            return _db.Logs.Where(log => log.UserId == userId && log.ContactMethod != ContactMethod.NoContact
-           && log.Logged > startDate && log.Logged < endDate);
+            return _db.Logs.Where(log => log.UserCreated == userId && log.ContactMethod != ContactMethod.NoContact
+           && log.DateCreated > startDate && log.DateCreated < endDate);
         }
 
     }

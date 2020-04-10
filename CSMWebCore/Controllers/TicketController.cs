@@ -243,7 +243,7 @@ namespace CSMWebCore.Controllers
                     Log = _logs.GetLastByTicketId(ticket.Id),
                     ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
                     ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id),
-                    DaysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).Logged
+                    DaysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).DateCreated
                 });
                 var sorted = model.OrderByDescending(x => x.DaysIdle).ToList();
 

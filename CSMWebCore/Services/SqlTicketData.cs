@@ -50,10 +50,10 @@ namespace CSMWebCore.Services
         public IEnumerable<Ticket> GetAll() => _db.Tickets;
 
         //get all open tickets
-        public IEnumerable<Ticket> GetOpen() => _db.Tickets.Where(x => x.TicketStatus != TicketStatus.Done);
+        public IEnumerable<Ticket> GetOpen() => _db.Tickets.Where(x => x.TicketStatus != TicketStatus.Closed);
 
         //get all closed tickets
-        public IEnumerable<Ticket> GetCompleted() => GetByStatus(TicketStatus.Done);
+        public IEnumerable<Ticket> GetCompleted() => GetByStatus(TicketStatus.Closed);
 
         //get all tickets for a given device
         public IEnumerable<Ticket> GetAllByDevice(int deviceId) => _db.Tickets.Where(x => x.DeviceId == deviceId);

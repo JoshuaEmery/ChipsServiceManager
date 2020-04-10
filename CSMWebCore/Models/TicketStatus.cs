@@ -11,10 +11,12 @@ namespace CSMWebCore.Models
         New,
         [Display(Name = "In Progress")]
         InProgress,
+        [Display(Name = "Needs Contact")]
+        NeedsContact,
         [Display(Name = "Pending Response")]
         PendingResponse,
         [Display(Name = "Pending Pickup")]
         PendingPickup,
-        Done
+        Closed
     }
 }

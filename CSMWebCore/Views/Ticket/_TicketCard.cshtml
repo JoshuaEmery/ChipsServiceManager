@@ -18,7 +18,7 @@
                         <td>@Model.Ticket.TicketStatus.ToString()</td>
                         <td>@Model.Customer.LastName</td>
                         <td>@Model.Ticket..ToShortDateString()</td>
-                        <td>@Model.Log.Logged.ToShortDateString()</td>
+                        <td>@Model.Log.DateCreated.ToShortDateString()</td>
                         <td>@Model.Ticket.NeedsBackup.ToString()</td>
                         <td>@Model.Log.Notes.ToString()</td>
                     </tr>
@@ -40,8 +40,8 @@
                                 <th>Time Service Performed</th>
                             </tr>
                             <tr>
-                                <td>@log.UserId</td>
-                                <td>@log.Logged</td>
+                                <td>@log.UserCreated</td>
+                                <td>@log.DateCreated</td>
                             </tr>
                         </table>
 
@@ -65,8 +65,8 @@
                                 <th>Contact Method</th>
                             </tr>
                             <tr>
-                                <td>@log.UserId</td>
-                                <td>@log.Logged</td>
+                                <td>@log.UserCreated</td>
+                                <td>@log.DateCreated</td>
                                 <td>@log.ContactMethod</td>
                             </tr>
                         </table>

@@ -6,7 +6,7 @@
         <th>@Html.DisplayNameFor(model => model.Ticket.TicketStatus)</th>
         <th>@Html.DisplayNameFor(model => model.Ticket.Device.Customer)</th>
         <th>@Html.DisplayNameFor(model => model.Ticket.CheckInDate)</th>
-        <th>@Html.DisplayNameFor(model => model.Log.Logged)</th>
+        <th>@Html.DisplayNameFor(model => model.Log.DateCreated)</th>
         <th>@Html.DisplayNameFor(model => model.Ticket.NeedsBackup)</th>
         <th>@Html.DisplayNameFor(model => model.Log.Notes)</th>
         <th></th>
@@ -18,7 +18,7 @@
             <td>@EnumHelper.GetDisplayName(ticket.Ticket.TicketStatus)</td>
             <td>@ticket.Customer.LastName</td>
             <td>@ticket.Ticket.CheckInDate.ToShortDateString()</td>
-            <td>@ticket.Log.Logged.ToShortDateString()</td>
+            <td>@ticket.Log.DateCreated.ToShortDateString()</td>
             <td>
                 @if (ticket.Ticket.NeedsBackup)
                 {

@@ -40,12 +40,15 @@ namespace CSMWebCore.Services
             //Save the new Ticket
             _tickets.Add(ticket);
             _tickets.Commit();
+            // TODO don't commit ticket until initial log has been created -- if log creation fails an incomplete ticket is created
             //Create a log entry with the newly created Ticket.Id as a foreign key
             Log log = new Log
             {
-                UserId = info.UserName,
+                EventId = 1, // hard-coded id corresponding to Check-In event in context class
+                // TODO get event id dynamically from db
+                UserCreated = info.UserName,
                 TicketId = ticket.Id,
-                Logged = DateTime.Now,
+                DateCreated = DateTime.Now,
                 Notes = info.Notes,
                 LogType = LogType.CheckIn,
                 ContactMethod = ContactMethod.InPerson
