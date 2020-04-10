@@ -15,14 +15,14 @@ namespace CSMWebCore.Controllers
     {
         private IDeviceData _devices;
         private ICustomerData _customers;
-        private ITicketData _tickets;
+        private ITicketRepository _tickets;
         private ILogData _logs;
         private ITicketsHistoryData _ticketsHistory;
         private IConsultationData _consultations;
         private IServicePriceData _servicePrices;
         private readonly UserManager<ChipsUser> _userManager;
 
-        public TempReportController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, 
+        public TempReportController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, 
             ITicketsHistoryData ticketsHistory, IConsultationData consultations, 
             IServicePriceData servicePrices ,UserManager<ChipsUser> userManager)
         {
@@ -114,7 +114,7 @@ namespace CSMWebCore.Controllers
             if (!status.HasValue)
                 return $"Total Active Tickets: {_tickets.GetOpen().Count()}\n";
             else
-                return $"{status.ToString()}: {_tickets.GetByStatus(status.Value).Count()}\n";
+                return $"{status}: {_tickets.GetByStatus(status.Value).Count()}\n";
         }
 
         private string TotalCompletedTickets(TimeSpan? span = null)
@@ -202,7 +202,7 @@ namespace CSMWebCore.Controllers
         private string PrintProgressReport(int ticketId)
         {
             string output = "";
-            TicketProgressReport tpr = _ticketsHistory.GetTicketProgressReport(_tickets.GetById(ticketId));
+            TicketProgressReport tpr = _ticketsHistory.GetTicketProgressReport(_tickets.Single(t => t.Id == ticketId));
             output += $"Ticket number {tpr.TicketId} time spent in each category:\n";            
             foreach (var item in tpr.TicketProgress)
             {
@@ -215,7 +215,7 @@ namespace CSMWebCore.Controllers
         {
             string output = "";
             output += $"The total cost for ticketId: " +
-                $"{_tickets.GetById(ticketId).TicketNumber} " +
+                $"{_tickets.Single(t => t.Id == ticketId).TicketNumber} " +
                 $"{_servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticketId))}\n";
             return output;
         }

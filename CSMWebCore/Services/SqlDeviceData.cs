@@ -24,7 +24,7 @@ namespace CSMWebCore.Services
            return _db.SaveChanges();
         }
 
-        public Device Get(int id)
+        public Device GetById(int id)
         {
             return _db.Find<Device>(id);
         }

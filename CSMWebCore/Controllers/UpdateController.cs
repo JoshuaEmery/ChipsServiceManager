@@ -17,11 +17,11 @@ namespace CSMWebCore.Controllers
     {
         private IDeviceData _devices;
         private ICustomerData _customers;
-        private ITicketData _tickets;
+        private ITicketRepository _tickets;
         private ILogData _logs;
         private IUpdateData _updates;
 
-        public UpdateController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates)
+        public UpdateController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, IUpdateData updates)
         {
             _devices = devices;
             _customers = customers;
@@ -35,11 +35,11 @@ namespace CSMWebCore.Controllers
         public IActionResult Index(string id)
         {
             var guid = new Guid(id);
-            var ticket = _tickets.GetById(_updates.GetTicketId(guid));
+            var ticket = _tickets.Single(t => t.Id == _updates.GetTicketId(guid));
             var model = new ConfirmationViewModel
             {
                 Ticket = ticket,
-                Device = _devices.Get(ticket.DeviceId),
+                Device = _devices.GetById(ticket.DeviceId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
             };
             return View(model);            

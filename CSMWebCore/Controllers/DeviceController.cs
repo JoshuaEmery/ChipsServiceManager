@@ -23,12 +23,12 @@ namespace CSMWebCore.Controllers
         //Device Controller uses all entity tables
         private IDeviceData _devices;
         private ICustomerData _customers;
-        private ITicketData _tickets;
+        private ITicketRepository _tickets;
         private ILogData _logs;
         private IUpdateData _updates;
         private ITicketCreator _ticketCreator;
         //constructor
-        public DeviceController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates, ITicketCreator ticketCreator)
+        public DeviceController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, IUpdateData updates, ITicketCreator ticketCreator)
         {
             _devices = devices;
             _customers = customers;
@@ -48,11 +48,11 @@ namespace CSMWebCore.Controllers
             // sequence thru active tickets, add viewmodel for each device to list     
             foreach (var ticket in activetickets)
             {
-                var device = _devices.Get(ticket.DeviceId);
+                var device = _devices.GetById(ticket.DeviceId);
                 model.Add(new DeviceViewModel
                 {
                     Id = device.Id,
-                    Customer = _customers.Get(device.CustomerId),
+                    Customer = _customers.GetById(device.CustomerId),
                     Make = device.Make,
                     ModelNumber = device.ModelNumber,
                     OperatingSystem = device.OperatingSystem,
@@ -70,7 +70,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(int deviceId)
         {
             //Check to see if device exists
-            var device = _devices.Get(deviceId);
+            var device = _devices.GetById(deviceId);
             if (device == null)
             {
                 return View();
@@ -94,7 +94,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(DeviceEditViewModel model)
         {
             //Check to see that the device exists
-            var device = _devices.Get(model.Id);
+            var device = _devices.GetById(model.Id);
             if (device == null || !ModelState.IsValid)
             {
                 return View();
@@ -149,7 +149,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Details(int deviceId)
         {
             //Check if device exists
-            var device = _devices.Get(deviceId);
+            var device = _devices.GetById(deviceId);
             if (device == null)
             {
                 return View();
@@ -158,7 +158,7 @@ namespace CSMWebCore.Controllers
             var model = new DeviceEditViewModel
             {
                 Id = device.Id,
-                Customer = _customers.Get(device.CustomerId),
+                Customer = _customers.GetById(device.CustomerId),
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
@@ -179,7 +179,7 @@ namespace CSMWebCore.Controllers
             DeviceEditViewModel model = new DeviceEditViewModel();
             model.Ticket = new Ticket();
             model.CustomerId = id;
-            model.Customer = _customers.Get(id);
+            model.Customer = _customers.GetById(id);
             //Get the next ticketnumber, this check is run again after post
             model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
             return View(model);
@@ -200,7 +200,7 @@ namespace CSMWebCore.Controllers
             {
                 //Get the customer object again from the database as no customer
                 //is posted back from the method
-                model.Customer = _customers.Get(model.CustomerId);
+                model.Customer = _customers.GetById(model.CustomerId);
                 return View(model);
             }
             //Create a new device using the Customer ID and form data
@@ -235,7 +235,7 @@ namespace CSMWebCore.Controllers
         public IActionResult DevicesByCustId(int id)
         {
             //check to see if customer exists
-            var cust = _customers.Get(id);
+            var cust = _customers.GetById(id);
             if (cust == null)
             {
                 return View();
@@ -264,7 +264,7 @@ namespace CSMWebCore.Controllers
             var model = _devices.Search(searchValue).Select(device => new DeviceViewModel
             {
                 Id = device.Id,
-                Customer = _customers.Get(device.CustomerId),
+                Customer = _customers.GetById(device.CustomerId),
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,

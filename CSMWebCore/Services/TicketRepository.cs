@@ -9,24 +9,14 @@ using CSMWebCore.Services;
 
 namespace CSMWebCore.Services
 {
-    //Implementation of ITicketData
-    public class SqlTicketData : ITicketData
+    //Implementation of ITicketRepository
+    public class TicketRepository : Repository<Ticket>, ITicketRepository
     {
-        //db context and injection
-        private ChipsDbContext _db;
-        public SqlTicketData(ChipsDbContext db)
+        public TicketRepository(ChipsDbContext db) : base(db)
         {
-            _db = db;
+
         }
 
-        //track ticket entity for later saving to db
-        public void Add(Ticket ticket)
-        {
-            _db.Add(ticket);
-        }
-
-        //save to db (returns # of entries written)
-        public int Commit() => _db.SaveChanges();
 
         //get all tickets of a given status
         public IEnumerable<Ticket> GetByStatus(TicketStatus status) => _db.Tickets.Where(x => x.TicketStatus == status);
@@ -44,10 +34,8 @@ namespace CSMWebCore.Services
             }
         }
         //get ticket by ID
-        public Ticket GetById(int id) => _db.Find<Ticket>(id);
 
-        //get all tickets
-        public IEnumerable<Ticket> GetAll() => _db.Tickets;
+
 
         //get all open tickets
         public IEnumerable<Ticket> GetOpen() => _db.Tickets.Where(x => x.TicketStatus != TicketStatus.Closed);
@@ -105,7 +93,8 @@ namespace CSMWebCore.Services
             return _db.Tickets.Where(x => x.CheckOutDate > startDate && x.CheckOutDate < endDate);
         }
 
-        public IEnumerable<Ticket> Search(string searchValue)
+        // TODO remove when Repository/Search is implemented
+        new public IEnumerable<Ticket> Search(string searchValue)
         {
             var result = new List<Ticket>();
             if (!String.IsNullOrEmpty(searchValue))
@@ -119,7 +108,5 @@ namespace CSMWebCore.Services
             return result;
 
         }
-
-
     }
 }

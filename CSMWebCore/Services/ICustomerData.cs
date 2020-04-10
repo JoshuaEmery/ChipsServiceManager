@@ -13,7 +13,7 @@ namespace CSMWebCore.Services
     {
         
         IEnumerable<Customer> GetAll();
-        Customer Get(int id);
+        Customer GetById(int id);
         void Add(Customer customer);
         int Commit();
         IEnumerable<Customer> Search(string searchValue);

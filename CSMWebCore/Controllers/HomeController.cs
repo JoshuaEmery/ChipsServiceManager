@@ -18,10 +18,10 @@ namespace CSMWebCore.Controllers
     {
         private IDeviceData _devices;
         private ICustomerData _customers;
-        private ITicketData _tickets;
+        private ITicketRepository _tickets;
         private ILogData _logs;
         
-        public HomeController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs)
+        public HomeController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs)
         {
             _devices = devices;
             _customers = customers;

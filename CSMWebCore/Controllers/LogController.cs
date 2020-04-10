@@ -20,11 +20,11 @@ namespace CSMWebCore.Controllers
     {
         private IDeviceData _devices;
         private ICustomerData _customers;
-        private ITicketData _tickets;
+        private ITicketRepository _tickets;
         private ILogData _logs;
         private ITicketsHistoryData _ticketsHistory;
 
-        public LogController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, ITicketsHistoryData ticketsHistory)
+        public LogController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, ITicketsHistoryData ticketsHistory)
         {
             _devices = devices;
             _customers = customers;
@@ -111,7 +111,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Service(int ticketId)
         {
             //get the ticket Object
-            var ticket = _tickets.GetById(ticketId);
+            var ticket = _tickets.Single(t => t.Id == ticketId);
             //create LogEditViewModel
             var model = new LogEditViewModel
             {
@@ -130,7 +130,7 @@ namespace CSMWebCore.Controllers
                 return View(model);
             }
                       
-            var ticket = _tickets.GetById(model.TicketId);
+            var ticket = _tickets.Single(t => t.Id == model.TicketId);
             //If this is the first log for a new ticket update the ticket status
             if (model.TicketStatus == TicketStatus.New)
             {
@@ -161,8 +161,8 @@ namespace CSMWebCore.Controllers
         public IActionResult Contact(int ticketId)
         {
             //get th ticket and the customer associated with that ticket
-            var ticket = _tickets.GetById(ticketId);
-            var customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId);
+            var ticket = _tickets.Single(t => t.Id == ticketId);
+            var customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId);
             //create LogEditViewModel
             var model = new LogEditViewModel
             {
@@ -180,7 +180,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Contact(LogEditViewModel model)
         {
             //get the ticket and check for valid
-            Ticket ticket = _tickets.GetById(model.TicketId);
+            Ticket ticket = _tickets.Single(t => t.Id == model.TicketId);
             if (!ModelState.IsValid || ticket == null)
             {
                 return View(model);

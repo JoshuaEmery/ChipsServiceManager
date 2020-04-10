@@ -9,7 +9,7 @@ namespace CSMWebCore.Services
     public interface IDeviceData
     {
         IEnumerable<Device> GetAll();
-        Device Get(int id);
+        Device GetById(int id);
         void Add(Device device);
         int Commit();
         IEnumerable<Device> GetAllByCustId(int customerId);

@@ -56,7 +56,7 @@ namespace CSMWebCore
             services.AddScoped<ICustomerData, SqlCustomerData>();
             services.AddScoped<IDeviceData, SqlDeviceData>();
             services.AddScoped<ILogData, SqlLogData>();
-            services.AddScoped<ITicketData, SqlTicketData>();
+            services.AddScoped<ITicketRepository, TicketRepository>();
             services.AddScoped<IUpdateData, SqlUpdateData>();
             services.AddScoped<ITicketsHistoryData, SqlTicketsHistoryData>();
             services.AddScoped<IConsultationData, SqlConsultationData>();

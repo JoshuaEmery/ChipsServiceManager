@@ -7,17 +7,13 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface ITicketData
+    public interface ITicketRepository : IRepository<Ticket>
     {
-        IEnumerable<Ticket> GetAll();
-        Ticket GetById(int id);
-        void Add(Ticket ticket);
-        int Commit();
         IEnumerable<Ticket> GetByStatus(TicketStatus status);
         int GetLatestTicketNum();
         IEnumerable<Ticket> GetAllByDevice(int deviceId);
         IEnumerable<Ticket> GetOpen();
-        IEnumerable<Ticket> Search(string searchValue);
+
         IEnumerable<Ticket> GetAll(DateTime startDate, DateTime endDate);
         IEnumerable<Ticket> GetAll(TimeSpan span);
         IEnumerable<Ticket> GetClosed(DateTime startDate, DateTime endDate);

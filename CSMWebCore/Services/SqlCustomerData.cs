@@ -26,7 +26,7 @@ namespace CSMWebCore.Services
             return _db.SaveChanges();
         }
 
-        public Customer Get(int id)
+        public Customer GetById(int id)
         {
             return _db.Find<Customer>(id);
         }

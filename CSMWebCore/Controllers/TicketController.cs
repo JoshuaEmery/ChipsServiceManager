@@ -20,12 +20,12 @@ namespace CSMWebCore.Controllers
     {
         private IDeviceData _devices;
         private ICustomerData _customers;
-        private ITicketData _tickets;
+        private ITicketRepository _tickets;
         private ILogData _logs;
         private IUpdateData _updates;
         private ITicketCreator _ticketCreator;
 
-        public TicketController(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates, ITicketCreator ticketCreator)
+        public TicketController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, IUpdateData updates, ITicketCreator ticketCreator)
         {
             _devices = devices;
             _customers = customers;
@@ -42,7 +42,7 @@ namespace CSMWebCore.Controllers
             var model = _tickets.GetOpen().Select(ticket => new TicketViewModel
             {
                 Ticket = ticket,
-                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
                 ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
                 ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -58,7 +58,7 @@ namespace CSMWebCore.Controllers
         public IActionResult CreateByExistingDeviceId(int deviceId)
         {
             //get the device and check it
-            var device = _devices.Get(deviceId);
+            var device = _devices.GetById(deviceId);
             if (device == null)
             {
                 return View();
@@ -73,7 +73,7 @@ namespace CSMWebCore.Controllers
                 Password = device.Password,
                 Serviced = device.Serviced,
                 Ticket = new Ticket(),
-                Customer = _customers.Get(device.CustomerId),
+                Customer = _customers.GetById(device.CustomerId),
                 CustomerId = device.CustomerId
             };
             //Get the current Ticket Number
@@ -87,12 +87,12 @@ namespace CSMWebCore.Controllers
             model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
             if (!ModelState.IsValid)
             {
-                model.Customer = _customers.Get(model.CustomerId);
+                model.Customer = _customers.GetById(model.CustomerId);
                 return View(model);
 
             }
             //get the device and create a new ticket from the device
-            var device = _devices.Get(model.Id);
+            var device = _devices.GetById(model.Id);
             TicketConfirmationModel tcModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
             {
                 DeviceId = device.Id,
@@ -114,7 +114,7 @@ namespace CSMWebCore.Controllers
         //Ticket/Edit
         public IActionResult Edit(int id)
         {
-            var model = _tickets.GetById(id);
+            var model = _tickets.Single(t => t.Id == id);
             if (model == null)
             {
                 return RedirectToAction("Index");
@@ -125,7 +125,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(TicketEditViewModel model)
         {
             //get the ticket to edit
-            var ticket = _tickets.GetById(model.Id);
+            var ticket = _tickets.Single(t => t.Id == model.Id);
             if (ticket == null || !ModelState.IsValid)
             {
                 return View(model);
@@ -150,14 +150,14 @@ namespace CSMWebCore.Controllers
         public IActionResult Details(int ticketId)
         {
             //get the ticket
-            var ticket = _tickets.GetById(ticketId);
+            var ticket = _tickets.Single(t => t.Id == ticketId);
             //check that it is not null
             if (ticket != null)
             {
                 var model = new TicketViewModel
                 {
                     Ticket = ticket,
-                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                    Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
                     Log = _logs.GetLastByTicketId(ticket.Id),
                     ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
                     ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -185,7 +185,7 @@ namespace CSMWebCore.Controllers
             var model = _tickets.GetByStatus(result.TicketStatus).Select(ticket => new TicketViewModel
             {
                 Ticket = ticket,
-                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
                 ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
                 ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -211,7 +211,7 @@ namespace CSMWebCore.Controllers
                 var model = _tickets.GetAll().OrderBy(x => x.CheckInDate).Select(ticket => new TicketViewModel
                 {
                     Ticket = ticket,
-                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                    Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
                     Log = _logs.GetLastByTicketId(ticket.Id),
                     ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
                     ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -225,7 +225,7 @@ namespace CSMWebCore.Controllers
                 var model = _tickets.GetAll().OrderByDescending(x => x.CheckInDate).Select(ticket => new TicketViewModel
                 {
                     Ticket = ticket,
-                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                    Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
                     Log = _logs.GetLastByTicketId(ticket.Id),
                     ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
                     ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -239,7 +239,7 @@ namespace CSMWebCore.Controllers
                 var model = _tickets.GetAll().OrderBy(x => x.CheckInDate).Select(ticket => new TicketViewModel
                 {
                     Ticket = ticket,
-                    Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                    Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
                     Log = _logs.GetLastByTicketId(ticket.Id),
                     ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
                     ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id),
@@ -261,7 +261,7 @@ namespace CSMWebCore.Controllers
             var model = _tickets.GetAllByDevice(deviceId).Select(ticket => new TicketViewModel
             {
                 Ticket = ticket,
-                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
                 ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
                 ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -285,7 +285,7 @@ namespace CSMWebCore.Controllers
             var model = _tickets.Search(searchValue).Select(ticket => new TicketViewModel
             {
                 Ticket = ticket,
-                Customer = _customers.Get(_devices.Get(ticket.DeviceId).CustomerId),
+                Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
                 Log = _logs.GetLastByTicketId(ticket.Id),
                 ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
                 ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -310,20 +310,18 @@ namespace CSMWebCore.Controllers
         // converts bitmap to byte array
         private static byte[] BitmapToBytes(Bitmap img)
         {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                return stream.ToArray();
-            }
+            using MemoryStream stream = new MemoryStream();
+            img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+            return stream.ToArray();
         }
         // displays Update view for printout
         public IActionResult Confirmation(int ticketId, int deviceId, int customerId, Guid updateId)
         {
             var model = new ConfirmationViewModel
             {
-                Ticket = _tickets.GetById(ticketId),
-                Device = _devices.Get(deviceId),
-                Customer = _customers.Get(customerId),
+                Ticket = _tickets.Single(t => t.Id == ticketId),
+                Device = _devices.GetById(deviceId),
+                Customer = _customers.GetById(customerId),
                 Update = _updates.Get(updateId)
             };
             return View(model);

@@ -13,10 +13,10 @@ namespace CSMWebCore.Services
     {
         private IDeviceData _devices;
         private ICustomerData _customers;
-        private ITicketData _tickets;
+        private ITicketRepository _tickets;
         private ILogData _logs;
         private IUpdateData _updates;
-        public TicketCreator(IDeviceData devices, ICustomerData customers, ITicketData tickets, ILogData logs, IUpdateData updates)
+        public TicketCreator(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, IUpdateData updates)
         {
             _devices = devices;
             _customers = customers;
