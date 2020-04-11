@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class Device : Entity
+    public class Device
     {
+        public int Id { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
         public string Make { get; set; }

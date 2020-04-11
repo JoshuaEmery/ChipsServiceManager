@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class Log : Entity
+    public class Log
     {
+        public int Id { get; set; }
         public int TicketId { get; set; }
         public Ticket Ticket { get; set; }
         public int EventId { get; set; }

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class Consultation : Entity
+    public class Consultation
     {
+        public int Id { get; set; }
         public string UserName { get; set; }
         public DateTime Time { get; set; }
     }
