@@ -9,6 +9,8 @@ namespace CSMWebCore.Services
 {
     public interface ITicketRepository : IRepository<Ticket>
     {
+        Ticket GetById(int id);
+        IEnumerable<Ticket> Search(string searchValue);
         IEnumerable<Ticket> GetByStatus(TicketStatus status);
         int GetLatestTicketNum();
         IEnumerable<Ticket> GetAllByDevice(int deviceId);

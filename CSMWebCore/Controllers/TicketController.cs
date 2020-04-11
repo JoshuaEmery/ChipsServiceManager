@@ -18,14 +18,14 @@ namespace CSMWebCore.Controllers
     [Authorize]
     public class TicketController : Controller
     {
-        private IDeviceData _devices;
-        private ICustomerData _customers;
+        private IDeviceRepository _devices;
+        private ICustomerRepository _customers;
         private ITicketRepository _tickets;
-        private ILogData _logs;
-        private IUpdateData _updates;
+        private ILogRepository _logs;
+        private XIUpdateData _updates;
         private ITicketCreator _ticketCreator;
 
-        public TicketController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, IUpdateData updates, ITicketCreator ticketCreator)
+        public TicketController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, XIUpdateData updates, ITicketCreator ticketCreator)
         {
             _devices = devices;
             _customers = customers;
@@ -114,7 +114,7 @@ namespace CSMWebCore.Controllers
         //Ticket/Edit
         public IActionResult Edit(int id)
         {
-            var model = _tickets.Single(t => t.Id == id);
+            var model = _tickets.GetSingle(t => t.Id == id);
             if (model == null)
             {
                 return RedirectToAction("Index");
@@ -125,7 +125,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(TicketEditViewModel model)
         {
             //get the ticket to edit
-            var ticket = _tickets.Single(t => t.Id == model.Id);
+            var ticket = _tickets.GetSingle(t => t.Id == model.Id);
             if (ticket == null || !ModelState.IsValid)
             {
                 return View(model);
@@ -150,7 +150,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Details(int ticketId)
         {
             //get the ticket
-            var ticket = _tickets.Single(t => t.Id == ticketId);
+            var ticket = _tickets.GetSingle(t => t.Id == ticketId);
             //check that it is not null
             if (ticket != null)
             {
@@ -301,7 +301,7 @@ namespace CSMWebCore.Controllers
         {
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             //change to route to site url
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"http://chipsmgr.com/Update/Index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"http://chipsmgr.com/XUpdate/Index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(20);
             byte[] image = BitmapToBytes(qrCodeImage);
@@ -319,7 +319,7 @@ namespace CSMWebCore.Controllers
         {
             var model = new ConfirmationViewModel
             {
-                Ticket = _tickets.Single(t => t.Id == ticketId),
+                Ticket = _tickets.GetSingle(t => t.Id == ticketId),
                 Device = _devices.GetById(deviceId),
                 Customer = _customers.GetById(customerId),
                 Update = _updates.Get(updateId)

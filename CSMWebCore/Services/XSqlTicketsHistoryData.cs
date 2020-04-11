@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public class SqlTicketsHistoryData : ITicketsHistoryData
+    public class XSqlTicketsHistoryData : XITicketsHistoryData
     {
         private ChipsDbContext _db;
-        public SqlTicketsHistoryData(ChipsDbContext db)
+        public XSqlTicketsHistoryData(ChipsDbContext db)
         {
             _db = db;
         }
 
-        public IEnumerable<TicketHistory> GetAll()
+        public IEnumerable<XTicketHistory> GetAll()
         {
             return _db.TicketsHistory;
         }
@@ -24,7 +24,7 @@ namespace CSMWebCore.Services
         //the newly generated primary key from the tickethistory table.
         public int AddTicketToHistory(Ticket ticket)
         {
-            TicketHistory ticketHistory = new TicketHistory
+            XTicketHistory ticketHistory = new XTicketHistory
             {
                 TicketId = ticket.Id,
                 CheckedIn = ticket.CheckInDate,
@@ -51,7 +51,7 @@ namespace CSMWebCore.Services
             TimeSpan[] timeByStatus = new TimeSpan[5];
             //get the list of tickethistory entries for this ticket and create a list from it so
             //it can be accessed by index
-            List<TicketHistory> ticketHistories = _db.TicketsHistory.Where(x => x.TicketId == ticket.Id).ToList();
+            List<XTicketHistory> ticketHistories = _db.TicketsHistory.Where(x => x.TicketId == ticket.Id).ToList();
             //assign the id
             ticketProgressReport.TicketId = ticket.Id;
             //if there are no entries in tickethistory then the status is still new so the time is simply
@@ -106,7 +106,7 @@ namespace CSMWebCore.Services
             else
             {
                 DateTime date = (DateTime.Now - span.Value);
-                IEnumerable<TicketHistory> ticketHistories = _db.TicketsHistory.Where(x => x.AddedToHistory > date);
+                IEnumerable<XTicketHistory> ticketHistories = _db.TicketsHistory.Where(x => x.AddedToHistory > date);
                 foreach (var ticketHistory in ticketHistories)
                 {
 
@@ -118,7 +118,7 @@ namespace CSMWebCore.Services
         public IEnumerable<TicketProgressReport> GetTicketProgressReports(DateTime startDate, DateTime endDate)
         {
             List<TicketProgressReport> result = new List<TicketProgressReport>();
-            IEnumerable<TicketHistory> ticketHistories = _db.TicketsHistory.Where(x => x.AddedToHistory > startDate && x.AddedToHistory < endDate);
+            IEnumerable<XTicketHistory> ticketHistories = _db.TicketsHistory.Where(x => x.AddedToHistory > startDate && x.AddedToHistory < endDate);
             foreach (var ticketHistory in ticketHistories)
             {
 

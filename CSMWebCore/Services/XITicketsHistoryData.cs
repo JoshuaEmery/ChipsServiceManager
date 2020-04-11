@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface ITicketsHistoryData
+    public interface XITicketsHistoryData
     {
         /// <summary>
         /// Get all entries in tickethistory table
         /// </summary>
         /// <returns></returns>
-        IEnumerable<TicketHistory> GetAll();
+        IEnumerable<XTicketHistory> GetAll();
         /// <summary>
         /// Add a ticket to the history table and return the id of the newly created tickethistory
         /// </summary>

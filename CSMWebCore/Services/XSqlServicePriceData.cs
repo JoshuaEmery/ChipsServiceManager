@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public class SqlServicePriceData : IServicePriceData
+    public class XSqlServicePriceData : XIServicePriceData
     {
         private ChipsDbContext _db;
-        public SqlServicePriceData(ChipsDbContext db)
+        public XSqlServicePriceData(ChipsDbContext db)
         {
             _db = db;
         }

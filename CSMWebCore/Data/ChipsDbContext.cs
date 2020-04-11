@@ -15,12 +15,12 @@ namespace CSMWebCore.Data
     {
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<TicketHistory> TicketsHistory { get; set; }
+        public DbSet<XTicketHistory> TicketsHistory { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<Device> Devices { get; set; }
-        public DbSet<Update> Updates { get; set; }
+        public DbSet<XUpdate> Updates { get; set; }
         public DbSet<Consultation> Consultations { get; set; }
-        public DbSet<ServicePrice> ServicePrices { get; set; }
+        public DbSet<XServicePrice> ServicePrices { get; set; }
         public DbSet<Event> Events { get; set; }
 
         //public DbSet<Customer> MyProperty { get; set; }
@@ -33,25 +33,25 @@ namespace CSMWebCore.Data
             base.OnModelCreating(builder);
 
             // seed initial services
-            builder.Entity<ServicePrice>().HasData(
-                new ServicePrice { Id = 1, Service = LogType.CheckIn, Price = 0m },
-                new ServicePrice { Id = 2, Service = LogType.Contact, Price = 0m },
-                new ServicePrice { Id = 3, Service = LogType.Checkout, Price = 0m },
-                new ServicePrice { Id = 4, Service = LogType.Diagnostic, Price = 50m },
-                new ServicePrice { Id = 5, Service = LogType.OsInstallation, Price = 150m },
-                new ServicePrice { Id = 6, Service = LogType.OsUpdate, Price = 50m },
-                new ServicePrice { Id = 7, Service = LogType.DataBackupRestore, Price = 150m },
-                new ServicePrice { Id = 8, Service = LogType.SoftwareInstallation, Price = 50m },
-                new ServicePrice { Id = 9, Service = LogType.DriveInstallation, Price = 100m },
-                new ServicePrice { Id = 10, Service = LogType.RamInstallation, Price = 100m },
-                new ServicePrice { Id = 11, Service = LogType.ScreenReplacement, Price = 150m },
-                new ServicePrice { Id = 12, Service = LogType.KeyboardReplacement, Price = 125m },
-                new ServicePrice { Id = 13, Service = LogType.TouchpadReplacement, Price = 150m },
-                new ServicePrice { Id = 14, Service = LogType.HingeRepair, Price = 150m },
-                new ServicePrice { Id = 15, Service = LogType.VirusRemoval, Price = 150m },
-                new ServicePrice { Id = 16, Service = LogType.BatteryReplacment, Price = 50m },
-                new ServicePrice { Id = 17, Service = LogType.PowerJackReplacement, Price = 150m },
-                new ServicePrice { Id = 18, Service = LogType.MiscRepair, Price = 100m });
+            builder.Entity<XServicePrice>().HasData(
+                new XServicePrice { Id = 1, Service = LogType.CheckIn, Price = 0m },
+                new XServicePrice { Id = 2, Service = LogType.Contact, Price = 0m },
+                new XServicePrice { Id = 3, Service = LogType.Checkout, Price = 0m },
+                new XServicePrice { Id = 4, Service = LogType.Diagnostic, Price = 50m },
+                new XServicePrice { Id = 5, Service = LogType.OsInstallation, Price = 150m },
+                new XServicePrice { Id = 6, Service = LogType.OsUpdate, Price = 50m },
+                new XServicePrice { Id = 7, Service = LogType.DataBackupRestore, Price = 150m },
+                new XServicePrice { Id = 8, Service = LogType.SoftwareInstallation, Price = 50m },
+                new XServicePrice { Id = 9, Service = LogType.DriveInstallation, Price = 100m },
+                new XServicePrice { Id = 10, Service = LogType.RamInstallation, Price = 100m },
+                new XServicePrice { Id = 11, Service = LogType.ScreenReplacement, Price = 150m },
+                new XServicePrice { Id = 12, Service = LogType.KeyboardReplacement, Price = 125m },
+                new XServicePrice { Id = 13, Service = LogType.TouchpadReplacement, Price = 150m },
+                new XServicePrice { Id = 14, Service = LogType.HingeRepair, Price = 150m },
+                new XServicePrice { Id = 15, Service = LogType.VirusRemoval, Price = 150m },
+                new XServicePrice { Id = 16, Service = LogType.BatteryReplacment, Price = 50m },
+                new XServicePrice { Id = 17, Service = LogType.PowerJackReplacement, Price = 150m },
+                new XServicePrice { Id = 18, Service = LogType.MiscRepair, Price = 100m });
 
             // seed log event types (currently unused, eventually to replace LogType/ContactMethod enums and ServicePrice Entity)
             builder.Entity<Event>().HasData(

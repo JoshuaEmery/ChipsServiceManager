@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface IUpdateData
+    public interface ICustomerRepository : IRepository<Customer>
     {
-        Update Get(Guid id);
-        int GetTicketId(Guid id);
-        void Add(Update update);
-        int Commit();
+        Customer GetById(int id);
+        IEnumerable<Customer> Search(string searchValue);
     }
 }

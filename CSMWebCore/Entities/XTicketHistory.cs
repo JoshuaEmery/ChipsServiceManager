@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class TicketHistory
+    public class XTicketHistory
     {
         public int Id { get; set; }
         public int TicketId { get; set; }

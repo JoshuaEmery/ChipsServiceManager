@@ -16,12 +16,12 @@ namespace CSMWebCore.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private IDeviceData _devices;
-        private ICustomerData _customers;
+        private IDeviceRepository _devices;
+        private ICustomerRepository _customers;
         private ITicketRepository _tickets;
-        private ILogData _logs;
+        private ILogRepository _logs;
         
-        public HomeController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs)
+        public HomeController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs)
         {
             _devices = devices;
             _customers = customers;

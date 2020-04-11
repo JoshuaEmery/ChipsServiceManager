@@ -1,4 +1,5 @@
 ﻿using CSMWebCore.Data;
+using CSMWebCore.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public abstract class Repository<TEntity> : IRepository<TEntity>
-        where TEntity : class
+    public abstract class Repository<T> : IRepository<T> where T : class
     {
         public ChipsDbContext _db;
 
@@ -16,30 +16,15 @@ namespace CSMWebCore.Services
             // inject database context into repository
             _db = db;
         }
+        
+        public IEnumerable<T> GetAll() => _db.Set<T>().ToList();
+        
+        public IEnumerable<T> GetAll(Func<T, bool> exp) => _db.Set<T>().Where(exp).ToList();
+        
+        public T GetSingle(Func<T, bool> exp) => _db.Set<T>().Single(exp);
 
-
-        public void Add(TEntity entity) => _db.Add(entity);
+        public void Add(T entity) => _db.Add(entity);
 
         public int Commit() =>_db.SaveChanges();
-
-        /// <summary>
-        /// Gets all instances by getting a DbSet of the entity type 
-        /// and creating a list from it.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<TEntity> GetAll() => _db.Set<TEntity>().ToList();
-
-        public IEnumerable<TEntity> Search(string searchValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Gets a single entity that satisfies the function delegate expression.
-        /// Throws an exception if more than one element exists.
-        /// </summary>
-        /// <param name="exp"></param>
-        /// <returns></returns>
-        public TEntity Single(Func<TEntity, bool> exp) => _db.Set<TEntity>().Single(exp);
     }
 }

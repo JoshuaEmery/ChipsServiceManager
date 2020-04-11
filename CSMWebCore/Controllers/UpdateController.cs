@@ -15,13 +15,13 @@ namespace CSMWebCore.Controllers
     //Conroller that generates data for updating the customer
     public class UpdateController : Controller
     {
-        private IDeviceData _devices;
-        private ICustomerData _customers;
+        private IDeviceRepository _devices;
+        private ICustomerRepository _customers;
         private ITicketRepository _tickets;
-        private ILogData _logs;
-        private IUpdateData _updates;
+        private ILogRepository _logs;
+        private XIUpdateData _updates;
 
-        public UpdateController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, IUpdateData updates)
+        public UpdateController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, XIUpdateData updates)
         {
             _devices = devices;
             _customers = customers;
@@ -35,7 +35,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Index(string id)
         {
             var guid = new Guid(id);
-            var ticket = _tickets.Single(t => t.Id == _updates.GetTicketId(guid));
+            var ticket = _tickets.GetSingle(t => t.Id == _updates.GetTicketId(guid));
             var model = new ConfirmationViewModel
             {
                 Ticket = ticket,

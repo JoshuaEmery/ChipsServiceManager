@@ -10,18 +10,18 @@ namespace CSMWebCore.Services
 {
     public class ReportsService : IReportsService 
     {
-        private IDeviceData _devices;
-        private ICustomerData _customers;
+        private IDeviceRepository _devices;
+        private ICustomerRepository _customers;
         private ITicketRepository _tickets;
-        private ILogData _logs;
-        private ITicketsHistoryData _ticketsHistory;
-        private IConsultationData _consultations;
-        private IServicePriceData _servicePrices;
+        private ILogRepository _logs;
+        private XITicketsHistoryData _ticketsHistory;
+        private IConsultationRepository _consultations;
+        private XIServicePriceData _servicePrices;
         private readonly UserManager<ChipsUser> _userManager;
 
-        public ReportsService(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs,
-            ITicketsHistoryData ticketsHistory, IConsultationData consultations,
-            IServicePriceData servicePrices, UserManager<ChipsUser> userManager)
+        public ReportsService(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs,
+            XITicketsHistoryData ticketsHistory, IConsultationRepository consultations,
+            XIServicePriceData servicePrices, UserManager<ChipsUser> userManager)
         {
             _devices = devices;
             _customers = customers;
@@ -135,7 +135,7 @@ namespace CSMWebCore.Services
 
         public TicketProgressReport PrintProgressReport(int ticketId)
         {
-            return _ticketsHistory.GetTicketProgressReport(_tickets.Single(t => t.Id == ticketId));
+            return _ticketsHistory.GetTicketProgressReport(_tickets.GetSingle(t => t.Id == ticketId));
         }
 
         public decimal GetSavingsByTicket(int ticketId)

@@ -15,11 +15,11 @@ namespace CSMWebCore.Controllers
     public class CustomerController : Controller
     {
         //Customers controller needs access to customers, tickets and devices tables
-        private ICustomerData _customers;
+        private ICustomerRepository _customers;
         private ITicketRepository _tickets;
-        private IDeviceData _devices;
+        private IDeviceRepository _devices;
         //Constructor
-        public CustomerController(ICustomerData customers, ITicketRepository tickets, IDeviceData devices)
+        public CustomerController(ICustomerRepository customers, ITicketRepository tickets, IDeviceRepository devices)
         {
             _customers = customers;
             _tickets = tickets;
@@ -48,7 +48,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Details(int id)
         {
             //Get the customer object using ID
-            var cust = _customers.GetById(id);
+            var cust = _customers.GetSingle(c => c.Id == id);
             //Check to see that customer exists
             if(cust == null)
             {
@@ -72,7 +72,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(int id)
         {
             //get the customer object
-            var cust = _customers.GetById(id);
+            var cust = _customers.GetSingle(c => c.Id == id);
             //check to see if it is null
             if(cust == null)
             {
@@ -86,7 +86,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(CustomerEditViewModel model)
         {
             //Verify the Id that came back from the Post is valid
-            var cust = _customers.GetById(model.Id);
+            var cust = _customers.GetSingle(c => c.Id == model.Id);
             if(cust == null || !ModelState.IsValid)
             {
                 return View(model);
@@ -173,7 +173,7 @@ namespace CSMWebCore.Controllers
             {
                 //Retrieve each Customer by getting the CustomerID stored in the Device that is
                 //stored in the Ticket
-                Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId)               
+                Customer = _customers.GetSingle(c => c.Id == _devices.GetSingle(d => d.Id == ticket.DeviceId).CustomerId)
             });
             //return View
             return View(model);

@@ -21,14 +21,14 @@ namespace CSMWebCore.Controllers
     public class DeviceController : Controller
     {
         //Device Controller uses all entity tables
-        private IDeviceData _devices;
-        private ICustomerData _customers;
+        private IDeviceRepository _devices;
+        private ICustomerRepository _customers;
         private ITicketRepository _tickets;
-        private ILogData _logs;
-        private IUpdateData _updates;
+        private ILogRepository _logs;
+        private XIUpdateData _updates;
         private ITicketCreator _ticketCreator;
         //constructor
-        public DeviceController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, IUpdateData updates, ITicketCreator ticketCreator)
+        public DeviceController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, XIUpdateData updates, ITicketCreator ticketCreator)
         {
             _devices = devices;
             _customers = customers;

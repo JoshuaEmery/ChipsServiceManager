@@ -11,12 +11,12 @@ namespace CSMWebCore.Services
 {
     public class TicketCreator : ITicketCreator
     {
-        private IDeviceData _devices;
-        private ICustomerData _customers;
+        private IDeviceRepository _devices;
+        private ICustomerRepository _customers;
         private ITicketRepository _tickets;
-        private ILogData _logs;
-        private IUpdateData _updates;
-        public TicketCreator(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, IUpdateData updates)
+        private ILogRepository _logs;
+        private XIUpdateData _updates;
+        public TicketCreator(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, XIUpdateData updates)
         {
             _devices = devices;
             _customers = customers;
@@ -58,7 +58,7 @@ namespace CSMWebCore.Services
             _logs.Commit();
             //Create a new entry in the update table with a guid for the Primary Key and
             //a foreign key from the Ticket
-            Update update = new Update
+            XUpdate update = new XUpdate
             {
                 Id = new Guid(),
                 TicketId = ticket.Id

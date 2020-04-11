@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class ServicePrice
+    public class XServicePrice
     {
         public int Id { get; set; }
         public LogType Service { get; set; }

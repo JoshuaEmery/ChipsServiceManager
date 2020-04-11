@@ -13,7 +13,7 @@ namespace CSMWebCore.ViewModels
         public Device Device { get; set; }
         public Log Log { get; set; }
         public Customer Customer { get; set; }
-        public Update Update { get; set; }
+        public XUpdate Update { get; set; }
 
 
     }

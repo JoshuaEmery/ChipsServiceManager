@@ -7,17 +7,10 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public class SqlConsultationData : IConsultationData
+    public class ConsultationRepository : Repository<Consultation>, IConsultationRepository
     {
-        private ChipsDbContext _db;
-        public SqlConsultationData(ChipsDbContext db)
-        {
-            _db = db;
-        }
-        public IEnumerable<Consultation> GetAll()
-        {
-            return _db.Consultations;
-        }
+        public ConsultationRepository(ChipsDbContext db) : base(db)
+        { }
 
         public IEnumerable<Consultation> GetConsultations(TimeSpan span)
         {

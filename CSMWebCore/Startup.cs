@@ -51,16 +51,16 @@ namespace CSMWebCore
             services.AddDbContext<ChipsDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            //this adds the service to access Customer data through the SqlCustomerData object which implements the
+            //this adds the service to access Customer data through the CustomerRepository object which implements the
             //ICusomerData Interface.  Add scoped must be used in order for services to work with EF
-            services.AddScoped<ICustomerData, SqlCustomerData>();
-            services.AddScoped<IDeviceData, SqlDeviceData>();
-            services.AddScoped<ILogData, SqlLogData>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IDeviceRepository, DeviceRepository>();
+            services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
-            services.AddScoped<IUpdateData, SqlUpdateData>();
-            services.AddScoped<ITicketsHistoryData, SqlTicketsHistoryData>();
-            services.AddScoped<IConsultationData, SqlConsultationData>();
-            services.AddScoped<IServicePriceData, SqlServicePriceData>();
+            services.AddScoped<XIUpdateData, XSqlUpdateData>();
+            services.AddScoped<XITicketsHistoryData, XSqlTicketsHistoryData>();
+            services.AddScoped<IConsultationRepository, ConsultationRepository>();
+            services.AddScoped<XIServicePriceData, XSqlServicePriceData>();
             services.AddScoped<IReportsService, ReportsService>();
             services.AddScoped<ITicketCreator, TicketCreator>();
             //Adds Identity services using the DBFramework.  This also allows for dependency injection for User

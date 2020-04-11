@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface IServicePriceData
+    public interface XIServicePriceData
     {
         decimal GetTotalPrice(IEnumerable<LogType> logs);
         decimal GetPriceOfServiceType(LogType service);

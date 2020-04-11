@@ -7,32 +7,12 @@ using CSMWebCore.Entities;
 
 namespace CSMWebCore.Services
 {
-    public class SqlDeviceData : IDeviceData
+    public class DeviceRepository : Repository<Device>, IDeviceRepository
     {
-        private ChipsDbContext _db;
-        public SqlDeviceData(ChipsDbContext db)
-        {
-            _db = db;
-        }
-        public void Add(Device device)
-        {
-            _db.Add(device);
-        }
+        public DeviceRepository(ChipsDbContext db) : base(db)
+        { }
 
-        public int Commit()
-        {
-           return _db.SaveChanges();
-        }
-
-        public Device GetById(int id)
-        {
-            return _db.Find<Device>(id);
-        }
-
-        public IEnumerable<Device> GetAll()
-        {
-            return _db.Devices;
-        }
+        public Device GetById(int id) => GetSingle(d => d.Id == id);
 
         public IEnumerable<Device> GetAllByCustId(int customerId)
         {

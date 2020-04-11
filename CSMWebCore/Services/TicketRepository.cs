@@ -12,11 +12,8 @@ namespace CSMWebCore.Services
     //Implementation of ITicketRepository
     public class TicketRepository : Repository<Ticket>, ITicketRepository
     {
-        public TicketRepository(ChipsDbContext db) : base(db)
-        {
-
-        }
-
+        public TicketRepository(ChipsDbContext db) : base(db) 
+        { }
 
         //get all tickets of a given status
         public IEnumerable<Ticket> GetByStatus(TicketStatus status) => _db.Tickets.Where(x => x.TicketStatus == status);
@@ -34,7 +31,7 @@ namespace CSMWebCore.Services
             }
         }
         //get ticket by ID
-
+        public Ticket GetById(int id) => GetSingle(t => t.Id == id);
 
 
         //get all open tickets
@@ -94,7 +91,7 @@ namespace CSMWebCore.Services
         }
 
         // TODO remove when Repository/Search is implemented
-        new public IEnumerable<Ticket> Search(string searchValue)
+        public IEnumerable<Ticket> Search(string searchValue)
         {
             var result = new List<Ticket>();
             if (!String.IsNullOrEmpty(searchValue))

@@ -13,18 +13,18 @@ namespace CSMWebCore.Controllers
     //This to be deleted after report with Ty on Tuesday
     public class TempReportController : Controller
     {
-        private IDeviceData _devices;
-        private ICustomerData _customers;
+        private IDeviceRepository _devices;
+        private ICustomerRepository _customers;
         private ITicketRepository _tickets;
-        private ILogData _logs;
-        private ITicketsHistoryData _ticketsHistory;
-        private IConsultationData _consultations;
-        private IServicePriceData _servicePrices;
+        private ILogRepository _logs;
+        private XITicketsHistoryData _ticketsHistory;
+        private IConsultationRepository _consultations;
+        private XIServicePriceData _servicePrices;
         private readonly UserManager<ChipsUser> _userManager;
 
-        public TempReportController(IDeviceData devices, ICustomerData customers, ITicketRepository tickets, ILogData logs, 
-            ITicketsHistoryData ticketsHistory, IConsultationData consultations, 
-            IServicePriceData servicePrices ,UserManager<ChipsUser> userManager)
+        public TempReportController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, 
+            XITicketsHistoryData ticketsHistory, IConsultationRepository consultations, 
+            XIServicePriceData servicePrices ,UserManager<ChipsUser> userManager)
         {
             _devices = devices;
             _customers = customers;
@@ -202,7 +202,7 @@ namespace CSMWebCore.Controllers
         private string PrintProgressReport(int ticketId)
         {
             string output = "";
-            TicketProgressReport tpr = _ticketsHistory.GetTicketProgressReport(_tickets.Single(t => t.Id == ticketId));
+            TicketProgressReport tpr = _ticketsHistory.GetTicketProgressReport(_tickets.GetSingle(t => t.Id == ticketId));
             output += $"Ticket number {tpr.TicketId} time spent in each category:\n";            
             foreach (var item in tpr.TicketProgress)
             {
@@ -215,7 +215,7 @@ namespace CSMWebCore.Controllers
         {
             string output = "";
             output += $"The total cost for ticketId: " +
-                $"{_tickets.Single(t => t.Id == ticketId).TicketNumber} " +
+                $"{_tickets.GetSingle(t => t.Id == ticketId).TicketNumber} " +
                 $"{_servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticketId))}\n";
             return output;
         }

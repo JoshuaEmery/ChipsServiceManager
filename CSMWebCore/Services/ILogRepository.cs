@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface ILogData
+    public interface ILogRepository : IRepository<Log>
     {
-        IEnumerable<Log> GetAll();
-        Log Get(int id);
-        void Add(Log log);
-        int Commit();
+        Log GetById(int id);
         Log GetLastByTicketId(int ticketId);
         IEnumerable<Log> GetLogsByTicketId(int ticketId);
         IEnumerable<LogType> GetDistinctLogTypesByTicketId(int ticketId);

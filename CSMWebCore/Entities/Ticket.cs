@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class Ticket
+    public class Ticket : Entity
     {
-        public int Id { get; set; }
         [Display(Name = "Ticket No.")]
         public int TicketNumber { get; set; }
         public int DeviceId { get; set; }
         public Device Device { get; set; }
         [Display(Name = "Data Backup")]
         public bool NeedsBackup { get; set; }
+        // used in url for customers to track ticket (given QR code)
+        public Guid ExternalId { get; set; }
 
         // properties which will be found in Log after switch to Log/Event
         [Display(Name = "Status")]
