@@ -44,11 +44,11 @@ namespace CSMWebCore.Controllers
             // create list
             List<NewDeviceViewModel> model = new List<NewDeviceViewModel>();
             //Get all active tickets
-            var activetickets = _tickets.GetOpen();
+            var activetickets = _tickets.GetOpen();            
             // sequence thru active tickets, add viewmodel for each device to list     
             foreach (var ticket in activetickets)
             {
-                var device = _devices.GetById(ticket.Device.Id);
+                var device = _devices.GetById(ticket.DeviceId);
                 model.Add(new NewDeviceViewModel
                 {
                     Id = device.Id,

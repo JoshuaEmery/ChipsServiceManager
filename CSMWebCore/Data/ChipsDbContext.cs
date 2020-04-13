@@ -61,35 +61,35 @@ namespace CSMWebCore.Data
             // seed log event types (currently unused, eventually to replace LogType/ContactMethod enums and ServicePrice Entity)
             builder.Entity<Event>().HasData(
                 // Open Ticket
-                new Event { Id = 1, Name = "Check-In", Description = "Initial event when a device is brought in and a ticket is opened", Category = EventCategory.OpenTicket, Price = 0m },
+                new Event { Id = 1, Name = EventName.CheckIn, Description = "Initial event when a device is brought in and a ticket is opened", Category = EventCategory.OpenTicket, Price = 0m },
                 // Close Ticket
-                new Event { Id = 2, Name = "Check-Out", Description = "Final event when a device returned to the customer", Category = EventCategory.CloseTicket, Price = 0m },
-                new Event { Id = 3, Name = "Lost and Found", Description = "Final event when a device has been awaiting pickup for 30 days and is sent to Lost and Found", Category = EventCategory.CloseTicket, Price = 0m },
+                new Event { Id = 2, Name = EventName.CheckOut, Description = "Final event when a device returned to the customer", Category = EventCategory.CloseTicket, Price = 0m },
+                new Event { Id = 3, Name = EventName.LostandFound, Description = "Final event when a device has been awaiting pickup for 30 days and is sent to Lost and Found", Category = EventCategory.CloseTicket, Price = 0m },
                 // General Services
-                new Event { Id = 4, Name = "Diagnostic", Description = "Identification of the issue by inspecting device hardware and software", Category = EventCategory.GeneralService, Price = 50m },
+                new Event { Id = 4, Name = EventName.Diagnostic, Description = "Identification of the issue by inspecting device hardware and software", Category = EventCategory.GeneralService, Price = 50m },
                 // Software Services
-                new Event { Id = 5, Name = "Data Backup", Category = EventCategory.SWService, Price = 150m },
-                new Event { Id = 6, Name = "Data Restore", Category = EventCategory.SWService, Price = 150m },
-                new Event { Id = 7, Name = "OS Installation", Description = "Installation of an OS on a blank drive or over an old OS, writing over existing user data", Category = EventCategory.SWService, Price = 150m },
-                new Event { Id = 8, Name = "OS Updates", Description = "Incremental updates to an OS where user data is preserved", Category = EventCategory.SWService, Price = 50m },
-                new Event { Id = 9, Name = "Program/Driver Installation", Category = EventCategory.SWService, Price = 50m },
-                new Event { Id = 10, Name = "Virus/Malware Removal", Category = EventCategory.SWService, Price = 150m },
-                new Event { Id = 11, Name = "Other", Category = EventCategory.SWService, Price = 50m },
+                new Event { Id = 5, Name = EventName.DataBackup, Category = EventCategory.SWService, Price = 150m },
+                new Event { Id = 6, Name = EventName.DataRestore, Category = EventCategory.SWService, Price = 150m },
+                new Event { Id = 7, Name = EventName.OSInstallation, Description = "Installation of an OS on a blank drive or over an old OS, writing over existing user data", Category = EventCategory.SWService, Price = 150m },
+                new Event { Id = 8, Name = EventName.OSUpdates, Description = "Incremental updates to an OS where user data is preserved", Category = EventCategory.SWService, Price = 50m },
+                new Event { Id = 9, Name = EventName.ProgramDriverInstallation, Category = EventCategory.SWService, Price = 50m },
+                new Event { Id = 10, Name = EventName.VirusMalwareRemoval, Category = EventCategory.SWService, Price = 150m },
+                new Event { Id = 11, Name = EventName.MiscSoftware, Category = EventCategory.SWService, Price = 50m },
                 // Hardware Services
-                new Event { Id = 12, Name = "Battery Replacement", Category = EventCategory.HWService, Price = 50m },
-                new Event { Id = 13, Name = "Display Replacement", Category = EventCategory.HWService, Price = 150m },
-                new Event { Id = 14, Name = "Hinge Replacement", Category = EventCategory.HWService, Price = 150m },
-                new Event { Id = 15, Name = "Keyboard Replacement", Category = EventCategory.HWService, Price = 125m },
-                new Event { Id = 16, Name = "Power Jack Replacement", Category = EventCategory.HWService, Price = 150m },
-                new Event { Id = 17, Name = "RAM Replacement", Category = EventCategory.HWService, Price = 100m },
-                new Event { Id = 18, Name = "Storage Drive Replacement", Category = EventCategory.HWService, Price = 100m },
-                new Event { Id = 19, Name = "Trackpad Replacement", Category = EventCategory.HWService, Price = 150m },
-                new Event { Id = 20, Name = "Other", Category = EventCategory.HWService, Price = 100m },
+                new Event { Id = 12, Name = EventName.BatteryReplacement, Category = EventCategory.HWService, Price = 50m },
+                new Event { Id = 13, Name = EventName.DisplayReplacement, Category = EventCategory.HWService, Price = 150m },
+                new Event { Id = 14, Name = EventName.HingeReplacement, Category = EventCategory.HWService, Price = 150m },
+                new Event { Id = 15, Name = EventName.KeyboardReplacement, Category = EventCategory.HWService, Price = 125m },
+                new Event { Id = 16, Name = EventName.PowerJackReplacement, Category = EventCategory.HWService, Price = 150m },
+                new Event { Id = 17, Name = EventName.RAMReplacement, Category = EventCategory.HWService, Price = 100m },
+                new Event { Id = 18, Name = EventName.StorageDriveReplacement, Category = EventCategory.HWService, Price = 100m },
+                new Event { Id = 19, Name = EventName.TrackpadReplacement, Category = EventCategory.HWService, Price = 150m },
+                new Event { Id = 20, Name = EventName.MiscHardware, Category = EventCategory.HWService, Price = 100m },
                 // Contact
-                new Event { Id = 21, Name = "In-Person", Category = EventCategory.Contact, Price = 0m },
-                new Event { Id = 22, Name = "Email", Category = EventCategory.Contact, Price = 0m },
-                new Event { Id = 23, Name = "Phone Call", Category = EventCategory.Contact, Price = 0m },
-                new Event { Id = 24, Name = "Voicemail", Category = EventCategory.Contact, Price = 0m }
+                new Event { Id = 21, Name = EventName.InPerson, Category = EventCategory.Contact, Price = 0m },
+                new Event { Id = 22, Name = EventName.Email, Category = EventCategory.Contact, Price = 0m },
+                new Event { Id = 23, Name = EventName.PhoneCall, Category = EventCategory.Contact, Price = 0m },
+                new Event { Id = 24, Name = EventName.Voicemail, Category = EventCategory.Contact, Price = 0m }
             );
 
             // seed user roles

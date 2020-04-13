@@ -31,7 +31,7 @@ namespace CSMWebCore.Services
                 CheckedOut = ticket.CheckOutDate,
                 CheckInUserId = ticket.CheckInUserId,
                 CheckOutUserId = ticket.CheckOutUserId,
-                DeviceId = ticket.Device.Id,
+                DeviceId = ticket.DeviceId,
                 Finished = ticket.FinishDate,
                 NeedsBackup = ticket.NeedsBackup,
                 TicketNumber = ticket.TicketNumber,

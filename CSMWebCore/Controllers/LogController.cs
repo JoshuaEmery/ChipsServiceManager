@@ -147,6 +147,7 @@ namespace CSMWebCore.Controllers
                 Notes = model.Notes,
                 LogType = model.LogType,
                 ContactMethod = model.ContactMethod
+                
             };
             _logs.Insert(log);
             _logs.Commit();
@@ -194,6 +195,7 @@ namespace CSMWebCore.Controllers
             Log log = new Log
             {
                 UserCreated = User.FindFirst(ClaimTypes.Name).Value.ToString(),
+                EventId = (int)EventCategory.Contact,
                 TicketId = model.TicketId,
                 DateCreated = DateTime.Now,
                 Notes = model.Notes,
