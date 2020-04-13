@@ -39,7 +39,7 @@ namespace CSMWebCore.Controllers
             //get all active tickets
             var activeTickets = _tickets.GetOpen();
             //get all tickets
-            var allTickets = _tickets.GetAll();
+            var allTickets = _tickets.Get();
             //create new ViewModel
             var model = new HomeIndexViewModel();
             //see all properties to 0
@@ -69,7 +69,7 @@ namespace CSMWebCore.Controllers
             foreach (var ticket in activeTickets)
             {
                 //count by status
-                switch (ticket.TicketStatus)
+                switch (ticket.Status)
                 {
                     case TicketStatus.New:
                         model.newCount++;
@@ -184,7 +184,7 @@ namespace CSMWebCore.Controllers
             int maxIdleTicketId = 0;
             foreach (var ticket in activeTickets)
             {
-                switch (ticket.TicketStatus)
+                switch (ticket.Status)
                 {
                     case TicketStatus.New:
                         model.newCount++;

@@ -1,4 +1,5 @@
 ﻿using CSMWebCore.Entities;
+using CSMWebCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface ICustomerRepository : IRepository<Customer>
+    public interface IEventRepository : IGenericRepository<Event>
     {
-        Customer GetById(int id);
-        IEnumerable<Customer> Search(string searchValue);
+        Event GetCheckInEvent();
+        Event GetCheckOutEvent();
     }
 }

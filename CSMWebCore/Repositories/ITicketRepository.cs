@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface ITicketRepository : IRepository<Ticket>
+    public interface ITicketRepository : IGenericRepository<Ticket>
     {
-        Ticket GetById(int id);
         IEnumerable<Ticket> Search(string searchValue);
         IEnumerable<Ticket> GetByStatus(TicketStatus status);
         int GetLatestTicketNum();

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface IDeviceRepository : IRepository<Device>
+    public interface IDeviceRepository : IGenericRepository<Device>
     {
-        Device GetById(int id);
         IEnumerable<Device> GetAllByCustId(int customerId);
         IEnumerable<Device> Search(string searchValue);
     }

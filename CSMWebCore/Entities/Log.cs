@@ -10,10 +10,10 @@ namespace CSMWebCore.Entities
     public class Log
     {
         public int Id { get; set; }
-        public int TicketId { get; set; }
         public Ticket Ticket { get; set; }
-        public int EventId { get; set; }
+        public int TicketId { get; set; }
         public Event Event { get; set; }
+        public int EventId { get; set; }
 
         public TicketStatus TicketStatus { get; set; }
         // Each log added to a ticket stores the next status and the latest log keeps the current ticket status.
@@ -36,7 +36,7 @@ namespace CSMWebCore.Entities
         // notes are only required on some types of events
         public string Notes { get; set; }
 
-        // propeties which will be found in Log after switch to Log/Event
+        // redundant propeties to remove after switch to Log/Event
         public LogType LogType { get; set; }
         public ContactMethod ContactMethod { get; set; }
     }

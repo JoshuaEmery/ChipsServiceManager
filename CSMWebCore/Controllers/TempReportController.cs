@@ -17,14 +17,14 @@ namespace CSMWebCore.Controllers
         private ICustomerRepository _customers;
         private ITicketRepository _tickets;
         private ILogRepository _logs;
-        private XITicketsHistoryData _ticketsHistory;
+        private ITicketsHistoryData _ticketsHistory;
         private IConsultationRepository _consultations;
-        private XIServicePriceData _servicePrices;
+        private IServicePriceData _servicePrices;
         private readonly UserManager<ChipsUser> _userManager;
 
         public TempReportController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, 
-            XITicketsHistoryData ticketsHistory, IConsultationRepository consultations, 
-            XIServicePriceData servicePrices ,UserManager<ChipsUser> userManager)
+            ITicketsHistoryData ticketsHistory, IConsultationRepository consultations, 
+            IServicePriceData servicePrices ,UserManager<ChipsUser> userManager)
         {
             _devices = devices;
             _customers = customers;
@@ -64,7 +64,7 @@ namespace CSMWebCore.Controllers
             output += TotalCheckedOutTickets(new TimeSpan(90, 0, 0, 0));
             output += TotalCheckedOutTickets(new TimeSpan(365, 0, 0, 0));
             output += TotalCheckedOutTickets(new DateTime(2020, 01, 01), DateTime.Now);
-            foreach (var ticket in _tickets.GetAll())
+            foreach (var ticket in _tickets.Get())
             {
                 output += PrintProgressReport(ticket.Id);
             }
@@ -89,7 +89,7 @@ namespace CSMWebCore.Controllers
                 output += GetConsultationsLogsByUser(user.UserName, new TimeSpan(90, 0, 0, 0));
                 output += GetConsultationsLogsByUser(user.UserName, new DateTime(2020, 01, 01), DateTime.Now);
             }
-            foreach (var ticket in _tickets.GetAll())
+            foreach (var ticket in _tickets.Get())
             {
                 output += GetSavingsByTicket(ticket.Id);
             }
@@ -131,7 +131,7 @@ namespace CSMWebCore.Controllers
         private string TotalCheckedInTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return $"Tickets Checked in all time: {_tickets.GetAll().Count()}\n";
+                return $"Tickets Checked in all time: {_tickets.Get().Count()}\n";
             else
                 return $"Tickets Checked in last {span.Value.TotalDays} days {_tickets.GetAll(span.Value).Count()}\n";
         }
@@ -142,7 +142,7 @@ namespace CSMWebCore.Controllers
         private string TotalCheckedOutTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return $"Tickets Checked out all time: {_tickets.GetAll().Count()}\n";
+                return $"Tickets Checked out all time: {_tickets.Get().Count()}\n";
             else
                 return $"Tickets Checked out last {span.Value.TotalDays} days {_tickets.GetClosed(span.Value).Count()}\n";
         }
@@ -177,7 +177,7 @@ namespace CSMWebCore.Controllers
         private string GetConsultations(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return $"Consultations Completed all time: {_consultations.GetAll().Count()}\n";
+                return $"Consultations Completed all time: {_consultations.Get().Count()}\n";
             else
                 return $"Consultations Completed in the last {span.Value.TotalDays} days {_consultations.GetConsultations(span.Value).Count()}\n";
         }
@@ -202,7 +202,7 @@ namespace CSMWebCore.Controllers
         private string PrintProgressReport(int ticketId)
         {
             string output = "";
-            TicketProgressReport tpr = _ticketsHistory.GetTicketProgressReport(_tickets.GetSingle(t => t.Id == ticketId));
+            TicketProgressReport tpr = _ticketsHistory.GetTicketProgressReport(_tickets.GetById(ticketId));
             output += $"Ticket number {tpr.TicketId} time spent in each category:\n";            
             foreach (var item in tpr.TicketProgress)
             {
@@ -215,7 +215,7 @@ namespace CSMWebCore.Controllers
         {
             string output = "";
             output += $"The total cost for ticketId: " +
-                $"{_tickets.GetSingle(t => t.Id == ticketId).TicketNumber} " +
+                $"{_tickets.GetById(ticketId).TicketNumber} " +
                 $"{_servicePrices.GetTotalPrice(_logs.GetDistinctLogTypesByTicketId(ticketId))}\n";
             return output;
         }
@@ -224,7 +224,7 @@ namespace CSMWebCore.Controllers
             IEnumerable<Ticket> tickets;            
             if (!span.HasValue)
             {
-                tickets = _tickets.GetAll();                
+                tickets = _tickets.Get();                
             }
             else
             {
@@ -258,7 +258,7 @@ namespace CSMWebCore.Controllers
             IEnumerable<Consultation> consults;
             if (!span.HasValue)
             {
-                consults = _consultations.GetAll();
+                consults = _consultations.Get();
             }
             else
             {

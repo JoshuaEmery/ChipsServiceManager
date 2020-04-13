@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<TicketViewModel>
 
-<table class="table table-hover table-responsive">
+@*<table class="table table-hover table-responsive">
     <tr>
         <th>@Html.DisplayNameFor(model => model.Ticket.TicketNumber)</th>
-        <th>@Html.DisplayNameFor(model => model.Ticket.TicketStatus)</th>
+        <th>@Html.DisplayNameFor(model => model.Ticket.Status)</th>
         <th>@Html.DisplayNameFor(model => model.Ticket.Device.Customer)</th>
         <th>@Html.DisplayNameFor(model => model.Ticket.CheckInDate)</th>
         <th>@Html.DisplayNameFor(model => model.Log.DateCreated)</th>
@@ -15,7 +15,7 @@
     {
         <tr>
             <td scope="row">@ticket.Ticket.TicketNumber</td>
-            <td>@EnumHelper.GetDisplayName(ticket.Ticket.TicketStatus)</td>
+            <td>@EnumHelper.GetDisplayName(ticket.Ticket.Status)</td>
             <td>@ticket.Customer.LastName</td>
             <td>@ticket.Ticket.CheckInDate.ToShortDateString()</td>
             <td>@ticket.Log.DateCreated.ToShortDateString()</td>
@@ -37,4 +37,4 @@
         </tr>
 
     }
-</table>
+</table>*@

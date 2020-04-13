@@ -1,8 +1,27 @@
 ﻿@model TicketViewModel
-<div>
-    <div>
-        <div>
-            <a data-toggle="collapse" href=@string.Format($"#collapse{ Model.Ticket.TicketNumber}")>
+<div class="card">
+    <div class="card-header">@Model.TicketNumber - @Model.CustomerFName @Model.CustomerLName</div>
+    <div class="card-body">
+        <ul>
+            <li>Device: @Model.DeviceMake @Model.DeviceModelNumber</li>
+            <li>OS: @Model.DeviceOS</li>
+            <li>Backup: @Model.NeedsBackup</li>
+        </ul>
+        <p>@Html.DisplayNameFor(model => model.LogOpenDate): @Model.LogOpenDate.ToShortDateString()</p>
+        <p>@Html.DisplayNameFor(model => model.LogLatestDate): @Model.LogLatestDate.ToShortDateString()</p>
+        <p>@Html.DisplayNameFor(model => model.LogCloseDate): @Model.LogCloseDate.ToShortDateString()</p>
+        <p>@Html.DisplayNameFor(model => model.LogLatestStatus): @EnumHelper.GetDisplayName(Model.LogLatestStatus)</p>
+        <div class="btn-group">
+            <a class="btn btn-sm btn-outline-primary" asp-controller="Log" asp-action="Service" asp-route-ticketId="@Model.Id">Log Service</a>
+            <a class="btn btn-sm btn-outline-primary" asp-controller="Log" asp-action="Contact" asp-route-ticketId="@Model.Id">Log Contact</a>
+            <a class="btn btn-sm btn-outline-secondary" asp-controller="Customer" asp-action="Details" asp-route-id="@Model.CustomerId">Customer Details</a>
+            <a class="btn btn-sm btn-outline-secondary" asp-controller="Device" asp-action="Details" asp-route-deviceId="@Model.DeviceId">Device Details</a>
+        </div>
+    </div>
+</div>
+
+    @*<a data-toggle="collapse" href=@string.Format($"#collapse{ Model.Ticket.TicketNumber}")>
+
                 <table class="table-responsive table-striped">
                     <tr>
                         <th>Ticket</th>
@@ -15,7 +34,7 @@
                     </tr>
                     <tr>
                         <td>@Model.Ticket.TicketNumber</td>
-                        <td>@Model.Ticket.TicketStatus.ToString()</td>
+                        <td>@Model.Ticket.Status.ToString()</td>
                         <td>@Model.Customer.LastName</td>
                         <td>@Model.Ticket..ToShortDateString()</td>
                         <td>@Model.Log.DateCreated.ToShortDateString()</td>
@@ -86,8 +105,6 @@
 
 
 
-            </div>
-    </div>
-</div>
+</div>*@
 
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class XUpdate
+    public class TicketProgress
     {
         public Guid Id { get; set; }
         public int TicketId { get; set; }

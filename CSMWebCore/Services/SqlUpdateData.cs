@@ -7,14 +7,14 @@ using CSMWebCore.Entities;
 
 namespace CSMWebCore.Services
 {
-    public class XSqlUpdateData : XIUpdateData
+    public class SqlUpdateData : IUpdateData
     {
         private ChipsDbContext _db;
-        public XSqlUpdateData(ChipsDbContext db)
+        public SqlUpdateData(ChipsDbContext db)
         {
             _db = db;
         }
-        public void Add(XUpdate update)
+        public void Add(TicketProgress update)
         {
             _db.Updates.Add(update);
         }
@@ -24,14 +24,14 @@ namespace CSMWebCore.Services
             return _db.SaveChanges();
         }
 
-        public XUpdate Get(Guid id)
+        public TicketProgress Get(Guid id)
         {
-            return _db.Find<XUpdate>(id);
+            return _db.Find<TicketProgress>(id);
         }
 
         public int GetTicketId(Guid id)
         {
-            return _db.Find<XUpdate>(id).TicketId;
+            return _db.Find<TicketProgress>(id).TicketId;
         }
     }
 }

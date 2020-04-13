@@ -15,8 +15,8 @@ namespace CSMWebCore.Services
         private ICustomerRepository _customers;
         private ITicketRepository _tickets;
         private ILogRepository _logs;
-        private XIUpdateData _updates;
-        public TicketCreator(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, XIUpdateData updates)
+        private IUpdateData _updates;
+        public TicketCreator(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, IUpdateData updates)
         {
             _devices = devices;
             _customers = customers;
@@ -34,11 +34,11 @@ namespace CSMWebCore.Services
                 CheckInUserId = info.UserName,
                 CheckInDate = DateTime.Now,
                 NeedsBackup = info.NeedsBackup,
-                TicketStatus = TicketStatus.New,
+                Status = TicketStatus.New,
                 TicketNumber = _tickets.GetLatestTicketNum() + 1
             };
             //Save the new Ticket
-            _tickets.Add(ticket);
+            _tickets.Insert(ticket);
             _tickets.Commit();
             // TODO don't commit ticket until initial log has been created -- if log creation fails an incomplete ticket is created
             //Create a log entry with the newly created Ticket.Id as a foreign key
@@ -54,11 +54,11 @@ namespace CSMWebCore.Services
                 ContactMethod = ContactMethod.InPerson
             };
             //Add new Log
-            _logs.Add(log);
+            _logs.Insert(log);
             _logs.Commit();
             //Create a new entry in the update table with a guid for the Primary Key and
             //a foreign key from the Ticket
-            XUpdate update = new XUpdate
+            TicketProgress update = new TicketProgress
             {
                 Id = new Guid(),
                 TicketId = ticket.Id

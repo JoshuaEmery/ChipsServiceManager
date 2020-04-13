@@ -13,4 +13,6 @@
 
     </select>
 </form>
-@await Html.PartialAsync("_TicketTable", Model)
+@foreach (var ticket in Model) {
+    @await Html.PartialAsync("_TicketCard", ticket);
+}

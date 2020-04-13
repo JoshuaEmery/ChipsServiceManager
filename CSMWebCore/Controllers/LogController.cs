@@ -22,9 +22,9 @@ namespace CSMWebCore.Controllers
         private ICustomerRepository _customers;
         private ITicketRepository _tickets;
         private ILogRepository _logs;
-        private XITicketsHistoryData _ticketsHistory;
+        private ITicketsHistoryData _ticketsHistory;
 
-        public LogController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, XITicketsHistoryData ticketsHistory)
+        public LogController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, ITicketsHistoryData ticketsHistory)
         {
             _devices = devices;
             _customers = customers;
@@ -35,7 +35,7 @@ namespace CSMWebCore.Controllers
         //Test Actions
         //public IActionResult Index()
         //{
-        //    var model = _logs.GetAll().Select(log => new LogViewModel
+        //    var model = _logs.Get().Select(log => new LogViewModel
         //    {
         //        Id = log.Id,
         //        UserCreated = log.UserCreated,
@@ -111,7 +111,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Service(int ticketId)
         {
             //get the ticket Object
-            var ticket = _tickets.GetSingle(t => t.Id == ticketId);
+            var ticket = _tickets.GetById(ticketId);
             //create LogEditViewModel
             var model = new LogEditViewModel
             {
@@ -130,7 +130,7 @@ namespace CSMWebCore.Controllers
                 return View(model);
             }
                       
-            var ticket = _tickets.GetSingle(t => t.Id == model.TicketId);
+            var ticket = _tickets.GetById(model.TicketId);
             //If this is the first log for a new ticket update the ticket status
             if (model.TicketStatus == TicketStatus.New)
             {
@@ -148,10 +148,10 @@ namespace CSMWebCore.Controllers
                 LogType = model.LogType,
                 ContactMethod = model.ContactMethod
             };
-            _logs.Add(log);
+            _logs.Insert(log);
             _logs.Commit();
             //update the database with any changes that were made to the ticketstatus 
-            ticket.TicketStatus = model.TicketStatus;
+            ticket.Status = model.TicketStatus;
             _tickets.Commit();
             return RedirectToAction("Index", "Ticket");            
         }        
@@ -161,7 +161,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Contact(int ticketId)
         {
             //get th ticket and the customer associated with that ticket
-            var ticket = _tickets.GetSingle(t => t.Id == ticketId);
+            var ticket = _tickets.GetById(ticketId);
             var customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId);
             //create LogEditViewModel
             var model = new LogEditViewModel
@@ -169,7 +169,7 @@ namespace CSMWebCore.Controllers
                 TicketId = ticket.Id,
                 TicketNumber = ticket.TicketNumber,
                 Customer = customer,
-                TicketStatus = ticket.TicketStatus,
+                TicketStatus = ticket.Status,
                 ContactMethod = ContactMethod.InPerson
             };
             //return View
@@ -180,12 +180,12 @@ namespace CSMWebCore.Controllers
         public IActionResult Contact(LogEditViewModel model)
         {
             //get the ticket and check for valid
-            Ticket ticket = _tickets.GetSingle(t => t.Id == model.TicketId);
+            Ticket ticket = _tickets.GetById(model.TicketId);
             if (!ModelState.IsValid || ticket == null)
             {
                 return View(model);
             }
-            if(ticket.TicketStatus != model.TicketStatus)
+            if(ticket.Status != model.TicketStatus)
             {
                 //Whenever a ticket is modified make an entry in tickethistory before changing
                 _ticketsHistory.AddTicketToHistory(ticket);
@@ -202,10 +202,10 @@ namespace CSMWebCore.Controllers
 
             };
             //update database
-            _logs.Add(log);
+            _logs.Insert(log);
             _logs.Commit();
             //record time finished if ticket has been completed
-            ticket.TicketStatus = model.TicketStatus;
+            ticket.Status = model.TicketStatus;
             if (model.TicketStatus == TicketStatus.PendingPickup)
             {
                 ticket.FinishDate = DateTime.Now;

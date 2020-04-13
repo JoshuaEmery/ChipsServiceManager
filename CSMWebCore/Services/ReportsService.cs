@@ -14,14 +14,14 @@ namespace CSMWebCore.Services
         private ICustomerRepository _customers;
         private ITicketRepository _tickets;
         private ILogRepository _logs;
-        private XITicketsHistoryData _ticketsHistory;
+        private ITicketsHistoryData _ticketsHistory;
         private IConsultationRepository _consultations;
-        private XIServicePriceData _servicePrices;
+        private IServicePriceData _servicePrices;
         private readonly UserManager<ChipsUser> _userManager;
 
         public ReportsService(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs,
-            XITicketsHistoryData ticketsHistory, IConsultationRepository consultations,
-            XIServicePriceData servicePrices, UserManager<ChipsUser> userManager)
+            ITicketsHistoryData ticketsHistory, IConsultationRepository consultations,
+            IServicePriceData servicePrices, UserManager<ChipsUser> userManager)
         {
             _devices = devices;
             _customers = customers;
@@ -58,7 +58,7 @@ namespace CSMWebCore.Services
         public int TotalCheckedInTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return _tickets.GetAll().Count();
+                return _tickets.Get().Count();
             else
                 return _tickets.GetAll(span.Value).Count();
         }
@@ -71,7 +71,7 @@ namespace CSMWebCore.Services
         public int TotalCheckedOutTickets(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return _tickets.GetAll().Count();
+                return _tickets.Get().Count();
             else
                 return _tickets.GetClosed(span.Value).Count();
         }
@@ -110,7 +110,7 @@ namespace CSMWebCore.Services
         public int GetConsultations(TimeSpan? span = null)
         {
             if (!span.HasValue)
-                return _consultations.GetAll().Count();
+                return _consultations.Get().Count();
             else
                 return _consultations.GetConsultations(span.Value).Count();
         }
@@ -135,7 +135,7 @@ namespace CSMWebCore.Services
 
         public TicketProgressReport PrintProgressReport(int ticketId)
         {
-            return _ticketsHistory.GetTicketProgressReport(_tickets.GetSingle(t => t.Id == ticketId));
+            return _ticketsHistory.GetTicketProgressReport(_tickets.GetById(ticketId));
         }
 
         public decimal GetSavingsByTicket(int ticketId)
@@ -148,7 +148,7 @@ namespace CSMWebCore.Services
             IEnumerable<Ticket> tickets;
             if (!span.HasValue)
             {
-                tickets = _tickets.GetAll();
+                tickets = _tickets.Get();
             }
             else
             {
@@ -178,7 +178,7 @@ namespace CSMWebCore.Services
             IEnumerable<Consultation> consults;
             if (!span.HasValue)
             {
-                consults = _consultations.GetAll();
+                consults = _consultations.Get();
             }
             else
             {

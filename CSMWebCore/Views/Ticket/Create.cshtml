@@ -1,54 +1,104 @@
-﻿@model DeviceEditViewModel
-@{ ViewBag.Title = $"Create new device for {Model.Customer.FirstName} {Model.Customer.LastName}";}
-<div class="col-md-12 topFormPanel">
-    <h2>@ViewBag.Title</h2>         <div class="pull-right">
-        <label asp-for="Ticket.TicketNumber"></label>
-        <input asp-for="Ticket.TicketNumber" readonly="readonly" />
+﻿@model CSMWebCore.ViewModels.TicketDeviceCustCreateVM
+
+<h4>TicketDeviceCustCreateVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <fieldset>
+                <legend>Customer</legend>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StudentId" class="control-label"></label>
+                    <input asp-for="StudentId" class="form-control" />
+                    <span asp-validation-for="StudentId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+
+                    <label asp-for="ContactPref" class="control-label"></label>
+                    <select class="form-control" asp-for="ContactPref" asp-items="Html.GetEnumSelectList<ContactPref>()"></select>
+                    <span asp-validation-for="ContactPref" class="text-danger"></span>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Device</legend>
+                <div class="form-group">
+                    <label asp-for="Make" class="control-label"></label>
+                    <input asp-for="Make" class="form-control" />
+                    <span asp-validation-for="Make" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ModelNumber" class="control-label"></label>
+                    <input asp-for="ModelNumber" class="form-control" />
+                    <span asp-validation-for="ModelNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OperatingSystem" class="control-label"></label>
+                    <input asp-for="OperatingSystem" class="form-control" />
+                    <span asp-validation-for="OperatingSystem" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Serviced" /> @Html.DisplayNameFor(model => model.Serviced)
+                    </label>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Ticket</legend>
+                @*<div class="form-group">
+                    <label asp-for="TicketNumber" class="control-label"></label>
+                    <input asp-for="TicketNumber" class="form-control" />
+                    <span asp-validation-for="TicketNumber" class="text-danger"></span>
+                </div>*@
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="NeedsBackup" /> @Html.DisplayNameFor(model => model.NeedsBackup)
+                    </label>
+                </div>
+                @*<div class="form-group">
+                    <label asp-for="UserCreated" class="control-label"></label>
+                    <input asp-for="UserCreated" class="form-control" />
+                    <span asp-validation-for="UserCreated" class="text-danger"></span>
+                </div>*@
+                <div class="form-group">
+                    <label asp-for="Notes" class="control-label"></label>
+                    <textarea asp-for="Notes" class="form-control"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+            </fieldset>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
 </div>
-<div class="col-md-12 bottomFormPanel">
-    <form asp-action="CreateByCustId" method="post">
-        <div asp-validation-summary="All"></div>
-        <table class="col-md-3 table table-hover">
-            <tr>
-                <td><label asp-for="Make"></label></td>
-                <td><input asp-for="Make" /></td>
-                <td><span asp-validation-for="Make"></span></td>
-            </tr>
-            <tr>
-                <td><label asp-for="ModelNumber"></label></td>
-                <td><input asp-for="ModelNumber" /></td>
-                <td><span asp-validation-for="ModelNumber"></span></td>
-            </tr>
-            <tr>
-                <td><label asp-for="OperatingSystem"></label></td>
-                <td><input asp-for="OperatingSystem" /></td>
-                <td><span asp-validation-for="OperatingSystem"></span></td>
-            </tr>
-            <tr>
-                <td><label asp-for="Password"></label></td>
-                <td><input asp-for="Password" /></td>
-                <td><span asp-validation-for="Password"></span></td>
-            </tr>
-            <tr>
-                <td><label asp-for="Serviced"></label></td>
-                <td><input asp-for="Serviced" /></td>
-                <td><span asp-validation-for="Serviced"></span></td>
-            </tr>
-            <tr>
-                <td><label asp-for="Ticket.NeedsBackup"></label></td>
-                <td><input asp-for="Ticket.NeedsBackup" /></td>
-                <td><span asp-validation-for="Ticket.NeedsBackup"></span></td>
-            </tr>
-        </table>
-        <div class="row">
-            <label asp-for="Log.Notes" class="col-md-1">Issues</label>
-            <textarea asp-for="Log.Notes" rows="5" class="col-md-5"></textarea>
-            <span asp-validation-for="Log.Notes"></span>
-        </div>
-        <input hidden asp-for="CustomerId" />
-        <input hidden asp-for="Ticket.TicketNumber" />
-        <input hidden asp-for="Customer" />
-        <input class="btn btn-primary" type="submit" value="Create" />
-    </form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
 </div>
+

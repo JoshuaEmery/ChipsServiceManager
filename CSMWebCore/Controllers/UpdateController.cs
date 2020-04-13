@@ -19,9 +19,9 @@ namespace CSMWebCore.Controllers
         private ICustomerRepository _customers;
         private ITicketRepository _tickets;
         private ILogRepository _logs;
-        private XIUpdateData _updates;
+        private IUpdateData _updates;
 
-        public UpdateController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, XIUpdateData updates)
+        public UpdateController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, IUpdateData updates)
         {
             _devices = devices;
             _customers = customers;
@@ -35,11 +35,11 @@ namespace CSMWebCore.Controllers
         public IActionResult Index(string id)
         {
             var guid = new Guid(id);
-            var ticket = _tickets.GetSingle(t => t.Id == _updates.GetTicketId(guid));
+            var ticket = _tickets.GetById(_updates.GetTicketId(guid));
             var model = new ConfirmationViewModel
             {
                 Ticket = ticket,
-                Device = _devices.GetById(ticket.DeviceId),
+                Device = _devices.GetById(ticket.Device.Id),
                 Log = _logs.GetLastByTicketId(ticket.Id),
             };
             return View(model);            

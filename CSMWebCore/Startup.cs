@@ -57,10 +57,10 @@ namespace CSMWebCore
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
-            services.AddScoped<XIUpdateData, XSqlUpdateData>();
-            services.AddScoped<XITicketsHistoryData, XSqlTicketsHistoryData>();
+            services.AddScoped<IUpdateData, SqlUpdateData>();
+            services.AddScoped<ITicketsHistoryData, SqlTicketsHistoryData>();
             services.AddScoped<IConsultationRepository, ConsultationRepository>();
-            services.AddScoped<XIServicePriceData, XSqlServicePriceData>();
+            services.AddScoped<IServicePriceData, SqlServicePriceData>();
             services.AddScoped<IReportsService, ReportsService>();
             services.AddScoped<ITicketCreator, TicketCreator>();
             //Adds Identity services using the DBFramework.  This also allows for dependency injection for User

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface IConsultationRepository : IRepository<Consultation>
+    public interface IConsultationRepository : IGenericRepository<Consultation>
     {     
         IEnumerable<Consultation> GetConsultations(TimeSpan span);
         IEnumerable<Consultation> GetConsultations(DateTime startDate, DateTime endDate);

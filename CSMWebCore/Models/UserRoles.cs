@@ -9,6 +9,6 @@ namespace CSMWebCore.Models
     {
         Administrator = 1,
         Technician = 2,
-        ReadOnly = 3
+        ReportReader = 3
     }
 }

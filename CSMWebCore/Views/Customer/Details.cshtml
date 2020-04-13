@@ -1,7 +1,6 @@
 ﻿@model CustomerViewModel
 @{ ViewBag.Title = Model.FullName;}
 <h2>@ViewBag.Title</h2>
-<p class="alert alert-danger">This view is no longer needed, dummy!</p>
 <form asp-action="CreateByCustId" method="get">
     <div asp-validation-summary="All"></div>
     <table class="table">

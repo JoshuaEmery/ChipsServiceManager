@@ -25,10 +25,10 @@ namespace CSMWebCore.Controllers
         private ICustomerRepository _customers;
         private ITicketRepository _tickets;
         private ILogRepository _logs;
-        private XIUpdateData _updates;
+        private IUpdateData _updates;
         private ITicketCreator _ticketCreator;
         //constructor
-        public DeviceController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, XIUpdateData updates, ITicketCreator ticketCreator)
+        public DeviceController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, IUpdateData updates, ITicketCreator ticketCreator)
         {
             _devices = devices;
             _customers = customers;
@@ -48,7 +48,7 @@ namespace CSMWebCore.Controllers
             // sequence thru active tickets, add viewmodel for each device to list     
             foreach (var ticket in activetickets)
             {
-                var device = _devices.GetById(ticket.DeviceId);
+                var device = _devices.GetById(ticket.Device.Id);
                 model.Add(new DeviceViewModel
                 {
                     Id = device.Id,
@@ -117,7 +117,7 @@ namespace CSMWebCore.Controllers
         //    //
         //    DeviceEditViewModel model = new DeviceEditViewModel();
         //    model.Customer = new List<SelectListItem>();
-        //    foreach (var customer in _customers.GetAll())
+        //    foreach (var customer in _customers.Get())
         //    {
         //        model.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName, customer.Id.ToString()));
         //    }
@@ -214,7 +214,7 @@ namespace CSMWebCore.Controllers
                 Serviced = model.Serviced
             };
             //Save the new devicesa
-            _devices.Add(device);
+            _devices.Insert(device);
             _devices.Commit();
             TicketConfirmationModel tcModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
             {

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public interface ILogRepository : IRepository<Log>
+    public interface ILogRepository : IGenericRepository<Log>
     {
-        Log GetById(int id);
         Log GetLastByTicketId(int ticketId);
         IEnumerable<Log> GetLogsByTicketId(int ticketId);
         IEnumerable<LogType> GetDistinctLogTypesByTicketId(int ticketId);
