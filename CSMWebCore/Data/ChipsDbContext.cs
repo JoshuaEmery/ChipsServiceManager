@@ -74,7 +74,7 @@ namespace CSMWebCore.Data
                 new Event { Id = (int)EventEnum.OSUpdates, Name = "OS Updates", Description = "Incremental updates to an OS where user data is preserved", Category = EventCategory.SWService, Price = 50m },
                 new Event { Id = (int)EventEnum.ProgramDriverInstallation, Name = "Program/Driver Installation", Category = EventCategory.SWService, Price = 50m },
                 new Event { Id = (int)EventEnum.VirusMalwareRemoval, Name = "Virus/Malware Removal", Category = EventCategory.SWService, Price = 150m },
-                new Event { Id = (int)EventEnum.MiscSoftware, Name = "Other", Category = EventCategory.SWService, Price = 50m },
+                new Event { Id = (int)EventEnum.MiscSoftware, Name = "Misc. Software", Category = EventCategory.SWService, Price = 50m },
                 // Hardware Services
                 new Event { Id = (int)EventEnum.BatteryReplacement, Name = "Battery Replacement", Category = EventCategory.HWService, Price = 50m },
                 new Event { Id = (int)EventEnum.DisplayReplacement, Name = "Display Replacement", Category = EventCategory.HWService, Price = 150m },
@@ -84,7 +84,7 @@ namespace CSMWebCore.Data
                 new Event { Id = (int)EventEnum.RAMReplacement, Name = "RAM Replacement", Category = EventCategory.HWService, Price = 100m },
                 new Event { Id = (int)EventEnum.StorageDriveReplacement, Name = "Storage Drive Replacement", Category = EventCategory.HWService, Price = 100m },
                 new Event { Id = (int)EventEnum.TrackpadReplacement, Name = "Trackpad Replacement", Category = EventCategory.HWService, Price = 150m },
-                new Event { Id = (int)EventEnum.MiscHardware, Name = "Other", Category = EventCategory.HWService, Price = 100m },
+                new Event { Id = (int)EventEnum.MiscHardware, Name = "Misc. Hardware", Category = EventCategory.HWService, Price = 100m },
                 // Contact
                 new Event { Id = (int)EventEnum.InPerson, Name = "In-Person", Category = EventCategory.Contact, Price = 0m },
                 new Event { Id = (int)EventEnum.Email, Name = "Email", Category = EventCategory.Contact, Price = 0m },
@@ -114,6 +114,5 @@ namespace CSMWebCore.Data
             // seed sample data
             SampleData.Seed(builder);
         }
-        public DbSet<CSMWebCore.ViewModels.TicketDeviceCustCreateVM> TicketDeviceCustCreateVM { get; set; }
     }
 }
