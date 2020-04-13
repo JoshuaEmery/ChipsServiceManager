@@ -56,7 +56,7 @@ namespace CSMWebCore.Controllers
                 DeviceModelNumber = ticket.Device.ModelNumber,
                 DeviceOS = ticket.Device.OperatingSystem,
                 LogOpenDate = ticket.Logs.Min(l => l.DateCreated),
-                LogLatestStatus = ticket.Logs.OrderBy(l => l.DateCreated).First().TicketStatus,
+                LogLatestStatus = ticket.Logs.OrderBy(l => l.DateCreated).Last().TicketStatus,
                 LogLatestDate = ticket.Logs.Max(l => l.DateCreated),
                 LogCloseDate = ticket.Logs.Max(l => l.DateCreated),
                 //LogCloseDate = ticket.Logs.FirstOrDefault(l => l.TicketStatus == TicketStatus.Closed).DateCreated
