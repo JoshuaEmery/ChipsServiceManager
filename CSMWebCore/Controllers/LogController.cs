@@ -111,48 +111,41 @@ namespace CSMWebCore.Controllers
         public IActionResult Service(int ticketId)
         {
             //get the ticket Object
-            var ticket = _tickets.GetById(ticketId);
+            var ticket = _tickets.GetById(ticketId);            
             //create LogEditViewModel
-            var model = new LogEditViewModel
+            var model = new NewLogServiceViewModel
             {
                 TicketId = ticket.Id,
-                TicketNumber = ticket.TicketNumber
+                TicketNumber = ticket.TicketNumber,
+                TicketStatus = _logs.GetLastByTicketId(ticketId).TicketStatus
             };
             return View(model);
         }
         //Post for /Log/Service
         [HttpPost]
-        public IActionResult Service(LogEditViewModel model)
+        public IActionResult Service(NewLogServiceViewModel model)
         {
             //check model state
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-                      
-            var ticket = _tickets.GetById(model.TicketId);
-            //If this is the first log for a new ticket update the ticket status
             if (model.TicketStatus == TicketStatus.New)
-            {
-                //Whenever a ticket is modified make an entry in tickethistory before changing
-                _ticketsHistory.AddTicketToHistory(ticket);
-                model.TicketStatus = TicketStatus.InProgress;                
-            }
-            //create a new Log entry
+                model.TicketStatus = TicketStatus.InProgress;                      
+            var ticket = _tickets.GetById(model.TicketId);
             Log log = new Log
             {
                 UserCreated = User.FindFirst(ClaimTypes.Name).Value.ToString(),
                 TicketId = model.TicketId,
                 DateCreated = DateTime.Now,
-                Notes = model.Notes,
-                LogType = model.LogType,
-                ContactMethod = model.ContactMethod
-                
+                Notes = model.LogNotes,                
+                ContactMethod = ContactMethod.NoContact,
+                EventId = (int)model.EventName,
+                TicketStatus = model.TicketStatus
             };
             _logs.Insert(log);
             _logs.Commit();
             //update the database with any changes that were made to the ticketstatus 
-            ticket.Status = model.TicketStatus;
             _tickets.Commit();
             return RedirectToAction("Index", "Ticket");            
         }        

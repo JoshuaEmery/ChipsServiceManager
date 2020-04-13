@@ -1,24 +1,22 @@
-﻿@model LogEditViewModel
+﻿@model NewLogServiceViewModel
 <form asp-action="Service" method="post">
     <div asp-validation-summary="All"></div>
     <div class="col-md-16 topFormPanel">
         <div class="row pull-right">
-            <label class = "col-md-2" asp-for="TicketNumber"></label>
-            <input class = "col-md-2" asp-for="TicketNumber" readonly="readonly"/>
+            <label class="col-md-2" asp-for="TicketNumber"></label>
+            <input class="col-md-2" asp-for="TicketNumber" readonly="readonly" />
         </div>
     </div>
     <div class="col-md-12 bottomFormPanel">
         <div class="row">
-            <label asp-for="LogType" class="col-md-2"></label>
-            <select class="col-md-2" asp-for="LogType" asp-items='Html.GetEnumSelectList<LogType>().Where(x => x.Text != LogType.CheckIn.ToString())
-                .Where(x => x.Text != LogType.Checkout.ToString())
-                .Where(x => x.Text != LogType.Contact.ToString())'></select>
-            <span asp-validation-for="LogType"></span>
+            <label asp-for="EventName" class="col-md-2"></label>
+            <select class="col-md-2" asp-for="EventName" asp-items='Html.GetEnumSelectList<EventName>().Where(x => int.Parse(x.Value) >= (int)EventName.LostandFound && int.Parse(x.Value) <= (int)EventName.MiscHardware)'></select>
+            <span asp-validation-for="EventName"></span>
         </div>
         <div class="row">
-            <label asp-for="Notes" class="col-md-2"></label>
-            <textarea asp-for="Notes" rows="5" class="col-md-5"></textarea>
-            <span asp-validation-for="Notes"></span>
+            <label asp-for="LogNotes" class="col-md-2"></label>
+            <textarea asp-for="LogNotes" rows="5" class="col-md-5"></textarea>
+            <span asp-validation-for="LogNotes"></span>
         </div>
         <input type="hidden" asp-for="TicketId" />
         <input type="hidden" asp-for="TicketStatus" />
