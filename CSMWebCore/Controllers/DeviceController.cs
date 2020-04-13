@@ -42,23 +42,25 @@ namespace CSMWebCore.Controllers
         public IActionResult Index()
         {
             // create list
-            List<DeviceViewModel> model = new List<DeviceViewModel>();
+            List<NewDeviceViewModel> model = new List<NewDeviceViewModel>();
             //Get all active tickets
             var activetickets = _tickets.GetOpen();
             // sequence thru active tickets, add viewmodel for each device to list     
             foreach (var ticket in activetickets)
             {
                 var device = _devices.GetById(ticket.Device.Id);
-                model.Add(new DeviceViewModel
+                model.Add(new NewDeviceViewModel
                 {
                     Id = device.Id,
-                    Customer = _customers.GetById(device.CustomerId),
+                    CustomerFirstName = _customers.GetById(device.CustomerId).FirstName,
+                    CustomerLastName = _customers.GetById(device.CustomerId).LastName,
+                    TicketNumber = ticket.TicketNumber,
+                    TicketStatus = ticket.Status,
                     Make = device.Make,
                     ModelNumber = device.ModelNumber,
                     OperatingSystem = device.OperatingSystem,
                     Password = device.Password,
-                    Serviced = device.Serviced,
-                    Ticket = ticket
+                    Serviced = device.Serviced
                 });
             }
             // pass viewmodel to view, return

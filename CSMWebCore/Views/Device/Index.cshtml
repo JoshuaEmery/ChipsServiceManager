@@ -1,11 +1,11 @@
-﻿@model IEnumerable<CSMWebCore.ViewModels.DeviceViewModel>
+﻿@model IEnumerable<CSMWebCore.ViewModels.NewDeviceViewModel>
 @{ ViewBag.Title = "Devices On Hand";}
 <h2>@ViewBag.Title</h2>
 <table class="table table-hover table-responsive">
     <tr>
-        <th>@Html.DisplayNameFor(model => model.Ticket.TicketNumber)</th>
-        <th>@Html.DisplayNameFor(model => model.Ticket.Status)</th>
-        <th>@Html.DisplayNameFor(model => model.Customer)</th>
+        <th>@Html.DisplayNameFor(model => model.TicketNumber)</th>
+        <th>@Html.DisplayNameFor(model => model.TicketStatus)</th>
+        <th>@Html.DisplayNameFor(model => model.CustomerFirstName)</th>
         <th>Make &amp; Model</th>
         <th>@Html.DisplayNameFor(model => model.OperatingSystem)</th>
         <th>@Html.DisplayNameFor(model => model.Password)</th>

@@ -55,7 +55,7 @@ namespace CSMWebCore.Controllers
                 RedirectToAction("Index");
             }
             //create new CustomerViewModel and send to View
-            return View(new CustomerViewModel
+            return View(new NewCustomerDetailsViewModel
             {
                 Id = cust.Id,
                 FullName = $"{cust.FirstName} {cust.LastName}",
@@ -79,11 +79,21 @@ namespace CSMWebCore.Controllers
                 return RedirectToAction("Index");
             }
             //send customer model to view
-            return View(cust);
+            return View(new NewCustomerEditViewModel { 
+                FirstName = cust.FirstName,
+                LastName = cust.LastName,
+                StudentId = cust.StudentId,
+                Phone = cust.Phone,
+                Email = cust.Email,
+                ContactPref = cust.ContactPref,
+                Id = cust.Id,
+
+            
+            });
         }
         //Post Method for Edit
         [HttpPost]
-        public IActionResult Edit(CustomerEditViewModel model)
+        public IActionResult Edit(NewCustomerEditViewModel model)
         {
             //Verify the Id that came back from the Post is valid
             var cust = _customers.GetById(model.Id);
@@ -111,7 +121,7 @@ namespace CSMWebCore.Controllers
         }
         //Post for Customer
         [HttpPost] 
-        public IActionResult Create(CustomerEditViewModel model)
+        public IActionResult Create(Customer model)
         {
             //Check to see if model is valid
             if (ModelState.IsValid)
@@ -145,7 +155,7 @@ namespace CSMWebCore.Controllers
         {
             //Call searchmethod from customer serives and pass searchValue
             //Create a IENumerable of CustomerViewModel, see SQLCustomer for Search Method
-            var model = _customers.Search(searchValue).Select(cust => new CustomerViewModel {
+            var model = _customers.Search(searchValue).Select(cust => new NewCustomerViewModel {
                 Id = cust.Id,
                 FullName = $"{cust.FirstName} {cust.LastName}",
                 Email = cust.Email,
@@ -169,14 +179,21 @@ namespace CSMWebCore.Controllers
         {
             //the model will be a list of CustomerActiveViewModel that is created from a list
             //of Tickets that are active
-            var model = _tickets.GetOpen().Select(ticket => new CustomerActiveViewModel
+            
+            IEnumerable<NewCustomerActiveViewModel> activeCustomers = _tickets.GetOpen().Select(ticket => new NewCustomerActiveViewModel
             {
                 //Retrieve each Customer by getting the CustomerID stored in the Device that is
                 //stored in the Ticket
-                Customer = _customers.GetById(_devices.GetById(ticket.Device.Id).CustomerId)
+                FirstName = _customers.GetById(_devices.GetById(ticket.Device.Id).CustomerId).FirstName,
+                LastName = _customers.GetById(_devices.GetById(ticket.Device.Id).CustomerId).LastName,
+                Phone = _customers.GetById(_devices.GetById(ticket.Device.Id).CustomerId).Phone,
+                Email = _customers.GetById(_devices.GetById(ticket.Device.Id).CustomerId).Email,
+                StudentId = _customers.GetById(_devices.GetById(ticket.Device.Id).CustomerId).StudentId,
+                ContactPref = _customers.GetById(_devices.GetById(ticket.Device.Id).CustomerId).ContactPref,
+                Id = _customers.GetById(_devices.GetById(ticket.Device.Id).CustomerId).Id
             });
             //return View
-            return View(model);
+            return View(activeCustomers);
         }
     }
 }

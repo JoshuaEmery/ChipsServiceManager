@@ -1,9 +1,9 @@
-﻿@model DeviceViewModel
+﻿@model NewDeviceViewModel
 <tr>
     <td scope="row">
-        @if (Model.Ticket != null)
+        @if (Model.TicketNumber > 0)
         {
-            @Model.Ticket.TicketNumber;
+            @Model.TicketNumber;
         }
         else
         {
@@ -11,16 +11,16 @@
         }
     </td>
     <td>
-        @if (Model.Ticket != null)
+        @if (Model.TicketNumber > 0)
         {
-            @EnumHelper.GetDisplayName(Model.Ticket.Status);
+            @EnumHelper.GetDisplayName(Model.TicketStatus);
         }
         else
         {
             <em>none</em>
         }
     </td>
-    <td>@Model.Customer.FirstName @Model.Customer.LastName</td>
+    <td>@Model.CustomerFirstName @Model.CustomerLastName</td>
     <td>@Model.Make @Model.ModelNumber</td>
     <td>@Model.OperatingSystem</td>
     <td>@Model.Password</td>

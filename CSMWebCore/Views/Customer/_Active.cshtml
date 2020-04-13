@@ -1,8 +1,8 @@
-﻿@model CustomerActiveViewModel
+﻿@model NewCustomerActiveViewModel
 <div>
     <div>
         <div>
-            <a asp-controller="Customer" asp-action="Details" asp-route-id="@Model.Customer.Id">
+            <a asp-controller="Customer" asp-action="Details" asp-route-id="@Model.Id">
                 <table class="table-responsive table-striped">
                     <tr>
                         <th>First Name</th>
@@ -13,12 +13,12 @@
                         <th>Contact Method</th>
                     </tr>
                     <tr>
-                        <td>@Model.Customer.FirstName</td>
-                        <td>@Model.Customer.LastName</td>
-                        <td>@Model.Customer.Phone</td>
-                        <td>@Model.Customer.Email</td>
-                        <td>@Model.Customer.StudentId</td>
-                        <td>@Model.Customer.ContactPref.ToString()</td>
+                        <td>@Model.FirstName</td>
+                        <td>@Model.LastName</td>
+                        <td>@Model.Phone</td>
+                        <td>@Model.Email</td>
+                        <td>@Model.StudentId</td>
+                        <td>@Model.ContactPref.ToString()</td>
                     </tr>
                 </table>
             </a>
