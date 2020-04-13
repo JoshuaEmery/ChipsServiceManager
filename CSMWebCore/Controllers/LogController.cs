@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CSMWebCore.Data;
 using CSMWebCore.Entities;
 using CSMWebCore.Models;
 using CSMWebCore.Services;
@@ -18,14 +19,16 @@ namespace CSMWebCore.Controllers
     //by TicketID as that is the foreign key in the log table.
     public class LogController : Controller
     {
+        private ChipsDbContext _context;
         private IDeviceRepository _devices;
         private ICustomerRepository _customers;
         private ITicketRepository _tickets;
         private ILogRepository _logs;
         private ITicketsHistoryData _ticketsHistory;
 
-        public LogController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, ITicketsHistoryData ticketsHistory)
+        public LogController(ChipsDbContext context, IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, ITicketsHistoryData ticketsHistory)
         {
+            _context = context;
             _devices = devices;
             _customers = customers;
             _tickets = tickets;
@@ -111,13 +114,15 @@ namespace CSMWebCore.Controllers
         public IActionResult Service(int ticketId)
         {
             //get the ticket Object
-            var ticket = _tickets.GetById(ticketId);            
+            var ticket = _tickets.GetById(ticketId);
+            IEnumerable<Event> events = _context.Events.Where(e => e.Category == EventCategory.HWService || e.Category == EventCategory.SWService).ToList();
             //create LogEditViewModel
             var model = new NewLogServiceViewModel
             {
                 TicketId = ticket.Id,
                 TicketNumber = ticket.TicketNumber,
-                TicketStatus = _logs.GetLastByTicketId(ticketId).TicketStatus
+                TicketStatus = _logs.GetLastByTicketId(ticketId).TicketStatus,
+                Events = SelectListHelper.ToSelectListItems(events, -1) // nothing selected
             };
             return View(model);
         }
@@ -140,7 +145,7 @@ namespace CSMWebCore.Controllers
                 DateCreated = DateTime.Now,
                 Notes = model.LogNotes,                
                 ContactMethod = ContactMethod.NoContact,
-                EventId = (int)model.EventName,
+                EventId = model.SelectedEventId,
                 TicketStatus = model.TicketStatus
             };
             _logs.Insert(log);
@@ -157,6 +162,7 @@ namespace CSMWebCore.Controllers
             //get th ticket and the customer associated with that ticket
             var ticket = _tickets.GetById(ticketId);
             var customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId);
+            IEnumerable<Event> events = _context.Events.Where(e => e.Category == EventCategory.Contact).ToList();
             //create LogEditViewModel
             var model = new NewLogContactViewModel
             {
@@ -166,7 +172,8 @@ namespace CSMWebCore.Controllers
                 CustomerLastName = customer.LastName,
                 CustomerEmail = customer.Email,
                 CustomerPhone = customer.Phone,
-                TicketStatus = _logs.GetLastByTicketId(ticketId).TicketStatus                
+                TicketStatus = _logs.GetLastByTicketId(ticketId).TicketStatus,
+                Events = SelectListHelper.ToSelectListItems(events, -1) // nothing selected
             };
             //return View
             return View(model);
@@ -190,7 +197,7 @@ namespace CSMWebCore.Controllers
             Log log = new Log
             {
                 UserCreated = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                EventId = (int)model.EventName,
+                EventId = model.SelectedEventId,
                 TicketId = model.TicketId,
                 DateCreated = DateTime.Now,
                 Notes = model.LogNotes,

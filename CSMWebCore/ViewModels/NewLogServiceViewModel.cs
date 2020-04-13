@@ -12,7 +12,8 @@ namespace CSMWebCore.ViewModels
         public int TicketNumber { get; set; }
         public int TicketId { get; set; }
         public string LogNotes { get; set; }
-        public EventName EventName { get; set; }
+        public int SelectedEventId { get; set; }
+        public IEnumerable<SelectListItem> Events { get; set; }
         public TicketStatus TicketStatus { get; set; }
 
     }

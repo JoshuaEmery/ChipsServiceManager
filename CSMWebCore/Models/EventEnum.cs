@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Models
 {
-    public enum EventName
+    public enum EventEnum
     {
         CheckIn = 1,
         CheckOut = 2,

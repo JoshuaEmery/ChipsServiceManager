@@ -9,9 +9,9 @@
     </div>
     <div class="col-md-12 bottomFormPanel">
         <div class="row">
-            <label asp-for="EventName" class="col-md-2"></label>
-            <select class="col-md-2" asp-for="EventName" asp-items='Html.GetEnumSelectList<EventName>().Where(x => int.Parse(x.Value) >= (int)EventName.LostandFound && int.Parse(x.Value) <= (int)EventName.MiscHardware)'></select>
-            <span asp-validation-for="EventName"></span>
+            <label asp-for="SelectedEventId" class="col-md-2"></label>
+            @Html.DropDownListFor(vm => vm.SelectedEventId, Model.Events, new { @class = "form-control" })
+            <span asp-validation-for="SelectedEventId"></span>
         </div>
         <div class="row">
             <label asp-for="LogNotes" class="col-md-2"></label>

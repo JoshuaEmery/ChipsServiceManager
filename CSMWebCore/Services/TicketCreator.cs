@@ -44,7 +44,7 @@ namespace CSMWebCore.Services
             //Create a log entry with the newly created Ticket.Id as a foreign key
             Log log = new Log
             {
-                EventId = (int)EventName.CheckIn,
+                EventId = (int)EventEnum.CheckIn,
                 // TODO get event id dynamically from db
                 UserCreated = info.UserName,
                 TicketId = ticket.Id,

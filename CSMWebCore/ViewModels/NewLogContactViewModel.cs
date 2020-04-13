@@ -16,9 +16,8 @@ namespace CSMWebCore.ViewModels
         public string CustomerEmail { get; set; }
         public string CustomerPhone { get; set; }
         public string LogNotes { get; set; }
-        public EventName EventName { get; set; }
+        public int SelectedEventId { get; set; }
+        public IEnumerable<SelectListItem> Events { get; set; }
         public TicketStatus TicketStatus { get; set; }
-        public ContactMethod ContactMethod { get; set; }
-
     }
 }
