@@ -1,6 +1,6 @@
-﻿@model IEnumerable<DeviceViewModel>
+﻿@model IEnumerable<NewDevicesByCustIdViewModel>
 @{ ViewBag.Title = "Ticket Home";}
-<h2>Devices Owned by @ViewBag.Customer.FirstName @ViewBag.Customer.LastName</h2>
+<h2>Devices Owned by @ViewBag.CustomerFirstName @ViewBag.CustomerLastName</h2>
 
 <div class="card-deck">
     @foreach (var device in Model)

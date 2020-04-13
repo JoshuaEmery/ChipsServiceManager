@@ -8,10 +8,15 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.ViewModels
 {
-    public class NewDeviceDetailsViewModel
+    public class NewDeviceCreateViewModel
     {
-        public int Id { get; set; }
+        public int Id { get; set; }        
         public int CustomerId { get; set; }
+        public string CustomerFirstName { get; set; }
+        public string CustomerLastName { get; set; }        
+        public int TicketNumber { get; set; }
+        public bool TicketNeedsBackup { get; set; }
+        public string LogNotes { get; set; }        
         [Required]
         public string Make { get; set; }
         [Required]

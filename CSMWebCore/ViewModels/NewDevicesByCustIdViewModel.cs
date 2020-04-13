@@ -8,18 +8,14 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.ViewModels
 {
-    public class NewDeviceDetailsViewModel
+    public class NewDevicesByCustIdViewModel
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
         [Required]
         public string Make { get; set; }
         [Required]
         public string ModelNumber { get; set; }
         [Display(Name = "Operating System")]
         public string OperatingSystem { get; set; }
-        public string Password { get; set; }
-        [Display(Name = "Has the computer been serviced before?")]
-        public bool Serviced { get; set; }
     }
 }

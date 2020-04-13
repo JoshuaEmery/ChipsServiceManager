@@ -78,7 +78,7 @@ namespace CSMWebCore.Controllers
                 return View();
             }
             //create new DeviceEditViewModel
-            DeviceEditViewModel model = new DeviceEditViewModel
+            NewDeviceEditViewModel model = new NewDeviceEditViewModel
             {
                 Id = device.Id,
                 CustomerId = device.CustomerId,
@@ -93,7 +93,7 @@ namespace CSMWebCore.Controllers
         }
         //Post for Edit
         [HttpPost]
-        public IActionResult Edit(DeviceEditViewModel model)
+        public IActionResult Edit(NewDeviceEditViewModel model)
         {
             //Check to see that the device exists
             var device = _devices.GetById(model.Id);
@@ -157,10 +157,10 @@ namespace CSMWebCore.Controllers
                 return View();
             }
             //create and return ViewModel
-            var model = new DeviceEditViewModel
+            var model = new NewDeviceDetailsViewModel
             {
                 Id = device.Id,
-                Customer = _customers.GetById(device.CustomerId),
+                CustomerId = _customers.GetById(device.CustomerId).Id,
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
@@ -178,12 +178,13 @@ namespace CSMWebCore.Controllers
             //The DeviceEditViewModel stores a Ticket, a Customer and TicketID and CustomerID
             //On get Customer is populated, on Post Ticket is populated, the customer will
             //have to be retrieved again if needed on post.
-            DeviceEditViewModel model = new DeviceEditViewModel();
-            model.Ticket = new Ticket();
-            model.CustomerId = id;
-            model.Customer = _customers.GetById(id);
-            //Get the next ticketnumber, this check is run again after post
-            model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
+            var model = new NewDeviceCreateViewModel 
+            { 
+                TicketNumber = _tickets.GetLatestTicketNum() + 1,
+                CustomerId = id,
+                CustomerFirstName = _customers.GetById(id).FirstName,
+                CustomerLastName = _customers.GetById(id).LastName
+            };
             return View(model);
         }
         //Post for CreateuByCustId
@@ -195,14 +196,12 @@ namespace CSMWebCore.Controllers
         //being unique to each ticket.  There is no constraint on the TicketNumber other than
         //what is enforced here.
         [HttpPost]
-        public IActionResult CreateByCustId(DeviceEditViewModel model)
+        public IActionResult CreateByCustId(NewDeviceCreateViewModel model)
         {
+            
             //Check if Model State is Valid
             if (!ModelState.IsValid)
-            {
-                //Get the customer object again from the database as no customer
-                //is posted back from the method
-                model.Customer = _customers.GetById(model.CustomerId);
+            {             
                 return View(model);
             }
             //Create a new device using the Customer ID and form data
@@ -222,8 +221,8 @@ namespace CSMWebCore.Controllers
             {
                 DeviceId = device.Id,
                 CustomerId = model.CustomerId,
-                NeedsBackup = model.Ticket.NeedsBackup,
-                Notes = model.Log.Notes,
+                NeedsBackup = model.TicketNeedsBackup,
+                Notes = model.LogNotes,
                 UserName = User.FindFirst(ClaimTypes.Name).Value.ToString()
             });
             return RedirectToAction("Confirmation", "Ticket", new { ticketId = tcModel.ticketId,
@@ -242,19 +241,15 @@ namespace CSMWebCore.Controllers
             {
                 return View();
             }
-            //ViewBag used to display Customer Name
-            ViewBag.Customer = cust;
+            ViewBag.CustomerFirstName = cust.FirstName;
+            ViewBag.CustomerLastName = cust.LastName;
             //create a IEnumerable of DeviceViewModel by customer ID
-            var model = _devices.GetAllByCustId(id).Select(device => new DeviceViewModel
+            var model = _devices.GetAllByCustId(id).Select(device => new NewDevicesByCustIdViewModel
             {
                 Id = device.Id,
-                Customer = device.Customer,
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
-                OperatingSystem = device.OperatingSystem,
-                Password = device.Password,
-                Serviced = device.Serviced
-
+                OperatingSystem = device.OperatingSystem
             });
             return View(model);
         }
@@ -263,16 +258,18 @@ namespace CSMWebCore.Controllers
         {
             //create an IEnumerable of DeviceViewModel from using the searchValue, 
             //see SQLDevice for Search method
-            var model = _devices.Search(searchValue).Select(device => new DeviceViewModel
+            var model = _devices.Search(searchValue).Select(device => new NewDeviceViewModel
             {
                 Id = device.Id,
-                Customer = _customers.GetById(device.CustomerId),
+                CustomerFirstName = _customers.GetById(device.CustomerId).FirstName,
+                CustomerLastName = _customers.GetById(device.CustomerId).LastName,
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
                 Password = device.Password,
                 Serviced = device.Serviced,
-                Ticket = _tickets.GetLatestForDevice(device.Id)                
+                TicketNumber = _tickets.GetLatestForDevice(device.Id).TicketNumber,
+                TicketStatus = _tickets.GetLatestForDevice(device.Id).Status
 
             });
             return View("Index", model);
