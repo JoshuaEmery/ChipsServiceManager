@@ -158,20 +158,22 @@ namespace CSMWebCore.Controllers
             var ticket = _tickets.GetById(ticketId);
             var customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId);
             //create LogEditViewModel
-            var model = new LogEditViewModel
+            var model = new NewLogContactViewModel
             {
                 TicketId = ticket.Id,
                 TicketNumber = ticket.TicketNumber,
-                Customer = customer,
-                TicketStatus = ticket.Status,
-                ContactMethod = ContactMethod.InPerson
+                CustomerFirstName = customer.FirstName,
+                CustomerLastName = customer.LastName,
+                CustomerEmail = customer.Email,
+                CustomerPhone = customer.Phone,
+                TicketStatus = _logs.GetLastByTicketId(ticketId).TicketStatus                
             };
             //return View
             return View(model);
         }
         [HttpPost]
         //Post Method for log contact
-        public IActionResult Contact(LogEditViewModel model)
+        public IActionResult Contact(NewLogContactViewModel model)
         {
             //get the ticket and check for valid
             Ticket ticket = _tickets.GetById(model.TicketId);
@@ -179,39 +181,37 @@ namespace CSMWebCore.Controllers
             {
                 return View(model);
             }
-            if(ticket.Status != model.TicketStatus)
-            {
-                //Whenever a ticket is modified make an entry in tickethistory before changing
-                _ticketsHistory.AddTicketToHistory(ticket);
-            }
+            //if(ticket.Status != model.TicketStatus)
+            //{
+            //    //Whenever a ticket is modified make an entry in tickethistory before changing
+            //    _ticketsHistory.AddTicketToHistory(ticket);
+            //}
             //create new log
             Log log = new Log
             {
                 UserCreated = User.FindFirst(ClaimTypes.Name).Value.ToString(),
-                EventId = (int)EventCategory.Contact,
+                EventId = (int)model.EventName,
                 TicketId = model.TicketId,
                 DateCreated = DateTime.Now,
-                Notes = model.Notes,
-                LogType = model.LogType,
-                ContactMethod = model.ContactMethod
-
+                Notes = model.LogNotes,
+                TicketStatus = model.TicketStatus
             };
             //update database
             _logs.Insert(log);
             _logs.Commit();
-            //record time finished if ticket has been completed
-            ticket.Status = model.TicketStatus;
-            if (model.TicketStatus == TicketStatus.PendingPickup)
-            {
-                ticket.FinishDate = DateTime.Now;
-            }
-            else if (model.TicketStatus == TicketStatus.Closed)
-            {
-                ticket.CheckOutDate = DateTime.Now;
-                ticket.CheckOutUserId = User.FindFirst(ClaimTypes.Name).Value.ToString();
-            }
-            //update tickets table
-            _tickets.Commit();
+            ////record time finished if ticket has been completed
+            //ticket.Status = model.TicketStatus;
+            //if (model.TicketStatus == TicketStatus.PendingPickup)
+            //{
+            //    ticket.FinishDate = DateTime.Now;
+            //}
+            //else if (model.TicketStatus == TicketStatus.Closed)
+            //{
+            //    ticket.CheckOutDate = DateTime.Now;
+            //    ticket.CheckOutUserId = User.FindFirst(ClaimTypes.Name).Value.ToString();
+            //}
+            ////update tickets table
+            //_tickets.Commit();
             return RedirectToAction("Index", "Ticket");            
         }
     }

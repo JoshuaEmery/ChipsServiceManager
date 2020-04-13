@@ -1,31 +1,31 @@
-﻿@model LogEditViewModel
+﻿@model NewLogContactViewModel
 <form asp-action="Contact" method="post">
     <div asp-validation-summary="All"></div>
     <div class="topFormPanel">
         <Table class="col-md-3 table table-bordered table-hover">
             <tr>
                 <td>
-                    <label asp-for="Customer.FirstName"></label>
+                    <label asp-for="CustomerFirstName"></label>
                 </td>
-                     <td><input asp-for="Customer.FirstName" readonly="readonly" /></td>
+                     <td><input asp-for="CustomerFirstName" readonly="readonly" /></td>
                 
             </tr>
             <tr>
                 <td>
-                    <label asp-for="Customer.LastName"></label></td>
-                    <td><input asp-for="Customer.LastName" readonly="readonly" />
+                    <label asp-for="CustomerLastName"></label></td>
+                    <td><input asp-for="CustomerLastName" readonly="readonly" />
                 </td>
             </tr>            
             <tr>
                 <td>
-                    <label asp-for="Customer.Email"></label></td>
-                    <td><input asp-for="Customer.Email" readonly="readonly" />
+                    <label asp-for="CustomerEmail"></label></td>
+                    <td><input asp-for="CustomerEmail" readonly="readonly" />
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label asp-for="Customer.Phone"></label></td>
-                   <td> <input asp-for="Customer.Phone" readonly="readonly" />
+                    <label asp-for="CustomerPhone"></label></td>
+                   <td> <input asp-for="CustomerPhone" readonly="readonly" />
                 </td>
             </tr>
             <tr>
@@ -38,9 +38,9 @@
     </div>
     <div class="col-md-12 bottomFormPanel">
         <div class="row">
-            <label asp-for="ContactMethod" class="col-md-2"></label>
-            <select class="col-md-2" asp-for="ContactMethod" asp-items='Html.GetEnumSelectList<ContactMethod>().Where(x => x.Text != ContactMethod.NoContact.ToString())'></select>
-            <span asp-validation-for="ContactMethod"></span>
+            <label asp-for="EventName" class="col-md-2"></label>
+            <select class="col-md-2" asp-for="EventName" asp-items='Html.GetEnumSelectList<EventName>().Where(x => int.Parse(x.Value) >= (int)EventName.InPerson && int.Parse(x.Value) <= (int)EventName.Voicemail)'></select>
+            <span asp-validation-for="EventName"></span>
         </div>
         <div class="row">
             <label asp-for="TicketStatus" class="col-md-2"></label>
@@ -48,9 +48,9 @@
             <span asp-validation-for="TicketStatus"></span>
         </div>
         <div class="row">
-            <label asp-for="Notes" class="col-md-2"></label>
-            <textarea asp-for="Notes" rows="5" class="col-md-5"></textarea>
-            <span asp-validation-for="Notes"></span>
+            <label asp-for="LogNotes" class="col-md-2"></label>
+            <textarea asp-for="LogNotes" rows="5" class="col-md-5"></textarea>
+            <span asp-validation-for="LogNotes"></span>
         </div>
         <input type="hidden" asp-for="TicketId" />
         <input class="btn btn-group btn-success" type="submit" value="Save Contact" />

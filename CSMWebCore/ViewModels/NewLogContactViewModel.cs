@@ -7,13 +7,18 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.ViewModels
 {
-    public class NewLogServiceViewModel
+    public class NewLogContactViewModel
     {
         public int TicketNumber { get; set; }
         public int TicketId { get; set; }
+        public string CustomerFirstName { get; set; }
+        public string CustomerLastName { get; set; }
+        public string CustomerEmail { get; set; }
+        public string CustomerPhone { get; set; }
         public string LogNotes { get; set; }
         public EventName EventName { get; set; }
         public TicketStatus TicketStatus { get; set; }
+        public ContactMethod ContactMethod { get; set; }
 
     }
 }
