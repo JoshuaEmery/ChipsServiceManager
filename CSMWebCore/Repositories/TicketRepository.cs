@@ -51,7 +51,7 @@ namespace CSMWebCore.Services
         public Ticket GetLatestForDevice(int deviceId) => context.Find<Ticket>(context.Tickets.Where(x => x.Device.Id == deviceId).LastOrDefault().Id);
 
         //method that gets all tickets that have been completed within a timespan        
-        //public IEnumerable<Ticket> GetCompleted(TimeSpan span)
+        //public IEnumerable<Ticket> GetCompletedTickets(TimeSpan span)
         //{
         //    DateTime date = (DateTime.Now - span);
         //    return context.Tickets.Where(x => x.FinishDate > date);

@@ -66,10 +66,10 @@ namespace CSMWebCore.Shared
         /// Searches relevant Customer fields for a matching search value and 
         /// returns a collection of matching Customers.
         /// </summary>
-        public static IEnumerable<Customer> Search(DbSet<Customer> dbSet, string searchValue)
+        public static List<Customer> Search(this DbSet<Customer> dbSet, string searchValue)
         {
             var result = new List<Customer>();
-            if (!String.IsNullOrEmpty(searchValue))
+            if (!string.IsNullOrEmpty(searchValue))
             {
                 result.AddRange(dbSet.Where(c => c.FirstName.Contains(searchValue)));
                 result.AddRange(dbSet.Where(c => c.LastName.Contains(searchValue)));
@@ -86,14 +86,14 @@ namespace CSMWebCore.Shared
         /// <summary>
         /// Gets a collection of Devices for a given Customer ID.
         /// </summary>
-        public static IEnumerable<Device> GetDevicesByCustId(DbSet<Device> dbSet, int customerId) =>
+        public static IQueryable<Device> GetDevicesByCustId(this DbSet<Device> dbSet, int customerId) =>
             dbSet.Where(x => x.Customer.Id == customerId);
 
         /// <summary>
         /// Searches relevant Device fields for a matching search value and
         /// returns a collection of matching Devices.
         /// </summary>
-        public static IEnumerable<Device> Search(DbSet<Device> dbSet, string searchValue)
+        public static List<Device> Search(this DbSet<Device> dbSet, string searchValue)
         {
             var result = new List<Device>();
             if (!string.IsNullOrEmpty(searchValue))
@@ -114,7 +114,7 @@ namespace CSMWebCore.Shared
         /// <summary>
         /// Gets a collection of Tickets for a given Device ID.
         /// </summary>
-        public static IEnumerable<Ticket> GetTicketsByDeviceId(this DbSet<Ticket> dbSet, int deviceId) =>
+        public static IQueryable<Ticket> GetTicketsByDeviceId(this DbSet<Ticket> dbSet, int deviceId) =>
             dbSet.Where(t => t.Device.Id == deviceId);
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace CSMWebCore.Shared
         /// <summary>
         /// Gets all tickets with the given TicketStatus its latest status.
         /// </summary>
-        public static IEnumerable<Ticket> GetTicketsByLatestStatus(this DbSet<Ticket> dbSet, TicketStatus status) =>
+        public static IQueryable<Ticket> GetTicketsByLatestStatus(this DbSet<Ticket> dbSet, TicketStatus status) =>
             dbSet.Where(t => t.Logs.LastOrDefault().TicketStatus == status);
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace CSMWebCore.Shared
         /// Searches relevant Device fields for a matching search value and
         /// returns a collection of matching Devices.
         /// </summary>
-        public static IEnumerable<Ticket> Search(this DbSet<Ticket> dbSet, string searchValue)
+        public static List<Ticket> Search(this DbSet<Ticket> dbSet, string searchValue)
         {
             var result = new List<Ticket>();
             if (!String.IsNullOrEmpty(searchValue))
@@ -170,9 +170,11 @@ namespace CSMWebCore.Shared
         /// Gets a collection of Tickets where the current status (found in the last log) 
         /// is open (anything but Closed).
         /// </summary>
-        // * This needs to be tested
-        public static IEnumerable<Ticket> GetOpen(this DbSet<Ticket> dbSet) =>
-        dbSet.Where(t => t.Logs.LastOrDefault().TicketStatus != TicketStatus.Closed);
+        // This has been tested to work. OrderByDescending is used with FirstOrDefault, rather than just LastOrDefault
+        // because LastOrDefault cannot be easily converted into a query by EF and throws an error at runtime:
+        // "The LINQ expression could not be translated".
+        public static IQueryable<Ticket> GetOpenTickets(this DbSet<Ticket> dbSet) =>
+            dbSet.Where(t => t.Logs.OrderByDescending(log => log.Id).FirstOrDefault().TicketStatus != TicketStatus.Closed);
 
 
         // ----------------- Get By Status - Checked In -----------------
@@ -181,7 +183,7 @@ namespace CSMWebCore.Shared
         /// Gets a collection of Tickets that were opened (device checked-in) within the given date range.
         /// "Checked-in" Tickets are selected by checking all Logs of each Ticket for EventEnum.CheckIn.
         /// </summary>
-        public static IEnumerable<Ticket> GetCheckedIn(this DbSet<Ticket> dbSet, DateTime startDate, DateTime endDate) =>
+        public static IQueryable<Ticket> GetCheckedInTickets(this DbSet<Ticket> dbSet, DateTime startDate, DateTime endDate) =>
             dbSet.Where(t => t.Logs.FirstOrDefault(log => log.EventId == (int)EventEnum.CheckIn).DateCreated >= startDate && t.CheckInDate < endDate);
 
         /// <summary>
@@ -189,7 +191,7 @@ namespace CSMWebCore.Shared
         /// given TimeSpan. "Checked-in" Tickets are selected by checking the Logs of each Ticket for 
         /// EventEnum.CheckIn. The first log found with a check-in event is used for checking date bounds.
         /// </summary>
-        public static IEnumerable<Ticket> GetCheckedIn(this DbSet<Ticket> dbSet, TimeSpan? span)
+        public static IQueryable<Ticket> GetCheckedInTickets(this DbSet<Ticket> dbSet, TimeSpan? span)
         {
             if (!span.HasValue) return dbSet.Where(t => t.Logs.FirstOrDefault().EventId == (int)EventEnum.CheckIn);
             else
@@ -197,7 +199,7 @@ namespace CSMWebCore.Shared
                 // gets span with end bound set to midnight tonight, to avoid overlap between business days
                 DateTime end = DateTime.Today.AddDays(1);
                 DateTime start = end.Subtract(span.Value);
-                return GetCheckedIn(dbSet, start, end);
+                return GetCheckedInTickets(dbSet, start, end);
             }
         }
 
@@ -208,7 +210,7 @@ namespace CSMWebCore.Shared
         /// Gets a collection of Tickets that were considered completed within the given date range.
         /// Completed tickets are selected by checking Logs of each Ticket for TicketStatus.PendingPickup.
         /// </summary>
-        public static IEnumerable<Ticket> GetCompleted(this DbSet<Ticket> dbSet, DateTime startDate, DateTime endDate) =>
+        public static IQueryable<Ticket> GetCompletedTickets(this DbSet<Ticket> dbSet, DateTime startDate, DateTime endDate) =>
             dbSet.Where(t => t.Logs.Any(log => log.TicketStatus == TicketStatus.PendingPickup && log.DateCreated >= startDate && log.DateCreated < endDate));
 
         /// <summary>
@@ -216,7 +218,7 @@ namespace CSMWebCore.Shared
         /// given TimeSpan (the end interval is today at midnight). Completed Tickets are selected by 
         /// checking Logs of each Ticket for TicketStatus.PendingPickup.
         /// </summary>
-        public static IEnumerable<Ticket> GetCompleted(this DbSet<Ticket> dbSet, TimeSpan? span = null)
+        public static IQueryable<Ticket> GetCompletedTickets(this DbSet<Ticket> dbSet, TimeSpan? span = null)
         {
             if (!span.HasValue) return dbSet.Where(t => t.Logs.Any(log => log.TicketStatus == TicketStatus.PendingPickup));
             else
@@ -224,7 +226,7 @@ namespace CSMWebCore.Shared
                 // gets span with end bound set to midnight tonight, to avoid overlap between business days
                 DateTime end = DateTime.Today.AddDays(1);
                 DateTime start = end.Subtract(span.Value);
-                return GetCompleted(dbSet, start, end);
+                return GetCompletedTickets(dbSet, start, end);
             }
         }
 
@@ -235,7 +237,7 @@ namespace CSMWebCore.Shared
         /// Gets a collection of Tickets that are closed, whether via device check-out or other means, within the given date range. 
         /// Closed tickets are selected by checking the final Log of each Ticket for TicketStatus.Closed.
         /// </summary>
-        public static IEnumerable<Ticket> GetClosed(this DbSet<Ticket> dbSet, DateTime startDate, DateTime endDate) =>
+        public static IQueryable<Ticket> GetClosedTickets(this DbSet<Ticket> dbSet, DateTime startDate, DateTime endDate) =>
             dbSet.GetTicketsByLatestStatus(TicketStatus.Closed).Where(t => t.Logs.LastOrDefault().DateCreated >= startDate && t.Logs.LastOrDefault().DateCreated < endDate);
 
         /// <summary>
@@ -243,7 +245,7 @@ namespace CSMWebCore.Shared
         /// Closed tickets are selected by checking the final Log of each Ticket for TicketStatus.Closed.
         /// </summary>
         // * This was rewritten and needs to be tested
-        public static IEnumerable<Ticket> GetClosed(this DbSet<Ticket> dbSet, TimeSpan? span = null)
+        public static IQueryable<Ticket> GetClosedTickets(this DbSet<Ticket> dbSet, TimeSpan? span = null)
         {
             if (!span.HasValue) return dbSet.GetTicketsByLatestStatus(TicketStatus.Closed);
             else
@@ -251,7 +253,7 @@ namespace CSMWebCore.Shared
                 // gets span with end bound set to midnight tonight, to avoid overlap between business days
                 DateTime end = DateTime.Today.AddDays(1);
                 DateTime start = end.Subtract(span.Value);
-                return GetClosed(dbSet, start, end);
+                return GetClosedTickets(dbSet, start, end);
             }
         }
 
@@ -267,7 +269,7 @@ namespace CSMWebCore.Shared
         /// <summary>
         /// Gets a collection of Logs for a given Ticket ID.
         /// </summary>
-        public static IEnumerable<Log> GetLogsByTicketId(this DbSet<Log> dbSet, int ticketId) => 
+        public static IQueryable<Log> GetLogsByTicketId(this DbSet<Log> dbSet, int ticketId) => 
             dbSet.Where(x => x.TicketId == ticketId);
 
 
@@ -285,7 +287,7 @@ namespace CSMWebCore.Shared
         /// Gets a collection of Logs with a service event (one of three 
         /// categories: General Service, Hardware Service, or Software Service) for a given Ticket ID.
         /// </summary>
-        public static IEnumerable<Log> GetServiceLogsByTicketId(this DbSet<Log> dbSet, int ticketId) => 
+        public static IQueryable<Log> GetServiceLogsByTicketId(this DbSet<Log> dbSet, int ticketId) => 
             dbSet.Where(log => log.TicketId == ticketId && IsService(log));
 
         /// <summary>
@@ -293,7 +295,7 @@ namespace CSMWebCore.Shared
         /// categories: General Service, Hardware Service, or Software Service) for a given username,
         /// and between two dates.
         /// </summary>
-        public static IEnumerable<Log> GetServiceLogsByUser(this DbSet<Log> dbSet, string userName, DateTime startDate, DateTime endDate) =>
+        public static IQueryable<Log> GetServiceLogsByUser(this DbSet<Log> dbSet, string userName, DateTime startDate, DateTime endDate) =>
             dbSet.Where(log => log.UserCreated == userName && IsService(log) && log.DateCreated >= startDate && log.DateCreated < endDate);
 
         /// <summary>
@@ -301,7 +303,7 @@ namespace CSMWebCore.Shared
         /// categories: General Service, Hardware Service, or Software Service) for a given username,
         /// and optionally within the given TimeSpan (the end interval is today at midnight).
         /// </summary>
-        public static IEnumerable<Log> GetServiceLogsByUser(this DbSet<Log> dbSet, string userName, TimeSpan? span = null)
+        public static IQueryable<Log> GetServiceLogsByUser(this DbSet<Log> dbSet, string userName, TimeSpan? span = null)
         {
             if (!span.HasValue) return dbSet.Where(log => log.UserCreated == userName && IsService(log));
             else
@@ -320,7 +322,7 @@ namespace CSMWebCore.Shared
         /// Gets a collection of Logs with a service event (one of three 
         /// categories: General Service, Hardware Service, or Software Service) for a given Ticket ID.
         /// </summary>
-        public static IEnumerable<Log> GetContactLogsByTicketId(this DbSet<Log> dbSet, int ticketId) => 
+        public static IQueryable<Log> GetContactLogsByTicketId(this DbSet<Log> dbSet, int ticketId) => 
             dbSet.Where(log => log.TicketId == ticketId && log.Event.Category == EventCategory.Contact);
 
         /// <summary>
@@ -328,7 +330,7 @@ namespace CSMWebCore.Shared
         /// categories: General Service, Hardware Service, or Software Service) for a given username,
         /// and between two dates.
         /// </summary>
-        public static IEnumerable<Log> GetContactLogsByUser(this DbSet<Log> dbSet, string userName, DateTime startDate, DateTime endDate) =>
+        public static IQueryable<Log> GetContactLogsByUser(this DbSet<Log> dbSet, string userName, DateTime startDate, DateTime endDate) =>
             dbSet.Where(log => log.UserCreated == userName && log.Event.Category == EventCategory.Contact && log.DateCreated >= startDate && log.DateCreated < endDate);
 
         /// <summary>
@@ -336,7 +338,7 @@ namespace CSMWebCore.Shared
         /// categories: General Service, Hardware Service, or Software Service) for a given username,
         /// and optionally within the given TimeSpan (the end interval is today at midnight).
         /// </summary>
-        public static IEnumerable<Log> GetContactLogsByUser(this DbSet<Log> dbSet, string userName, TimeSpan? span = null)
+        public static IQueryable<Log> GetContactLogsByUser(this DbSet<Log> dbSet, string userName, TimeSpan? span = null)
         {
             if (!span.HasValue) return dbSet.Where(log => log.UserCreated == userName && log.Event.Category == EventCategory.Contact);
             else
@@ -366,14 +368,14 @@ namespace CSMWebCore.Shared
         /// <summary>
         /// Gets a collection of Events that belong to a certain category.
         /// </summary>
-        public static IEnumerable<Event> GetEventsByCategory(this DbSet<Event> events, EventCategory category) => 
+        public static IQueryable<Event> GetEventsByCategory(this DbSet<Event> events, EventCategory category) => 
             events.Where(e => e.Category == category);
 
         /// <summary>
         /// Gets a collection of distinct Events that were found for logs of a 
         /// given Ticket ID. Duplicate events are excluded.
         /// </summary>
-        public static IEnumerable<Event> GetDistinctEventsByTicketId(this DbSet<Log> dbSet, int ticketId) =>
+        public static IQueryable<Event> GetDistinctEventsByTicketId(this DbSet<Log> dbSet, int ticketId) =>
             dbSet.Where(x => x.TicketId == ticketId).Select(x => x.Event).Distinct();
     }
 }
