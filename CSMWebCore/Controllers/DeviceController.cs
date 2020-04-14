@@ -5,10 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CSMWebCore.Data;
 using CSMWebCore.Entities;
 using CSMWebCore.Enums;
 using CSMWebCore.Models;
 using CSMWebCore.Services;
+using CSMWebCore.Shared;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,20 +23,13 @@ namespace CSMWebCore.Controllers
     [Authorize]
     public class DeviceController : Controller
     {
-        //Device Controller uses all entity tables
-        private IDeviceRepository _devices;
-        private ICustomerRepository _customers;
-        private ITicketRepository _tickets;
-        private ILogRepository _logs;
+        private ChipsDbContext context;
         private IUpdateData _updates;
         private ITicketCreator _ticketCreator;
         //constructor
-        public DeviceController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, IUpdateData updates, ITicketCreator ticketCreator)
+        public DeviceController(ChipsDbContext context, IUpdateData updates, ITicketCreator ticketCreator)
         {
-            _devices = devices;
-            _customers = customers;
-            _tickets = tickets;
-            _logs = logs;
+            this.context = context;
             _updates = updates;
             _ticketCreator = ticketCreator;
         }
@@ -45,16 +40,16 @@ namespace CSMWebCore.Controllers
             // create list
             List<NewDeviceViewModel> model = new List<NewDeviceViewModel>();
             //Get all active tickets
-            var activetickets = _tickets.GetOpen();            
+            var activetickets = context.Tickets.GetOpenTickets();            
             // sequence thru active tickets, add viewmodel for each device to list     
             foreach (var ticket in activetickets)
             {
-                var device = _devices.GetById(ticket.DeviceId);
+                var device = context.Devices.Find(ticket.DeviceId);
                 model.Add(new NewDeviceViewModel
                 {
                     Id = device.Id,
-                    CustomerFirstName = _customers.GetById(device.CustomerId).FirstName,
-                    CustomerLastName = _customers.GetById(device.CustomerId).LastName,
+                    CustomerFirstName = context.Customers.Find(device.CustomerId).FirstName,
+                    CustomerLastName = context.Customers.Find(device.CustomerId).LastName,
                     TicketNumber = ticket.TicketNumber,
                     TicketStatus = ticket.Status,
                     Make = device.Make,
@@ -73,7 +68,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(int deviceId)
         {
             //Check to see if device exists
-            var device = _devices.GetById(deviceId);
+            var device = context.Devices.Find(deviceId);
             if (device == null)
             {
                 return View();
@@ -97,7 +92,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(NewDeviceEditViewModel model)
         {
             //Check to see that the device exists
-            var device = _devices.GetById(model.Id);
+            var device = context.Devices.Find(model.Id);
             if (device == null || !ModelState.IsValid)
             {
                 return View();
@@ -109,50 +104,16 @@ namespace CSMWebCore.Controllers
             device.OperatingSystem = model.OperatingSystem;
             device.Password = model.Password;
             device.Serviced = model.Serviced;
-            _devices.Commit();
+            context.SaveChanges();
             return RedirectToAction("Index");
         }
-        //Device/Create - This Method Used for Testing.  No Longer necessary, use CreatebyCustomerID
-        //instead
-        //[HttpGet]
-        //public IActionResult Create()
-        //{
-        //    //
-        //    DeviceEditViewModel model = new DeviceEditViewModel();
-        //    model.Customer = new List<SelectListItem>();
-        //    foreach (var customer in _customers.Get())
-        //    {
-        //        model.Customer.Add(new SelectListItem(customer.FirstName + " " + customer.LastName, customer.Id.ToString()));
-        //    }
-        //    return View(model);
-        //}
-        //[HttpPost]
-        //public IActionResult Create(DeviceEditViewModel model)
-        //{
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        Device device = new Device
-        //        {
-        //            CustomerId = model.CustomerId,
-        //            Make = model.Make,
-        //            ModelNumber = model.ModelNumber,
-        //            OperatingSystem = model.OperatingSystem,
-        //            Password = model.Password,
-        //            Serviced = model.Serviced
-        //        };
-        //        _devices.Add(device);
-        //        _devices.Commit();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View();
-        //}
         //Device/Detials
         //Method that Shows the details of a device by ID
         public IActionResult Details(int deviceId)
         {
             //Check if device exists
-            var device = _devices.GetById(deviceId);
+            var device = context.Devices.Find(deviceId);
             if (device == null)
             {
                 return View();
@@ -161,7 +122,7 @@ namespace CSMWebCore.Controllers
             var model = new NewDeviceDetailsViewModel
             {
                 Id = device.Id,
-                CustomerId = _customers.GetById(device.CustomerId).Id,
+                CustomerId = context.Customers.Find(device.CustomerId).Id,
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
@@ -179,12 +140,15 @@ namespace CSMWebCore.Controllers
             //The DeviceEditViewModel stores a Ticket, a Customer and TicketID and CustomerID
             //On get Customer is populated, on Post Ticket is populated, the customer will
             //have to be retrieved again if needed on post.
+
+            Customer cust = context.Customers.Find(id);
+
             var model = new NewDeviceCreateViewModel 
             { 
-                TicketNumber = _tickets.GetLatestTicketNum() + 1,
+                TicketNumber = context.Tickets.GetLatestTicketNum() + 1,
                 CustomerId = id,
-                CustomerFirstName = _customers.GetById(id).FirstName,
-                CustomerLastName = _customers.GetById(id).LastName
+                CustomerFirstName = cust.FirstName,
+                CustomerLastName = cust.LastName
             };
             return View(model);
         }
@@ -215,9 +179,9 @@ namespace CSMWebCore.Controllers
                 Password = model.Password,
                 Serviced = model.Serviced
             };
-            //Save the new devicesa
-            _devices.Insert(device);
-            _devices.Commit();
+            //Save the new device
+            context.Add(device);
+            context.SaveChanges();
             TicketConfirmationModel tcModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
             {
                 DeviceId = device.Id,
@@ -237,7 +201,7 @@ namespace CSMWebCore.Controllers
         public IActionResult DevicesByCustId(int id)
         {
             //check to see if customer exists
-            var cust = _customers.GetById(id);
+            var cust = context.Customers.Find(id);
             if (cust == null)
             {
                 return View();
@@ -245,7 +209,7 @@ namespace CSMWebCore.Controllers
             ViewBag.CustomerFirstName = cust.FirstName;
             ViewBag.CustomerLastName = cust.LastName;
             //create a IEnumerable of DeviceViewModel by customer ID
-            var model = _devices.GetAllByCustId(id).Select(device => new NewDevicesByCustIdViewModel
+            var model = context.Devices.GetDevicesByCustId(id).Select(device => new NewDevicesByCustIdViewModel
             {
                 Id = device.Id,
                 Make = device.Make,
@@ -259,18 +223,18 @@ namespace CSMWebCore.Controllers
         {
             //create an IEnumerable of DeviceViewModel from using the searchValue, 
             //see SQLDevice for Search method
-            var model = _devices.Search(searchValue).Select(device => new NewDeviceViewModel
+            var model = context.Devices.Search(searchValue).Select(device => new NewDeviceViewModel
             {
                 Id = device.Id,
-                CustomerFirstName = _customers.GetById(device.CustomerId).FirstName,
-                CustomerLastName = _customers.GetById(device.CustomerId).LastName,
+                CustomerFirstName = device.Customer.FirstName,
+                CustomerLastName = device.Customer.LastName,
                 Make = device.Make,
                 ModelNumber = device.ModelNumber,
                 OperatingSystem = device.OperatingSystem,
                 Password = device.Password,
                 Serviced = device.Serviced,
-                TicketNumber = _tickets.GetLatestForDevice(device.Id).TicketNumber,
-                TicketStatus = _tickets.GetLatestForDevice(device.Id).Status
+                TicketNumber = context.Tickets.GetLatestTicketForDevice(device.Id).TicketNumber,
+                TicketStatus = context.Tickets.GetLatestTicketForDevice(device.Id).Status
 
             });
             return View("Index", model);

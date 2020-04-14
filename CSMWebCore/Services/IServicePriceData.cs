@@ -9,7 +9,7 @@ namespace CSMWebCore.Services
 {
     public interface IServicePriceData
     {
-        decimal GetTotalPrice(IEnumerable<LogType> logs);
-        decimal GetPriceOfServiceType(LogType service);
+        decimal GetTotalPriceOfTicket(Ticket ticket);
+        decimal GetPriceOfLogEvent(Event e);
     }
 }

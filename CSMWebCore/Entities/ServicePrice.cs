@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class ServicePrice
-    {
-        public int Id { get; set; }
-        public LogType Service { get; set; }
-        [Column(TypeName = "money")]
-        public decimal Price { get; set; }
-    }
+    //public class ServicePrice
+    //{
+    //    public int Id { get; set; }
+    //    public LogType Service { get; set; }
+    //    [Column(TypeName = "money")]
+    //    public decimal Price { get; set; }
+    //}
 }

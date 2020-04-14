@@ -10,6 +10,8 @@ using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
 using CSMWebCore.Entities;
 using CSMWebCore.Models;
+using CSMWebCore.Data;
+using CSMWebCore.Shared;
 
 namespace CSMWebCore.Controllers
 {
@@ -17,17 +19,11 @@ namespace CSMWebCore.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private IDeviceRepository _devices;
-        private ICustomerRepository _customers;
-        private ITicketRepository _tickets;
-        private ILogRepository _logs;
+        private ChipsDbContext context;
         
-        public HomeController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs)
+        public HomeController(ChipsDbContext context)
         {
-            _devices = devices;
-            _customers = customers;
-            _tickets = tickets;
-            _logs = logs;
+            this.context = context;
         }
         //Home/Index
         //This method gathers all of the data needed for the Google Charts.  
@@ -38,9 +34,9 @@ namespace CSMWebCore.Controllers
                 return RedirectToAction("Index", "TempReport");
             }
             //get all active tickets
-            var activeTickets = _tickets.GetOpen();
+            var activeTickets = context.Tickets.GetOpenTickets();
             //get all tickets
-            var allTickets = _tickets.Get();
+            var allTickets = context.Tickets.Get();
             //create new ViewModel
             var model = new HomeIndexViewModel();
             //see all properties to 0
@@ -96,7 +92,7 @@ namespace CSMWebCore.Controllers
                     maxAgeTicketId = ticket.Id;
                 }
                 //check how long it has been since the ticket was worked on by a tech
-                TimeSpan daysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).DateCreated;
+                TimeSpan daysIdle = DateTime.Now - context.Logs.GetLatestLogByTicketId(ticket.Id).DateCreated;
                 //sum for the average
                 sumIdle += daysIdle;
                 if (daysIdle > maxIdle)
@@ -171,7 +167,7 @@ namespace CSMWebCore.Controllers
         //I have left it here to try out other google Charts if needed.  This is not needed by the application
         public IActionResult Charts()
         {
-            var activeTickets = _tickets.GetOpen();
+            var activeTickets = context.Tickets.GetOpenTickets();
             var model = new HomeIndexViewModel();
             model.newCount = 0;
             model.inProgressCount = 0;
@@ -207,7 +203,7 @@ namespace CSMWebCore.Controllers
                     maxAge = daysOld;
                     maxAgeTicketId = ticket.Id;
                 }
-                TimeSpan daysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).DateCreated;
+                TimeSpan daysIdle = DateTime.Now - context.Logs.GetLatestLogByTicketId(ticket.Id).DateCreated;
                 sumIdle += daysIdle;
                 if (daysIdle > maxIdle)
                 {

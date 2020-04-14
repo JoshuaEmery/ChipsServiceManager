@@ -44,7 +44,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Details(int id)
         {
             // Get the customer object using ID
-            var cust = (Customer)context.Customers.GetById(id);
+            var cust = context.Customers.Find(id);
             // Check to see that customer exists
             if(cust == null)
             {
@@ -67,7 +67,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(int id)
         {
             // get the customer object
-            var cust = (Customer)context.Customers.GetById(id);
+            var cust = context.Customers.Find(id);
             // check to see if it is null
             if(cust == null)
             {
@@ -90,7 +90,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Edit(NewCustomerEditViewModel model)
         {
             // Verify the Id that came back from the Post is valid
-            var cust = (Customer)context.Customers.GetById(model.Id);
+            var cust = context.Customers.Find(model.Id);
             if(cust == null || !ModelState.IsValid)
             {
                 return View(model);

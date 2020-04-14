@@ -14,28 +14,20 @@ using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QRCoder;
+using CSMWebCore.Models;
 
 namespace CSMWebCore.Controllers
 {
     [Authorize]
     public class TicketController : Controller
     {
-        //private IDeviceRepository _devices;
-        //private ICustomerRepository _customers;
-        //private ITicketRepository _tickets;
-        //private ILogRepository _logs;
         private IUpdateData _updates;
         private ITicketCreator _ticketCreator;
-        private ChipsDbContext ctx;
-        //private UnitOfWork unitOfWork = new UnitOfWork();
+        private ChipsDbContext context;
 
         public TicketController(ChipsDbContext context, IUpdateData updates, ITicketCreator ticketCreator)
         {
-            //_devices = devices;
-            //_customers = customers;
-            //_tickets = tickets;
-            //_logs = logs;
-            ctx = context;
+            this.context = context;
             _updates = updates;
             _ticketCreator = ticketCreator;
         }
@@ -44,7 +36,7 @@ namespace CSMWebCore.Controllers
         public IActionResult Index()
         {
             //create an IEnumerable of TicketViewModel from open tickets (any with status not Closed)
-            var model = ctx.Tickets.Select(ticket => new TicketViewModel
+            var model = context.Tickets.Select(ticket => new TicketViewModel
             {
                 Id = ticket.Id,
                 TicketNumber = ticket.TicketNumber,
@@ -60,11 +52,11 @@ namespace CSMWebCore.Controllers
                 LogLatestStatus = ticket.Logs.OrderBy(l => l.DateCreated).Last().TicketStatus,
                 LogLatestDate = ticket.Logs.Max(l => l.DateCreated),
                 LogCloseDate = ticket.Logs.Max(l => l.DateCreated),
-                //LogCloseDate = ticket.Logs.FirstOrDefault(l => l.TicketStatus == TicketStatus.Closed).DateCreated
+                // TODO fix LogCloseDate to hold a null value if ticket is still open
+                // TODO move useful expressions to Queries
             });
             return View(model);
         }
-
 
         [HttpGet]
         public IActionResult Create()
@@ -98,131 +90,132 @@ namespace CSMWebCore.Controllers
                 Ticket ticket = new Ticket()
                 {
                     Device = device,
-                    TicketNumber = ctx.Tickets.Max(t => t.TicketNumber) + 1,
+                    TicketNumber = context.Tickets.Max(t => t.TicketNumber) + 1,
                     NeedsBackup = model.NeedsBackup
                 };
                 Log log = new Log()
                 {
                     Ticket = ticket,
-                    Event = ctx.Events.GetCheckInEvent(),
+                    Event = context.Events.GetCheckInEvent(),
                     TicketStatus = TicketStatus.New,
                     UserCreated = "chippy",
                     DateCreated = DateTime.Now,
                     Notes = model.Notes
                 };
-                ctx.Logs.Add(log); // stages all four entities for adding to db
-                ctx.SaveChanges();
+                context.Logs.Add(log); // stages all four entities for adding to db
+                context.SaveChanges();
             }
             return RedirectToAction("Index", "Ticket");          
         }
 
+        [HttpGet]
+        //Ticket/CreateByExistingDeviceId
+        // create ticket for existing device (and thus existing customer)
+        public IActionResult CreateByExistingDeviceId(int deviceId)
+        {
+            //get the device and check it
+            var device = context.Devices.Find(deviceId);
+            if (device == null)
+            {
+                return View();
+            }
+            //If it exists create ViewModel and send it to the View
+            DeviceEditViewModel model = new DeviceEditViewModel
+            {
+                Id = device.Id,
+                Make = device.Make,
+                ModelNumber = device.ModelNumber,
+                OperatingSystem = device.OperatingSystem,
+                Password = device.Password,
+                Serviced = device.Serviced,
+                Ticket = new Ticket(),
+                Customer = context.Customers.Find(device.CustomerId),
+                CustomerId = device.CustomerId
+            };
+            //Get the current Ticket Number
+            model.Ticket.TicketNumber = context.Tickets.GetLatestTicketNum() + 1;
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult CreateByExistingDeviceId(DeviceEditViewModel model)
+        {
+            //Get Ticket Number again and check ModelState
+            model.Ticket.TicketNumber = context.Tickets.GetLatestTicketNum() + 1;
+            if (!ModelState.IsValid)
+            {
+                model.Customer = context.Customers.Find(model.CustomerId);
+                return View(model);
 
-        //[HttpGet]
-        ////Ticket/CreateByExistingDeviceId
-        //// create ticket for existing device (and thus existing customer)
-        //public IActionResult CreateByExistingDeviceId(int deviceId)
-        //{
-        //    //get the device and check it
-        //    var device = _devices.GetById(deviceId);
-        //    if (device == null)
-        //    {
-        //        return View();
-        //    }
-        //    //If it exists create ViewModel and send it to the View
-        //    DeviceEditViewModel model = new DeviceEditViewModel
-        //    {
-        //        Id = device.Id,
-        //        Make = device.Make,
-        //        ModelNumber = device.ModelNumber,
-        //        OperatingSystem = device.OperatingSystem,
-        //        Password = device.Password,
-        //        Serviced = device.Serviced,
-        //        Ticket = new Ticket(),
-        //        Customer = _customers.GetById(device.CustomerId),
-        //        CustomerId = device.CustomerId
-        //    };
-        //    //Get the current Ticket Number
-        //    model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
-        //    return View(model);
-        //}
-        //[HttpPost]
-        //public IActionResult CreateByExistingDeviceId(DeviceEditViewModel model)
-        //{
-        //    //Get Ticket Number again and check ModelState
-        //    model.Ticket.TicketNumber = _tickets.GetLatestTicketNum() + 1;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        model.Customer = _customers.GetById(model.CustomerId);
-        //        return View(model);
+            }
+            //get the device and create a new ticket from the device
+            var device = context.Devices.Find(model.Id);
+            TicketConfirmationModel tcModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
+            {
+                DeviceId = device.Id,
+                CustomerId = device.CustomerId,
+                NeedsBackup = model.Ticket.NeedsBackup,
+                Notes = model.Log.Notes,
+                UserName = User.FindFirst(ClaimTypes.Name).Value.ToString()
+            });
+            return RedirectToAction("Confirmation", "Ticket", new
+            {
+                ticketId = tcModel.ticketId,
+                deviceId = tcModel.deviceId,
+                customerId = tcModel.customerId,
+                updateId = tcModel.updateId
+            });
+        }
 
-        //    }
-        //    //get the device and create a new ticket from the device
-        //    var device = _devices.GetById(model.Id);
-        //    TicketConfirmationModel tcModel = _ticketCreator.CreateTicket(new TicketCreatorInfo
-        //    {
-        //        DeviceId = device.Id,
-        //        CustomerId = device.CustomerId,
-        //        NeedsBackup = model.Ticket.NeedsBackup,
-        //        Notes = model.Log.Notes,
-        //        UserName = User.FindFirst(ClaimTypes.Name).Value.ToString()
-        //    });
-        //    return RedirectToAction("Confirmation", "Ticket", new
-        //    {
-        //        ticketId = tcModel.ticketId,
-        //        deviceId = tcModel.deviceId,
-        //        customerId = tcModel.customerId,
-        //        updateId = tcModel.updateId
-        //    });
-        //}
+        [HttpGet]
+        //Ticket/Edit
+        public IActionResult Edit(int id)
+        {
+            var model = context.Tickets.Find(id);
+            if (model == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Edit(TicketEditViewModel model)
+        {
+            //get the ticket to edit
+            var ticket = context.Tickets.Find(model.Id);
+            if (ticket == null || !ModelState.IsValid)
+            {
+                return View(model);
+            }
+            //edit the ticket
+            ticket.DeviceId = model.DeviceId;
+            ticket.CheckInDate = model.CheckedIn;
+            ticket.CheckOutDate = model.CheckedOut;
+            ticket.FinishDate = model.Finished;
+            ticket.CheckInUserId = model.CheckInUserId;
+            ticket.CheckOutUserId = model.CheckOutUserId;
+            ticket.NeedsBackup = model.NeedsBackup;
+            ticket.Status = model.TicketStatus;
+            //save changes
+            context.SaveChanges();
+            return RedirectToAction("Index");
 
-        //[HttpGet]
-        ////Ticket/Edit
-        //public IActionResult Edit(int id)
-        //{
-        //    var model = _tickets.GetById(id);
-        //    if (model == null)
-        //    {
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(model);
-        //}
-        //[HttpPost]
-        //public IActionResult Edit(TicketEditViewModel model)
-        //{
-        //    //get the ticket to edit
-        //    var ticket = _tickets.GetById(model.Id);
-        //    if (ticket == null || !ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-        //    //edit the ticket
-        //    ticket.DeviceId = model.DeviceId;
-        //    ticket.CheckInDate = model.CheckedIn;
-        //    ticket.CheckOutDate = model.CheckedOut;
-        //    ticket.FinishDate = model.Finished;
-        //    ticket.CheckInUserId = model.CheckInUserId;
-        //    ticket.CheckOutUserId = model.CheckOutUserId;
-        //    ticket.NeedsBackup = model.NeedsBackup;
-        //    ticket.Status = model.TicketStatus;
-        //    //save changes
-        //    _tickets.Commit();
-        //    return RedirectToAction("Index");
+        }
 
-        //}
+        // Note 4/14 - These actions currently use TicketViewModel which has been revised. Need to update these to use 
+        // TicketViewModel's properties or create simpler viewmodels for each
 
-        ////Ticket/Details
-        //// TODO review usage, since tickets can be accessed via TicketsByDeviceId
+        //Ticket/Details
         //public IActionResult Details(int ticketId)
         //{
         //    //get the ticket
-        //    var ticket = _tickets.GetById(ticketId);
+        //    var ticket = context.Tickets.Find(ticketId);
         //    //check that it is not null
         //    if (ticket != null)
         //    {
         //        var model = new TicketViewModel
         //        {
         //            Ticket = ticket,
-        //            Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
+        //            Customer = context.Customers.Find(context.Devices.Find(ticket.DeviceId).CustomerId),
         //            Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //            ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //            ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -233,11 +226,13 @@ namespace CSMWebCore.Controllers
         //    return RedirectToAction("Index");
         //}
 
-        //// -- SORTING, FILTERING, SEARCHING
+        // -- SORTING, FILTERING, SEARCHING
 
-        ////Ticket/FilterByStatus
-        //// called by status dropdown in Index view; selects relevant tickets for model and
-        //// populates TicketViewModel DateFilter with corresp. enum value
+        //Ticket/FilterByStatus
+        // called by status dropdown in Index view; selects relevant tickets for model and
+        // populates TicketViewModel DateFilter with corresp. enum value
+
+        // TODO review 
         //[HttpPost]
         //public IActionResult FilterByStatus(TicketViewModel result)
         //{
@@ -247,10 +242,10 @@ namespace CSMWebCore.Controllers
         //        return RedirectToAction("Index");
         //    }
         //    //Create IEnumerable of Tickets that match the Ticketstatus given
-        //    var model = _tickets.GetByStatus(result.TicketStatus).Select(ticket => new TicketViewModel
+        //    var model = context.Tickets.GetByStatus(result.TicketStatus).Select(ticket => new TicketViewModel
         //    {
         //        Ticket = ticket,
-        //        Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
+        //        Customer = context.Customers.Find(context.Devices.Find(ticket.DeviceId).CustomerId),
         //        Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //        ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //        ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -259,9 +254,9 @@ namespace CSMWebCore.Controllers
         //    return View("Index", model);
         //}
 
-        ////Ticket/FilterByDate
-        //// called by date dropdown in Index view; sorts model and populates TicketViewModel 
-        //// DateFilter with corresp. enum value
+        //Ticket/FilterByDate
+        // called by date dropdown in Index view; sorts model and populates TicketViewModel 
+        // DateFilter with corresp. enum value
         //[HttpPost]
         //public IActionResult FilterByDate(TicketViewModel result)
         //{
@@ -273,10 +268,10 @@ namespace CSMWebCore.Controllers
         //    //Check which filter was used and return corresponsding IENumerable of TicketViewModel
         //    else if (result.DateFilter == DateFilter.Oldest)
         //    {
-        //        var model = _tickets.Get().OrderBy(x => x.CheckInDate).Select(ticket => new TicketViewModel
+        //        var model = context.Tickets.Get().OrderBy(x => x.CheckInDate).Select(ticket => new TicketViewModel
         //        {
         //            Ticket = ticket,
-        //            Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
+        //            Customer = context.Customers.Find(context.Devices.Find(ticket.DeviceId).CustomerId),
         //            Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //            ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //            ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -287,10 +282,10 @@ namespace CSMWebCore.Controllers
         //    }
         //    else if (result.DateFilter == DateFilter.Newest)
         //    {
-        //        var model = _tickets.Get().OrderByDescending(x => x.CheckInDate).Select(ticket => new TicketViewModel
+        //        var model = context.Tickets.Get().OrderByDescending(x => x.CheckInDate).Select(ticket => new TicketViewModel
         //        {
         //            Ticket = ticket,
-        //            Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
+        //            Customer = context.Customers.Find(context.Devices.Find(ticket.DeviceId).CustomerId),
         //            Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //            ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //            ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -301,10 +296,10 @@ namespace CSMWebCore.Controllers
         //    }
         //    else if (result.DateFilter == DateFilter.Idle)
         //    {
-        //        var model = _tickets.Get().OrderBy(x => x.CheckInDate).Select(ticket => new TicketViewModel
+        //        var model = context.Tickets.Get().OrderBy(x => x.CheckInDate).Select(ticket => new TicketViewModel
         //        {
         //            Ticket = ticket,
-        //            Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
+        //            Customer = context.Customers.Find(context.Devices.Find(ticket.DeviceId).CustomerId),
         //            Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //            ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //            ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id),
@@ -318,15 +313,15 @@ namespace CSMWebCore.Controllers
         //    return View("Index");
         //}
 
-        ////Ticket/TicketsByDeviceId
-        //// gets tickets for device given id
+        //Ticket/TicketsByDeviceId
+        // gets tickets for device given id
         //public IActionResult TicketsByDeviceId(int deviceId)
         //{
         //    //Create an IEnumerable of TicketViewModel that match the given deviceID
-        //    var model = _tickets.GetTicketsByDeviceId(deviceId).Select(ticket => new TicketViewModel
+        //    var model = context.Tickets.GetTicketsByDeviceId(deviceId).Select(ticket => new TicketViewModel
         //    {
         //        Ticket = ticket,
-        //        Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
+        //        Customer = context.Customers.Find(context.Devices.Find(ticket.DeviceId).CustomerId),
         //        Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //        ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //        ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -340,17 +335,16 @@ namespace CSMWebCore.Controllers
         //    return View();
         //}
 
-        ////Ticket/Search
-        //// TODO review usage, currently only searches Ticket fields incl. Ticket No. and checkin technician.
-        //// Customer or Device search has more functionality
+        //Ticket/Search
+        // TODO review usage and more useful unified search
         //public IActionResult Search(string searchValue)
         //{
         //    //Create an IEnumerable of TicketViewModel that match the searchvalue.  Check SQLTicket for
         //    //search method
-        //    var model = _tickets.Search(searchValue).Select(ticket => new TicketViewModel
+        //    var model = context.Tickets.Search(searchValue).Select(ticket => new TicketViewModel
         //    {
         //        Ticket = ticket,
-        //        Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
+        //        Customer = context.Customers.Find(context.Devices.Find(ticket.DeviceId).CustomerId),
         //        Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //        ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //        ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
@@ -359,37 +353,37 @@ namespace CSMWebCore.Controllers
         //    return View("Index", model);
         //}
 
-        //// methods for QR code generation and printout page view for customer
-        //[Authorize]
-        //// returns QR code jpeg (duplicate code from DeviceController)
-        //public ActionResult GetQRByGuid(Guid code)
-        //{
-        //    QRCodeGenerator qrGenerator = new QRCodeGenerator();
-        //    //change to route to site url
-        //    QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"http://chipsmgr.com/TicketProgress/Index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
-        //    QRCode qrCode = new QRCode(qrCodeData);
-        //    Bitmap qrCodeImage = qrCode.GetGraphic(20);
-        //    byte[] image = BitmapToBytes(qrCodeImage);
-        //    return File(image, "image/jpeg");
-        //}
-        //// converts bitmap to byte array
-        //private static byte[] BitmapToBytes(Bitmap img)
-        //{
-        //    using MemoryStream stream = new MemoryStream();
-        //    img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-        //    return stream.ToArray();
-        //}
-        //// displays Update view for printout
-        //public IActionResult Confirmation(int ticketId, int deviceId, int customerId, Guid updateId)
-        //{
-        //    var model = new ConfirmationViewModel
-        //    {
-        //        Ticket = _tickets.GetById(ticketId),
-        //        Device = _devices.GetById(deviceId),
-        //        Customer = _customers.GetById(customerId),
-        //        Update = _updates.Get(updateId)
-        //    };
-        //    return View(model);
-        //}
+        // methods for QR code generation and printout page view for customer
+        [Authorize]
+        // returns QR code jpeg (duplicate code from DeviceController)
+        public ActionResult GetQRByGuid(Guid code)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //change to route to site url
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(@"http://chipsmgr.com/TicketProgress/Index/" + code.ToString(), QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+            byte[] image = BitmapToBytes(qrCodeImage);
+            return File(image, "image/jpeg");
+        }
+        // converts bitmap to byte array
+        private static byte[] BitmapToBytes(Bitmap img)
+        {
+            using MemoryStream stream = new MemoryStream();
+            img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+            return stream.ToArray();
+        }
+        // displays Update view for printout
+        public IActionResult Confirmation(int ticketId, int deviceId, int customerId, Guid updateId)
+        {
+            var model = new ConfirmationViewModel
+            {
+                Ticket = context.Tickets.Find(ticketId),
+                Device = context.Devices.Find(deviceId),
+                Customer = context.Customers.Find(customerId),
+                Update = _updates.Get(updateId)
+            };
+            return View(model);
+        }
     }
 }

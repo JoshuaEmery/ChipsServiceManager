@@ -53,15 +53,8 @@ namespace CSMWebCore
                     Configuration.GetConnectionString("DefaultConnection")));
             //this adds the service to access Customer data through the CustomerRepository object which implements the
             //ICusomerData Interface.  Add scoped must be used in order for services to work with EF
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<IDeviceRepository, DeviceRepository>();
-            services.AddScoped<ILogRepository, LogRepository>();
-            services.AddScoped<ITicketRepository, TicketRepository>();
             services.AddScoped<IUpdateData, SqlUpdateData>();
-            services.AddScoped<ITicketsHistoryData, SqlTicketsHistoryData>();
-            services.AddScoped<IConsultationRepository, ConsultationRepository>();
-            services.AddScoped<IServicePriceData, SqlServicePriceData>();
-            services.AddScoped<IReportsService, ReportsService>();
+            services.AddScoped<ITicketsHistoryData, SqlTicketsHistoryData>();;
             services.AddScoped<ITicketCreator, TicketCreator>();
             //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
             services.AddDefaultIdentity<ChipsUser>().AddRoles<IdentityRole>()

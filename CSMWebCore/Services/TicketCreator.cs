@@ -1,6 +1,8 @@
-﻿using CSMWebCore.Entities;
+﻿using CSMWebCore.Data;
+using CSMWebCore.Entities;
 using CSMWebCore.Enums;
 using CSMWebCore.Models;
+using CSMWebCore.Shared;
 using CSMWebCore.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,17 +14,11 @@ namespace CSMWebCore.Services
 {
     public class TicketCreator : ITicketCreator
     {
-        private IDeviceRepository _devices;
-        private ICustomerRepository _customers;
-        private ITicketRepository _tickets;
-        private ILogRepository _logs;
+        private ChipsDbContext context;
         private IUpdateData _updates;
-        public TicketCreator(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, IUpdateData updates)
+        public TicketCreator(ChipsDbContext context, IUpdateData updates)
         {
-            _devices = devices;
-            _customers = customers;
-            _tickets = tickets;
-            _logs = logs;
+            this.context = context;
             _updates = updates;
         }
 
@@ -36,11 +32,11 @@ namespace CSMWebCore.Services
                 CheckInDate = DateTime.Now,
                 NeedsBackup = info.NeedsBackup,
                 Status = TicketStatus.New,
-                TicketNumber = _tickets.GetLatestTicketNum() + 1
+                TicketNumber = context.Tickets.GetLatestTicketNum() + 1
             };
             //Save the new Ticket
-            _tickets.Insert(ticket);
-            _tickets.Commit();
+            context.Add(ticket);
+            context.SaveChanges();
             // TODO don't commit ticket until initial log has been created -- if log creation fails an incomplete ticket is created
             //Create a log entry with the newly created Ticket.Id as a foreign key
             Log log = new Log
@@ -55,8 +51,8 @@ namespace CSMWebCore.Services
                 ContactMethod = ContactMethod.InPerson
             };
             //Add new Log
-            _logs.Insert(log);
-            _logs.Commit();
+            context.Add(log);
+            context.SaveChanges();
             //Create a new entry in the update table with a guid for the Primary Key and
             //a foreign key from the Ticket
             TicketProgress update = new TicketProgress

@@ -4,7 +4,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CSMWebCore.Data;
 using CSMWebCore.Services;
+using CSMWebCore.Shared;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,18 +17,20 @@ namespace CSMWebCore.Controllers
     //Conroller that generates data for updating the customer
     public class UpdateController : Controller
     {
-        private IDeviceRepository _devices;
-        private ICustomerRepository _customers;
-        private ITicketRepository _tickets;
-        private ILogRepository _logs;
+        private ChipsDbContext context;
+        //private IDeviceRepository _devices;
+        //private ICustomerRepository _customers;
+        //private ITicketRepository _tickets;
+        //private ILogRepository _logs;
         private IUpdateData _updates;
 
-        public UpdateController(IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, IUpdateData updates)
+        public UpdateController(ChipsDbContext context, IUpdateData updates)
         {
-            _devices = devices;
-            _customers = customers;
-            _tickets = tickets;
-            _logs = logs;
+            this.context = context;
+            //_devices = devices;
+            //_customers = customers;
+            //_tickets = tickets;
+            //_logs = logs;
             _updates = updates;
         }
         //Update/Index
@@ -35,12 +39,12 @@ namespace CSMWebCore.Controllers
         public IActionResult Index(string id)
         {
             var guid = new Guid(id);
-            var ticket = _tickets.GetById(_updates.GetTicketId(guid));
+            var ticket = context.Tickets.Find(_updates.GetTicketId(guid));
             var model = new ConfirmationViewModel
             {
                 Ticket = ticket,
-                Device = _devices.GetById(ticket.Device.Id),
-                Log = _logs.GetLastByTicketId(ticket.Id),
+                Device = context.Devices.Find(ticket.Device.Id),
+                Log = context.Logs.GetLatestLogByTicketId(ticket.Id),
             };
             return View(model);            
         }

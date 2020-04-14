@@ -7,6 +7,7 @@ using CSMWebCore.Data;
 using CSMWebCore.Entities;
 using CSMWebCore.Enums;
 using CSMWebCore.Services;
+using CSMWebCore.Shared;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,26 +20,16 @@ namespace CSMWebCore.Controllers
     //by TicketID as that is the foreign key in the log table.
     public class LogController : Controller
     {
-        private ChipsDbContext _context;
-        private IDeviceRepository _devices;
-        private ICustomerRepository _customers;
-        private ITicketRepository _tickets;
-        private ILogRepository _logs;
-        private ITicketsHistoryData _ticketsHistory;
+        private ChipsDbContext context;
 
-        public LogController(ChipsDbContext context, IDeviceRepository devices, ICustomerRepository customers, ITicketRepository tickets, ILogRepository logs, ITicketsHistoryData ticketsHistory)
+        public LogController(ChipsDbContext context)
         {
-            _context = context;
-            _devices = devices;
-            _customers = customers;
-            _tickets = tickets;
-            _logs = logs;
-            _ticketsHistory = ticketsHistory;
+            this.context = context;
         }
         //Test Actions
         //public IActionResult Index()
         //{
-        //    var model = _logs.Get().Select(log => new LogViewModel
+        //    var model = context.Logs.Get().Select(log => new LogViewModel
         //    {
         //        Id = log.Id,
         //        UserCreated = log.UserCreated,
@@ -70,8 +61,8 @@ namespace CSMWebCore.Controllers
         //            LogType = model.LogType,
         //            ContactMethod = model.ContactMethod
         //        };
-        //        _logs.Add(log);
-        //        _logs.Commit();
+        //        context.Logs.Add(log);
+        //        context.Logs.Commit();
         //        return RedirectToAction("Index");
         //    }
         //    return View();
@@ -80,7 +71,7 @@ namespace CSMWebCore.Controllers
         //[HttpGet]
         //public IActionResult Edit(int id)
         //{
-        //    var model = _logs.Get(id);
+        //    var model = context.Logs.Get(id);
         //    if (model == null)
         //    {
         //        return View();
@@ -90,7 +81,7 @@ namespace CSMWebCore.Controllers
         //[HttpPost]
         //public IActionResult Edit(LogEditViewModel model)
         //{
-        //    var log = _logs.Get(model.Id);
+        //    var log = context.Logs.Get(model.Id);
         //    if (log == null || !ModelState.IsValid)
         //    {
         //        return View(model);
@@ -101,7 +92,7 @@ namespace CSMWebCore.Controllers
         //    log.Notes = model.Notes;
         //    log.LogType = model.LogType;
         //    log.ContactMethod = model.ContactMethod;
-        //    _logs.Commit();
+        //    context.Logs.Commit();
         //    return RedirectToAction("Index");
         //}
         //End Test Actions
@@ -114,14 +105,14 @@ namespace CSMWebCore.Controllers
         public IActionResult Service(int ticketId)
         {
             //get the ticket Object
-            var ticket = _tickets.GetById(ticketId);
-            IEnumerable<Event> events = _context.Events.Where(e => e.Category == EventCategory.HWService || e.Category == EventCategory.SWService).ToList();
+            var ticket = context.Tickets.Find(ticketId);
+            IEnumerable<Event> events = context.Events.Where(e => e.Category == EventCategory.HWService || e.Category == EventCategory.SWService).ToList();
             //create LogEditViewModel
             var model = new NewLogServiceViewModel
             {
                 TicketId = ticket.Id,
                 TicketNumber = ticket.TicketNumber,
-                TicketStatus = _logs.GetLastByTicketId(ticketId).TicketStatus,
+                TicketStatus = context.Logs.GetLatestLogByTicketId(ticketId).TicketStatus,
                 Events = SelectListHelper.ToSelectListItems(events, -1) // nothing selected
             };
             return View(model);
@@ -137,7 +128,7 @@ namespace CSMWebCore.Controllers
             }
             if (model.TicketStatus == TicketStatus.New)
                 model.TicketStatus = TicketStatus.InProgress;                      
-            var ticket = _tickets.GetById(model.TicketId);
+            var ticket = context.Tickets.Find(model.TicketId);
             Log log = new Log
             {
                 UserCreated = User.FindFirst(ClaimTypes.Name).Value.ToString(),
@@ -148,10 +139,9 @@ namespace CSMWebCore.Controllers
                 EventId = model.SelectedEventId,
                 TicketStatus = model.TicketStatus
             };
-            _logs.Insert(log);
-            _logs.Commit();
+            context.Add(log);
             //update the database with any changes that were made to the ticketstatus 
-            _tickets.Commit();
+            context.SaveChanges();
             return RedirectToAction("Index", "Ticket");            
         }        
         //Log/Contact
@@ -160,9 +150,9 @@ namespace CSMWebCore.Controllers
         public IActionResult Contact(int ticketId)
         {
             //get th ticket and the customer associated with that ticket
-            var ticket = _tickets.GetById(ticketId);
-            var customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId);
-            IEnumerable<Event> events = _context.Events.Where(e => e.Category == EventCategory.Contact).ToList();
+            var ticket = context.Tickets.Find(ticketId);
+            var customer = context.Customers.Find(context.Devices.Find(ticket.DeviceId).CustomerId);
+            IEnumerable<Event> events = context.Events.Where(e => e.Category == EventCategory.Contact).ToList();
             //create LogEditViewModel
             var model = new NewLogContactViewModel
             {
@@ -172,7 +162,7 @@ namespace CSMWebCore.Controllers
                 CustomerLastName = customer.LastName,
                 CustomerEmail = customer.Email,
                 CustomerPhone = customer.Phone,
-                TicketStatus = _logs.GetLastByTicketId(ticketId).TicketStatus,
+                TicketStatus = context.Logs.GetLatestLogByTicketId(ticketId).TicketStatus,
                 Events = SelectListHelper.ToSelectListItems(events, -1) // nothing selected
             };
             //return View
@@ -183,16 +173,11 @@ namespace CSMWebCore.Controllers
         public IActionResult Contact(NewLogContactViewModel model)
         {
             //get the ticket and check for valid
-            Ticket ticket = _tickets.GetById(model.TicketId);
+            Ticket ticket = context.Tickets.Find(model.TicketId);
             if (!ModelState.IsValid || ticket == null)
             {
                 return View(model);
             }
-            //if(ticket.Status != model.TicketStatus)
-            //{
-            //    //Whenever a ticket is modified make an entry in tickethistory before changing
-            //    _ticketsHistory.AddTicketToHistory(ticket);
-            //}
             //create new log
             Log log = new Log
             {
@@ -204,8 +189,8 @@ namespace CSMWebCore.Controllers
                 TicketStatus = model.TicketStatus
             };
             //update database
-            _logs.Insert(log);
-            _logs.Commit();
+            context.Add(log);
+            context.SaveChanges();
             ////record time finished if ticket has been completed
             //ticket.Status = model.TicketStatus;
             //if (model.TicketStatus == TicketStatus.PendingPickup)
@@ -218,7 +203,7 @@ namespace CSMWebCore.Controllers
             //    ticket.CheckOutUserId = User.FindFirst(ClaimTypes.Name).Value.ToString();
             //}
             ////update tickets table
-            //_tickets.Commit();
+            //context.Tickets.Commit();
             return RedirectToAction("Index", "Ticket");            
         }
     }
