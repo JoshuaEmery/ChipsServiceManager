@@ -1,5 +1,5 @@
 ﻿using CSMWebCore.Entities;
-using CSMWebCore.Models;
+using CSMWebCore.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;

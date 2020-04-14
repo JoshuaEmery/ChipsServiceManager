@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using CSMWebCore.Data;
 using CSMWebCore.Entities;
-using CSMWebCore.Models;
+using CSMWebCore.Enums;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Authorization;

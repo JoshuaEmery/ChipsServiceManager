@@ -1,4 +1,4 @@
-﻿using CSMWebCore.Models;
+﻿using CSMWebCore.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class Event
+    public class Event : IHasId
     {
         public int Id { get; set; }
         public string Name { get; set; }

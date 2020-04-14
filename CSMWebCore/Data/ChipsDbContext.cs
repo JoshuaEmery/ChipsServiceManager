@@ -4,7 +4,7 @@ using System.Text;
 
 using CSMWebCore.Controllers;
 using CSMWebCore.Entities;
-using CSMWebCore.Models;
+using CSMWebCore.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

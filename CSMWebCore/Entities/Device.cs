@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class Device
+    public class Device : IHasId
     {
         public int Id { get; set; }
         public Customer Customer { get; set; }

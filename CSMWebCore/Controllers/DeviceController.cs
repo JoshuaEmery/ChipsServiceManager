@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CSMWebCore.Entities;
+using CSMWebCore.Enums;
 using CSMWebCore.Models;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;

@@ -7,7 +7,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using CSMWebCore.Data;
 using CSMWebCore.Entities;
-using CSMWebCore.Models;
+using CSMWebCore.Shared;
+using CSMWebCore.Enums;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -103,7 +104,7 @@ namespace CSMWebCore.Controllers
                 Log log = new Log()
                 {
                     Ticket = ticket,
-                    Event = ctx.Events.Single(e => e.Id == 1),
+                    Event = ctx.Events.GetCheckInEvent(),
                     TicketStatus = TicketStatus.New,
                     UserCreated = "chippy",
                     DateCreated = DateTime.Now,
@@ -222,7 +223,7 @@ namespace CSMWebCore.Controllers
         //        {
         //            Ticket = ticket,
         //            Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
-        //            Log = _logs.GetLastByTicketId(ticket.Id),
+        //            Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //            ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //            ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
         //        };
@@ -250,7 +251,7 @@ namespace CSMWebCore.Controllers
         //    {
         //        Ticket = ticket,
         //        Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
-        //        Log = _logs.GetLastByTicketId(ticket.Id),
+        //        Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //        ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //        ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
         //    });
@@ -276,7 +277,7 @@ namespace CSMWebCore.Controllers
         //        {
         //            Ticket = ticket,
         //            Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
-        //            Log = _logs.GetLastByTicketId(ticket.Id),
+        //            Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //            ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //            ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 
@@ -290,7 +291,7 @@ namespace CSMWebCore.Controllers
         //        {
         //            Ticket = ticket,
         //            Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
-        //            Log = _logs.GetLastByTicketId(ticket.Id),
+        //            Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //            ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //            ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 
@@ -304,10 +305,10 @@ namespace CSMWebCore.Controllers
         //        {
         //            Ticket = ticket,
         //            Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
-        //            Log = _logs.GetLastByTicketId(ticket.Id),
+        //            Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //            ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //            ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id),
-        //            DaysIdle = DateTime.Now - _logs.GetLastByTicketId(ticket.Id).DateCreated
+        //            DaysIdle = DateTime.Now - _logs.GetLatestLogByTicketId(ticket.Id).DateCreated
         //        });
         //        var sorted = model.OrderByDescending(x => x.DaysIdle).ToList();
 
@@ -322,11 +323,11 @@ namespace CSMWebCore.Controllers
         //public IActionResult TicketsByDeviceId(int deviceId)
         //{
         //    //Create an IEnumerable of TicketViewModel that match the given deviceID
-        //    var model = _tickets.GetAllByDevice(deviceId).Select(ticket => new TicketViewModel
+        //    var model = _tickets.GetTicketsByDeviceId(deviceId).Select(ticket => new TicketViewModel
         //    {
         //        Ticket = ticket,
         //        Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
-        //        Log = _logs.GetLastByTicketId(ticket.Id),
+        //        Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //        ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //        ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 
@@ -350,7 +351,7 @@ namespace CSMWebCore.Controllers
         //    {
         //        Ticket = ticket,
         //        Customer = _customers.GetById(_devices.GetById(ticket.DeviceId).CustomerId),
-        //        Log = _logs.GetLastByTicketId(ticket.Id),
+        //        Log = _logs.GetLatestLogByTicketId(ticket.Id),
         //        ServiceLogs = _logs.GetServiceLogsByTicketId(ticket.Id),
         //        ContactLogs = _logs.GetContactLogsByTicketId(ticket.Id)
 

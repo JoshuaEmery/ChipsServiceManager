@@ -1,4 +1,5 @@
 ﻿using CSMWebCore.Entities;
+using CSMWebCore.Enums;
 using CSMWebCore.Models;
 using System;
 using System.Collections.Generic;

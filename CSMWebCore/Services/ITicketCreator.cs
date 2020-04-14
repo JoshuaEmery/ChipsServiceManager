@@ -1,4 +1,5 @@
-﻿using CSMWebCore.Models;
+﻿using CSMWebCore.Enums;
+using CSMWebCore.Models;
 using CSMWebCore.ViewModels;
 using System;
 using System.Collections.Generic;

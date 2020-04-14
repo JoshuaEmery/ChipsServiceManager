@@ -21,7 +21,7 @@ namespace CSMWebCore.Data
                     Email = "andy@yahoo.com",
                     Phone = "2063953029",
                     StudentId ="830549793",
-                    ContactPref = Models.ContactPref.Email
+                    ContactPref = Enums.ContactPref.Email
                 },
                 new Customer
                 {
@@ -31,7 +31,7 @@ namespace CSMWebCore.Data
                     Email = "pam01@gmail.com",
                     Phone = "3921235324",
                     StudentId = "223563434",
-                    ContactPref = Models.ContactPref.Phone
+                    ContactPref = Enums.ContactPref.Phone
                 }
             );
         }

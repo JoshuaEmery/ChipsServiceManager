@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSMWebCore.Data;
 using CSMWebCore.Entities;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
@@ -15,12 +16,14 @@ namespace CSMWebCore.Controllers
     public class CustomerController : Controller
     {
         //Customers controller needs access to customers, tickets and devices tables
+        private ChipsDbContext context;
         private ICustomerRepository _customers;
         private ITicketRepository _tickets;
         private IDeviceRepository _devices;
         //Constructor
-        public CustomerController(ICustomerRepository customers, ITicketRepository tickets, IDeviceRepository devices)
+        public CustomerController(ChipsDbContext context, ICustomerRepository customers, ITicketRepository tickets, IDeviceRepository devices)
         {
+            this.context = context;
             _customers = customers;
             _tickets = tickets;
             _devices = devices;

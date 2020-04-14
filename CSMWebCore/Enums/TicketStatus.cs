@@ -4,19 +4,19 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CSMWebCore.Models
+namespace CSMWebCore.Enums
 {
     public enum TicketStatus
     {
-        New,
+        New = 0,
         [Display(Name = "In Progress")]
-        InProgress,
+        InProgress = 1,
         [Display(Name = "Needs Contact")]
-        NeedsContact,
+        NeedsContact = 2,
         [Display(Name = "Pending Response")]
-        PendingResponse,
+        PendingResponse = 3,
         [Display(Name = "Pending Pickup")]
-        PendingPickup,
-        Closed
+        PendingPickup = 4,
+        Closed = 5
     }
 }

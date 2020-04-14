@@ -1,4 +1,4 @@
-﻿using CSMWebCore.Models;
+﻿using CSMWebCore.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Entities
 {
-    public class Customer
+    public class Customer : IHasId
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

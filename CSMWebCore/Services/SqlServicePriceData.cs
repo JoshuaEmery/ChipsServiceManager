@@ -1,6 +1,6 @@
 ﻿using CSMWebCore.Data;
 using CSMWebCore.Entities;
-using CSMWebCore.Models;
+using CSMWebCore.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
