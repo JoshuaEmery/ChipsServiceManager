@@ -51,9 +51,7 @@ namespace CSMWebCore.Controllers
                 LogOpenDate = ticket.Logs.Min(l => l.DateCreated),
                 LogLatestStatus = ticket.Logs.OrderBy(l => l.DateCreated).Last().TicketStatus,
                 LogLatestDate = ticket.Logs.Max(l => l.DateCreated),
-                LogCloseDate = ticket.Logs.Max(l => l.DateCreated),
-                // TODO fix LogCloseDate to hold a null value if ticket is still open
-                // TODO move useful expressions to Queries
+                LogCloseDate = ticket.Logs.Where(l => l.TicketStatus == TicketStatus.Closed).Max(l => l.DateCreated),
             });
             return View(model);
         }

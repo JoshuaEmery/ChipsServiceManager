@@ -70,7 +70,8 @@ namespace CSMWebCore
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
-
+            // add RuntimeCompilation package so changes in .cshtml pages update without needing to restart project
+            services.AddMvc().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

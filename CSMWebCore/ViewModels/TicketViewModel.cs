@@ -35,7 +35,7 @@ namespace CSMWebCore.ViewModels
         [Display(Name = "Last Worked On")]
         public DateTime LogLatestDate { get; set; }
         [Display(Name = "Date Closed")]
-        public DateTime LogCloseDate { get; set; }
+        public DateTime? LogCloseDate { get; set; }
 
         // for date filtering
         public DateFilter DateFilter { get; set; }
