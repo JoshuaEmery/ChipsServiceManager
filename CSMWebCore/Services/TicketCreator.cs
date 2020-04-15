@@ -46,9 +46,7 @@ namespace CSMWebCore.Services
                 UserCreated = info.UserName,
                 TicketId = ticket.Id,
                 DateCreated = DateTime.Now,
-                Notes = info.Notes,
-                LogType = LogType.CheckIn,
-                ContactMethod = ContactMethod.InPerson
+                Notes = info.Notes
             };
             //Add new Log
             context.Add(log);

@@ -135,7 +135,6 @@ namespace CSMWebCore.Controllers
                 TicketId = model.TicketId,
                 DateCreated = DateTime.Now,
                 Notes = model.LogNotes,                
-                ContactMethod = ContactMethod.NoContact,
                 EventId = model.SelectedEventId,
                 TicketStatus = model.TicketStatus
             };
