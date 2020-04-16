@@ -131,9 +131,25 @@ namespace CSMWebCore.Services
             return context.Consultations.GetConsultationsByUser(userName, startDate, endDate).Count();
         }
 
-        public TicketProgressReport PrintProgressReport(int ticketId)
+        public TicketProgressReport GetTicketProgressReport(Ticket ticket)
         {
-            return context.Tickets.Find(ticketId).GetTicketProgressReport();
+            var logs = context.Logs.GetLogsByTicketId(ticket.Id).ToList();
+            //create a new ticket progress report
+            TicketProgressReport ticketProgressReport = new TicketProgressReport();
+            ticketProgressReport.TicketId = ticket.Id;
+            //create a timespan array
+            TimeSpan[] timeByStatus = new TimeSpan[5];
+            //interate through the logs
+            for (int i = 0; i < logs.Count() - 1; i++)
+            {
+                timeByStatus[(int)logs[i].TicketStatus] += logs[i + 1].DateCreated - logs[i].DateCreated;
+
+            }
+            for (int i = 0; i < timeByStatus.Length; i++)
+            {
+                ticketProgressReport.TicketProgress.Add((TicketStatus)i, timeByStatus[i]);
+            }
+            return ticketProgressReport;
         }
 
         //public decimal GetSavingsByTicket(int ticketId)

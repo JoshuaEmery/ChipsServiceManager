@@ -11,6 +11,7 @@ namespace CSMWebCore.Controllers
     public class ReportController : Controller
     {
         private IReportsService _rs;
+        
         public ReportController(IReportsService rs)
         {
             _rs = rs;

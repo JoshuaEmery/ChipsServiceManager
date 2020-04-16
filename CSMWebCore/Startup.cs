@@ -55,7 +55,7 @@ namespace CSMWebCore
             //ICusomerData Interface.  Add scoped must be used in order for services to work with EF
             services.AddScoped<IUpdateData, SqlUpdateData>();
             services.AddScoped<ITicketsHistoryData, SqlTicketsHistoryData>();;
-            services.AddScoped<ITicketCreator, TicketCreator>();
+            services.AddScoped<ITicketCreator, TicketCreator>();            
             //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
             services.AddDefaultIdentity<ChipsUser>().AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ChipsDbContext>();
