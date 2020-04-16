@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSMWebCore.Models;
 using CSMWebCore.Services;
 using CSMWebCore.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,16 @@ namespace CSMWebCore.Controllers
                 EndDate = DateTime.Now.Date,
                 Report = "TESTTEST"
             });
+        }
+        public IActionResult TestTicketProgressReport()
+        {
+            string output = "";
+            TicketProgressReport tp = _rs.GetTicketProgressReport(1);
+            foreach (var item in tp.TicketProgress)
+            {
+                output += $"{item.Key} {item.Value}\n";
+            }
+            return Content(output);
         }
         [HttpPost]
         public IActionResult ReadOnlyReport(ReadOnlyReportViewModel model)

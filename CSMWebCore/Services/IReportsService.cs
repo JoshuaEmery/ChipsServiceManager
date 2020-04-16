@@ -160,5 +160,11 @@ namespace CSMWebCore.Services
         /// <param name="span"></param>
         /// <returns></returns>
         TimeSpan GetAverageHandleTime(TimeSpan span);
+        /// <summary>
+        /// Gets the Progress report for a given ticketId
+        /// </summary>
+        /// <param name="ticketId"></param>
+        /// <returns></returns>
+        TicketProgressReport GetTicketProgressReport(int ticketId);
     }
 }

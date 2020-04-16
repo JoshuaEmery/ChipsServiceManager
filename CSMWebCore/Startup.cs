@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CSMWebCore.Data;
+using CSMWebCore.Entities;
+using CSMWebCore.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using CSMWebCore.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
-using CSMWebCore.Services;
-using CSMWebCore.Entities;
-using Microsoft.AspNetCore.Identity.UI.Services;
 
 
 namespace CSMWebCore
@@ -54,8 +49,9 @@ namespace CSMWebCore
             //this adds the service to access Customer data through the CustomerRepository object which implements the
             //ICusomerData Interface.  Add scoped must be used in order for services to work with EF
             services.AddScoped<IUpdateData, SqlUpdateData>();
-            services.AddScoped<ITicketsHistoryData, SqlTicketsHistoryData>();;
-            services.AddScoped<ITicketCreator, TicketCreator>();            
+            services.AddScoped<ITicketsHistoryData, SqlTicketsHistoryData>();
+            services.AddScoped<ITicketCreator, TicketCreator>();
+            services.AddScoped<IReportsService, ReportsService>();
             //Adds Identity services using the DBFramework.  This also allows for dependency injection for User
             services.AddDefaultIdentity<ChipsUser>().AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ChipsDbContext>();
