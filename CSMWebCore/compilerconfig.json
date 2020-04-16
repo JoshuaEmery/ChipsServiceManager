@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/style.css",
+    "inputFile": "wwwroot/css/style.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/account.css",
+    "inputFile": "wwwroot/css/account.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/print.css",
+    "inputFile": "wwwroot/css/print.scss"
+  }
+]

@@ -1,0 +1,29 @@
+﻿.card {
+    box-shadow: 0px 0.5rem 1rem rgba(61, 61, 61, 0.39);
+}
+
+.form-check {
+    /* keep checkbox and button inline (overrides Bootstrap's 
+       media query which disables inline styles @ < 576px wide) */
+    width: auto !important;
+}
+
+.form-check-input {
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-right: 0.35rem !important;
+}
+/* login error div (asp-validation-summary="All") */
+.validation-summary-errors ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.validation-summary-errors li {
+    margin-bottom: 0.5rem;
+}
+
+.validation-summary-errors li:last-child {
+    margin-bottom: 0;
+}

@@ -1,0 +1,52 @@
+﻿/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+  padding-left: 15px;
+  padding-right: 15px; }
+
+/* QR code generator */
+#qrCode {
+  margin: 15px; }
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+  /* Hide captions */
+  .carousel-caption {
+    display: none; } }
+
+.btn-group {
+  padding: 10px; }
+
+/* Navigation */
+.navbar {
+  background-color: #333366; }
+
+.navbar-dark .nav-link {
+  color: #ddf !important; }
+
+.navbar-dark .nav-link:hover {
+  color: #fff !important; }
+
+.navbar-dark .nav-link.disabled {
+  color: #88a !important; }
+
+.navbar-brand img {
+  height: 40px; }
+
+/*navbar dropdown search bars*/
+.navbar .dropdown .input-group {
+  min-width: 15rem !important;
+  margin-left: -.75rem;
+  margin-right: -.75rem; }
+
+/* main content element */
+main {
+  margin-top: 6rem; }
+
+/*NavBar*/
+.update-logo {
+  position: absolute;
+  right: 25%;
+  top: 0px;
+  width: 30%;
+  height: 25%; }
