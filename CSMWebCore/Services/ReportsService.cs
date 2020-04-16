@@ -11,21 +11,20 @@ using System.Threading.Tasks;
 
 namespace CSMWebCore.Services
 {
-    public class ReportsService
+    public class ReportsService : IReportsService
     {
         private ChipsDbContext context;
         private ITicketsHistoryData _ticketsHistory;
 
-        private IServicePriceData _servicePrices;
+        
         private readonly UserManager<ChipsUser> _userManager;
 
         public ReportsService(ChipsDbContext context, ITicketsHistoryData ticketsHistory,
-            IServicePriceData servicePrices, UserManager<ChipsUser> userManager)
+            UserManager<ChipsUser> userManager)
         {
             this.context = context;
             _ticketsHistory = ticketsHistory;
-            _userManager = userManager;
-            _servicePrices = servicePrices;
+            _userManager = userManager;            
         }
 
         //public int TotalActiveTickets(TicketStatus? status = null)
@@ -131,9 +130,25 @@ namespace CSMWebCore.Services
             return context.Consultations.GetConsultationsByUser(userName, startDate, endDate).Count();
         }
 
-        public TicketProgressReport PrintProgressReport(int ticketId)
+        public TicketProgressReport GetTicketProgressReport(int ticketId)
         {
-            return context.Tickets.Find(ticketId).GetTicketProgressReport();
+            var logs = context.Logs.GetLogsByTicketId(ticketId).ToList();
+            //create a new ticket progress report
+            TicketProgressReport ticketProgressReport = new TicketProgressReport();
+            ticketProgressReport.TicketId = ticketId;
+            //create a timespan array
+            TimeSpan[] timeByStatus = new TimeSpan[5];
+            //interate through the logs
+            for (int i = 0; i < logs.Count() - 1; i++)
+            {
+                timeByStatus[(int)logs[i].TicketStatus] += logs[i + 1].DateCreated - logs[i].DateCreated;
+
+            }
+            for (int i = 0; i < timeByStatus.Length; i++)
+            {
+                ticketProgressReport.TicketProgress.Add((TicketStatus)i, timeByStatus[i]);
+            }
+            return ticketProgressReport;
         }
 
         //public decimal GetSavingsByTicket(int ticketId)
@@ -211,5 +226,26 @@ namespace CSMWebCore.Services
             }
             return handleTime / tickets.Count();
         }
+
+        public int TotalActiveTickets(TicketStatus? status = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int TotalCompletedTickets(TimeSpan? span = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TicketProgressReport PrintProgressReport(int ticketId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public decimal GetSavingsByTicket(int ticketId)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
