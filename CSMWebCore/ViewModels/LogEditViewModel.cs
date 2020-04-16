@@ -18,8 +18,6 @@ namespace CSMWebCore.ViewModels
         public DateTime Logged { get; set; }
         [Required(ErrorMessage = "Notes are required on all log entries")]
         public string Notes { get; set; }
-        public LogType LogType { get; set; }
-        public ContactMethod ContactMethod { get; set; }
         public TicketStatus TicketStatus { get; set; }
         public Customer Customer { get; set; }
     }

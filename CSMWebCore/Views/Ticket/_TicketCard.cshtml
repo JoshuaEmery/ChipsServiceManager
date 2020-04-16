@@ -1,6 +1,10 @@
 ﻿@model TicketViewModel
 <div class="card">
-    <div class="card-header">@Model.TicketNumber - @Model.CustomerFName @Model.CustomerLName</div>
+    <div class="card-header d-flex justify-content-between">
+        <h5 style="display:inline-block; margin: 0;">@Model.TicketNumber</h5>
+        <span class="align-self-center">@Model.CustomerFName @Model.CustomerLName</span>
+        <span>@EnumHelper.GetDisplayName(Model.LogLatestStatus).ToUpper()</span>
+    </div>
     <div class="card-body">
         <ul>
             <li>Device: @Model.DeviceMake @Model.DeviceModelNumber</li>
@@ -9,8 +13,10 @@
         </ul>
         <p>@Html.DisplayNameFor(model => model.LogOpenDate): @Model.LogOpenDate.ToShortDateString()</p>
         <p>@Html.DisplayNameFor(model => model.LogLatestDate): @Model.LogLatestDate.ToShortDateString()</p>
-        <p>@Html.DisplayNameFor(model => model.LogCloseDate): @Model.LogCloseDate.ToShortDateString()</p>
-        <p>@Html.DisplayNameFor(model => model.LogLatestStatus): @EnumHelper.GetDisplayName(Model.LogLatestStatus)</p>
+        @if (Model.LogCloseDate.HasValue)
+        {
+            <p>@Html.DisplayNameFor(model => model.LogCloseDate): @Model.LogCloseDate.Value.ToShortDateString()</p>
+        }
         <div class="btn-group">
             <a class="btn btn-sm btn-outline-primary" asp-controller="Log" asp-action="Service" asp-route-ticketId="@Model.Id">Log Service</a>
             <a class="btn btn-sm btn-outline-primary" asp-controller="Log" asp-action="Contact" asp-route-ticketId="@Model.Id">Log Contact</a>

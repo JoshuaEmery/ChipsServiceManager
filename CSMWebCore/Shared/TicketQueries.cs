@@ -99,7 +99,7 @@ namespace CSMWebCore.Shared
         /// Gets a collection of Tickets that were opened (device checked-in) within the given date range.
         /// "Checked-in" Tickets are selected by checking all Logs of each Ticket for EventEnum.CheckIn.
         /// </summary>
-        public static IQueryable<Ticket> GetCheckedInTickets(this DbSet<Ticket> dbSet, DateTime startDate, DateTime endDate) =>
+        public static IQueryable<Ticket> GetAllTicketsWithCheckIn(this DbSet<Ticket> dbSet, DateTime startDate, DateTime endDate) =>
             dbSet.Where(t => t.Logs.FirstOrDefault(log => log.EventId == (int)EventEnum.CheckIn).DateCreated >= startDate && t.CheckInDate < endDate);
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace CSMWebCore.Shared
         /// given TimeSpan. "Checked-in" Tickets are selected by checking the Logs of each Ticket for 
         /// EventEnum.CheckIn. The first log found with a check-in event is used for checking date bounds.
         /// </summary>
-        public static IQueryable<Ticket> GetCheckedInTickets(this DbSet<Ticket> dbSet, TimeSpan? span)
+        public static IQueryable<Ticket> GetAllTicketsWithCheckIn(this DbSet<Ticket> dbSet, TimeSpan? span)
         {
             if (!span.HasValue) return dbSet.Where(t => t.Logs.FirstOrDefault().EventId == (int)EventEnum.CheckIn);
             else
@@ -115,7 +115,7 @@ namespace CSMWebCore.Shared
                 // gets span with end bound set to midnight tonight, to avoid overlap between business days
                 DateTime end = DateTime.Today.AddDays(1);
                 DateTime start = end.Subtract(span.Value);
-                return GetCheckedInTickets(dbSet, start, end);
+                return GetAllTicketsWithCheckIn(dbSet, start, end);
             }
         }
 

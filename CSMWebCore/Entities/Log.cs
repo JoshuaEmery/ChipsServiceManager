@@ -35,9 +35,5 @@ namespace CSMWebCore.Entities
         //[Required(ErrorMessage = "Notes are required on all log entries")]
         // notes are only required on some types of events
         public string Notes { get; set; }
-
-        // redundant propeties to remove after switch to Log/Event
-        public LogType LogType { get; set; }
-        public ContactMethod ContactMethod { get; set; }
     }
 }

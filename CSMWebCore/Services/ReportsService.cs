@@ -58,12 +58,12 @@ namespace CSMWebCore.Services
             if (!span.HasValue)
                 return context.Tickets.Get().Count();
             else
-                return context.Tickets.GetCheckedInTickets(span.Value).Count();
+                return context.Tickets.GetAllTicketsWithCheckIn(span.Value).Count();
         }
 
         public int TotalCheckedInTickets(DateTime startDate, DateTime endDate)
         {
-            return context.Tickets.GetCheckedInTickets(startDate, endDate).Count();
+            return context.Tickets.GetAllTicketsWithCheckIn(startDate, endDate).Count();
         }
 
         public int TotalCheckedOutTickets(TimeSpan? span = null)
@@ -168,7 +168,7 @@ namespace CSMWebCore.Services
             }
             else
             {
-                tickets = context.Tickets.GetCheckedInTickets(span.Value);
+                tickets = context.Tickets.GetAllTicketsWithCheckIn(span.Value);
             }
             decimal total = 0m;
             foreach (var ticket in tickets)
@@ -180,7 +180,7 @@ namespace CSMWebCore.Services
 
         public decimal GetTicketSavingsOverTimePeriod(DateTime startDate, DateTime endDate)
         {
-            IEnumerable<Ticket> tickets = context.Tickets.GetCheckedInTickets(startDate, endDate);
+            IEnumerable<Ticket> tickets = context.Tickets.GetAllTicketsWithCheckIn(startDate, endDate);
             decimal total = 0m;
             foreach (var ticket in tickets)
             {

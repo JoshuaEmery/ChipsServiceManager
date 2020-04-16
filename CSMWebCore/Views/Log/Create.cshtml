@@ -10,16 +10,6 @@
             <td><span asp-validation-for="TicketId"></span></td>
         </tr>
         <tr>
-            <td><label asp-for="LogType"></label></td>
-            <td><select asp-for="LogType" asp-items="Html.GetEnumSelectList<LogType>()"></select></td>
-            <td><span asp-validation-for="LogType"></span></td>
-        </tr>
-        <tr>
-            <td><label asp-for="ContactMethod"></label></td>
-            <td><select asp-for="ContactMethod" asp-items="Html.GetEnumSelectList<ContactMethod>()"></select></td>
-            <td><span asp-validation-for="ContactMethod"></span></td>
-        </tr>
-        <tr>
             <td><label asp-for="Notes"></label></td>
             <td><textarea asp-for="Notes"></textarea></td>
             <td><span asp-validation-for="Notes"></span></td>
