@@ -1,4 +1,27 @@
 ﻿<environment include="Development">
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"
+            asp-fallback-src="~/lib/jquery-validation/jquery.validate.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator"
+            crossorigin="anonymous"
+            integrity="sha256-sPB0F50YUDK0otDnsfNHawYmA5M0pjjUf4TvRJkGFrI=">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"
+            asp-fallback-src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
+            crossorigin="anonymous"
+            integrity="sha256-9GycpJnliUjJDVDqP0UEu/bsm9U+3dnQUH8+3W10vkY=">
+    </script>
+</environment>
+
+@* By default, AspNetCore.Identity.UI gets its validation scripts from the library's own static web assets.
+    In the sources below, "~" refers to the home directory of these assets:
+    C:\Users\[USERNAME]\.nuget\packages\microsoft.aspnetcore.identity.ui\3.1.3\staticwebassets\V4*@
+
+@*<environment include="Development">
     <script src="~/Identity/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/Identity/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 </environment>
@@ -15,4 +38,4 @@
             crossorigin="anonymous"
             integrity="sha384-ifv0TYDWxBHzvAk2Z0n8R434FL1Rlv/Av18DXE43N/1rvHyOG4izKst0f2iSLdds">
     </script>
-</environment>
+</environment>*@

@@ -10,5 +10,9 @@
   {
     "outputFile": "wwwroot/css/print.css",
     "inputFile": "wwwroot/css/print.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/identity.css",
+    "inputFile": "wwwroot/css/identity.scss"
   }
 ]

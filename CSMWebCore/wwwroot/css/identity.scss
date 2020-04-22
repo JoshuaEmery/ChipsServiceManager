@@ -1,5 +1,22 @@
-﻿.card {
-    box-shadow: 0px 0.5rem 1rem rgba(61, 61, 61, 0.39);
+﻿html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: #1a1a37 url("../images/bg-glyph-tile.png") repeat center;
+}
+
+
+.card {
+    box-shadow: 0px 0.5rem 1rem rgba(20, 20, 20, 0.6);
+}
+
+.card-body.compact {
+    max-width: 18rem;
 }
 
 .form-check {
@@ -26,4 +43,8 @@
 
 .validation-summary-errors li:last-child {
     margin-bottom: 0;
+}
+
+.field-validation-error {
+    font-size: 0.8rem;
 }

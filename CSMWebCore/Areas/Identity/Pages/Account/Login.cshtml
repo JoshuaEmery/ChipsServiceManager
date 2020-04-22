@@ -3,35 +3,32 @@
 @{
     ViewData["Title"] = "Log In";
 }
-<div class="card mx-auto" style="max-width: 18rem">
-    <div class="card-body">
-        <img class="p-3 mb-2 img-fluid" src="~/images/ChipsLogoColor.png" />
-        <form asp-route-returnurl="@ViewData["ReturnUrl"]" class="login-form" method="post">
-            <div asp-validation-summary="All" ></div>
-            <div class="form-group">
-                <label class="sr-only" for="inputUsername">Username</label>
-                <input class="form-control" id="inputUsername" asp-for=" Input.UserName" placeholder="Username" />
+<div class="card-body compact">
+    <img class="p-3 mb-2 img-fluid" src="~/images/ChipsLogoColor.png" />
+    <form asp-route-returnurl="@ViewData["ReturnUrl"]" class="login-form" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label class="sr-only" asp-for="Input.UserName" for="inputUsername">Username</label>
+            <input class="form-control" id="inputUsername" asp-for=" Input.UserName" placeholder="Username" />
+            <span asp-validation-for="Input.UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="inputPassword">Password</label>
+            <input class="form-control" id="inputPassword" asp-for="Input.Password" placeholder="Password" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+        <div class="form-group form-inline">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="inputRememberMe" asp-for="Input.RememberMe" />
+                <label class="form-check-label" for="inputRememberMe" asp-for="Input.RememberMe">
+                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                </label>
             </div>
-            <div class="form-group">
-                <label class="sr-only" for="inputPassword">Password</label>
-                <input class="form-control" id="inputPassword" asp-for="Input.Password" placeholder="Password" />
-            </div>
-            <div class="form-group form-inline">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="inputRememberMe" asp-for="Input.RememberMe" />
-                    <label class="form-check-label" for="inputRememberMe" asp-for="Input.RememberMe">
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
-                </div>
-                <button class="btn btn-success ml-auto" type="submit">Log in</button>
-            </div>
-        </form>
-        <a class="small" asp-page="./ForgotPassword">Forgot your password?</a>
-    </div>
+            <button class="btn btn-success ml-auto" type="submit">Log in</button>
+        </div>
+    </form>
+    <a class="small" asp-page="./ForgotPassword">Forgot your password?</a>
 </div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-    $(".validation-summary-errors").addClass("alert alert-danger");
-    </script>
 }

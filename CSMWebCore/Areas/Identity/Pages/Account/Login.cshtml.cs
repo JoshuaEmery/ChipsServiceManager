@@ -77,34 +77,35 @@ namespace CSMWebCore.Areas.Identity.Pages.Account
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 
                 ChipsUser user = await _userManager.FindByNameAsync(Input.UserName);
+                // if user exists but not active, display error
                 if (user != null && !user.Active)
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "This account is not enabled. Contact an administrator for help.");
                     return Page();
                 }
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                // if password correct and all other requirements fulfilled, redirect to home
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
                     return RedirectToAction("Index","Home");
                 }
+                // if user has two-factor authentication set up, redirect to page
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
+                // if user is locked out, log and redirect
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("User attempted login with locked account.");
                     return RedirectToPage("./Lockout");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+                // if all else fails, username or password are invalid
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return Page();
             }
-
-            // If we got this far, something failed, redisplay form
+            // Model state invalid
             return Page();
         }
     }
