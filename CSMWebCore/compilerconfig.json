@@ -14,5 +14,17 @@
   {
     "outputFile": "wwwroot/css/identity.css",
     "inputFile": "wwwroot/css/identity.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/custom.css",
+    "inputFile": "wwwroot/css/custom.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/overrides.css",
+    "inputFile": "wwwroot/css/overrides.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/test.css",
+    "inputFile": "wwwroot/css/test.scss"
   }
 ]

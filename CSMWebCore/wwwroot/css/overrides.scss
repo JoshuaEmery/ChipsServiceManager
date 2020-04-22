@@ -1,0 +1,28 @@
+﻿@import "../lib/bootstrap/scss/bootstrap.scss";
+
+// Brand Colors
+$chips-red: #c42127;
+$chips-darkblue: #1a1a2c;
+$chips-blue: #393969;
+$chips-lightblue: #5b65aa;
+$chips-gray: #bbbbbf;
+$chips-lightgray: #faf9fc;
+$chips-darkgray: #848485;
+
+// override element colors
+$body-bg: $chips-gray;
+
+// override theme colors
+$theme-colors: ( 
+    "primary": $chips-lightblue,
+    "secondary": $chips-darkgray,
+    "dark": $chips-blue
+);
+
+$navbar-dark-color: $white;
+$navbar-dark-hover-color: $white;
+$navbar-dark-active-color: $white;
+
+$navbar-light-color:  $chips-lightblue;
+$navbar-light-hover-color: $chips-blue;
+$navbar-light-active-color: $chips-blue;

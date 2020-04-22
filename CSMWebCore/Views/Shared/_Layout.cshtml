@@ -8,66 +8,30 @@
     <link rel="stylesheet" href="~/css/style.min.css" asp-append-version="true" />
 </head>
 <body>
-    <nav class="navbar navbar-dark navbar-expand-lg fixed-top">
+    @* Primary Nav Bar *@
+    <nav id="primaryNav" class="navbar navbar-dark bg-dark navbar-expand-lg">
         <div class="container d-flex">
-            <a class="navbar-brand py-0" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/ChipsLogoColor.png" /></a>
-            <div class="d-flex flex-row order-lg-1">
+            @* Toggler *@
+            <button class="navbar-toggler order-0" type="button" data-toggle="collapse" data-target="#mainMenuCollapse" aria-controls="mainMenuCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            @* Brand Link (to Home Page) *@
+            <a class="navbar-brand py-0 order-lg-2" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/images/ChipsLogoColor.png" />
+            </a>
+            @* Right Nav Menu (User Account) *@
+            <div class="d-flex flex-row order-lg-3">
                 @await Html.PartialAsync("_AccountOptionsPartial")
-                <button class="navbar-toggler order-2" type="button" data-toggle="collapse" data-target="#mainMenuCollapse" aria-controls="mainMenuCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
             </div>
-            <div class="collapse navbar-collapse" id="mainMenuCollapse">
+            @* Left Nav Menu (Report, etc) *@
+            <div class="collapse navbar-collapse order-lg-1 d-lg-block" id="mainMenuCollapse">
                 <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="customersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-users"></i> Customers
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="customersDropdown">
-                            <a class="dropdown-item" asp-controller="Customer" asp-action="Create"><i class="fas fa-address-card"></i> Create New Customer</a>
-                            <a class="dropdown-item" asp-controller="Customer" asp-action="Index">All Customers</a>
-                            <a class="dropdown-item" asp-controller="Customer" asp-action="Active">Customers With Open Tickets</a>
-                            <div class="dropdown-item">
-                                <form asp-controller="Customer" asp-action="Search" method="get" role="search">
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" name="SearchValue" placeholder="Search Customers" aria-label="searchCustomer">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-sm btn-success" type="submit">Go</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="ticketsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ticket-alt"></i> Tickets
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="ticketsDropdown">
-                            <a class="dropdown-item" asp-controller="Ticket" asp-action="Index">Open Tickets</a>
-                            <div class="dropdown-item">
-                                <form role="search">
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="Search Closed Tickets" aria-label="searchTicket">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-sm btn-success" asp-controller="Ticket" asp-action="Search" type="submit">Go</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Device" asp-action="Index">
-                            <i class="fas fa-laptop"></i> Devices On Hand
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Report" asp-action="Index"><i class="fas fa-clipboard-list"></i> Reports</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle user-dropdown" href="#" id="usersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-id-badge"></i> Users
+                        <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-id-badge"></i> Manage Users
                         </a>
                         <div class="dropdown-menu" aria-labelledby="usersDropdown">
                             <a class="dropdown-item" asp-controller="User" asp-action="Index">View All Users</a>
@@ -78,6 +42,70 @@
                 </ul>
             </div>
         </div>
+    </nav>
+    @* Secondary Nav Bar *@
+    <nav id="secondaryNav" class="navbar navbar-light bg-light">
+        <ul class="container navbar-nav d-flex flex-row px-3">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Ticket" asp-action="Index">
+                    <i class="fas fa-ticket-alt"></i> Tickets
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Device" asp-action="Index">
+                    <i class="fas fa-laptop"></i> Devices
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Customer" asp-action="Index">
+                    <i class="fas fa-users"></i> Customers
+                </a>
+            </li>
+            @* Old Navigation *@
+            @*<li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="customersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-users"></i> Customers
+                </a>
+                <div class="dropdown-menu bg-dark" aria-labelledby="customersDropdown">
+                    <a class="dropdown-item" asp-controller="Customer" asp-action="Create"><i class="fas fa-address-card"></i> Create New Customer</a>
+                    <a class="dropdown-item" asp-controller="Customer" asp-action="Index">All Customers</a>
+                    <a class="dropdown-item" asp-controller="Customer" asp-action="Active">Customers With Open Tickets</a>
+                    <div class="dropdown-item">
+                        <form asp-controller="Customer" asp-action="Search" method="get" role="search">
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="SearchValue" placeholder="Search Customers" aria-label="searchCustomer">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-success" type="submit">Go</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="ticketsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ticket-alt"></i> Tickets
+                </a>
+                <div class="dropdown-menu" aria-labelledby="ticketsDropdown">
+                    <a class="dropdown-item" asp-controller="Ticket" asp-action="Index">Open Tickets</a>
+                    <div class="dropdown-item">
+                        <form role="search">
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="Search Closed Tickets" aria-label="searchTicket">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-success" asp-controller="Ticket" asp-action="Search" type="submit">Go</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Device" asp-action="Index">
+                    <i class="fas fa-laptop"></i> Devices On Hand
+                </a>
+            </li>*@
+        </ul>
     </nav>
     <main class="container">
         <partial name="_CookieConsentPartial" />

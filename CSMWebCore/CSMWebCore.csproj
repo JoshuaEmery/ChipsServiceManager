@@ -21,8 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\custom.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\custom.min.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\print.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\style.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\test.min.css" />
   </ItemGroup>
 
   <ItemGroup>

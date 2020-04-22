@@ -18,12 +18,17 @@
       "destination": "wwwroot/lib/jquery-validation-unobtrusive"
     },
     {
-      "library": "twitter-bootstrap@4.4.1",
+      "provider": "unpkg",
+      "library": "bootstrap@4.4.1",
       "files": [
-        "css/bootstrap.min.css",
-        "css/bootstrap.min.css.map",
-        "js/bootstrap.bundle.min.js",
-        "js/bootstrap.bundle.min.js.map"
+        "scss/*",
+        "scss/mixins/*",
+        "scss/utilities/*",
+        "scss/vendor/*",
+        "dist/css/bootstrap.min.css",
+        "dist/css/bootstrap.min.css.map",
+        "dist/js/bootstrap.bundle.min.js",
+        "dist/js/bootstrap.bundle.min.js.map"
       ],
       "destination": "wwwroot/lib/bootstrap"
     },

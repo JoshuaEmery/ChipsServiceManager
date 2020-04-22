@@ -9,11 +9,11 @@
     <ul class="navbar-nav mr-2 mr-lg-0">
         <li class="nav-item dropdown">
             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
-                <a class="nav-link dropdown-toggle user-dropdown py-0" href="#" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle py-0" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="d-inline-block py-2">@User.Identity.Name</div>
                     <img src="~/images/avatar.png" class="img-circle avatar" alt="" height="40">
                 </a>
-                <div class="dropdown-menu position-absolute" aria-labelledby="loginDropdown">
+                <div class="dropdown-menu position-absolute" aria-labelledby="accountDropdown">
                     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Settings</a>
                     <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
                 </div>
